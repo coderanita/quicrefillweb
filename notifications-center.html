@@ -3,241 +3,492 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quicrefill Admin - Notifications Center</title>
+    <title>Quicrefill Admin</title>
+    <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Load Chart.js from cdnjs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js" integrity="sha512-ElRFoEQdI5Ht6kZvyzXhYG9NqjtkmlkfYk0wr6wHxU9JEHakS7UJZNeml5ALk+8IKlU6jDgMabC3vkumRokgJA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- Load Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.js"></script>
 </head>
-<body class="bg-gray-50">
-    <header class="bg-white border-b border-gray-200 px-4 py-2 flex items-center justify-between">
+
+    <style>
+        [x-cloak] { display: none !important; }
+
+        @media (max-width: 768px) {
+            .mobile-sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease-in-out;
+            }
+            .mobile-sidebar.open {
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <!-- Header -->
+        
+    <header class="bg-white shadow-md flex items-center justify-between p-4 sticky top-0 z-30">
         <div class="flex items-center">
-            <div class="flex items-center mr-4">
-                <span class="text-yellow-500 mr-1">🔥</span>
-                <span class="font-semibold">Quicrefill</span>
-                <span class="text-gray-600">Admin</span>
+            <button  id="sidebar-toggle" class=" md:hidden mr-4">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="flex items-center mr-4 md:mr-8">
+                <img src="images/logo.png" class="w-[150px] md:w-[250px]">
             </div>
-            <button class="border border-gray-300 rounded px-2 py-1 text-sm text-gray-500">
-                <i class="fas fa-chevron-left"></i>
+            <button id="hide-sidebar-button" class="border border-gray-200 rounded-md px-2 py-1 z-15 hidden md:block">
+                <i class="fas fa-angle-left"></i>
             </button>
         </div>
         
-        <div class="flex items-center relative w-1/3">
-            <div class="relative w-full">
-                <input type="search" placeholder="Search" class="w-full px-4 py-2 bg-gray-100 rounded-lg focus:outline-none">
-                <button class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-yellow-500 text-white rounded px-2 py-1">
-                    <i class="fas fa-search"></i>
+        <div class="hidden md:block relative w-1/3">
+            <input type="text" placeholder="Search"
+                class="w-full px-4 py-2 border border-gray-300 rounded-md bg-gray-100 focus:outline-none pl-10">
+            <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+            <button class="absolute right-0 top-0 h-full px-4 bg-gradient-to-b from-[#FFC533] to-[#FFB600] text-black rounded-r-md border border-gray-300 shadow flex items-center justify-center">
+        <i class="fas fa-arrow-left"></i>
+    </button>
+        </div>
+        
+        
+        <div class="flex items-center">
+            <div x-data="{ open: false }" class="relative mr-4">
+                <!-- Notification Icon -->
+                <button @click="open = !open"  class="relative p-2">
+                    <i class="fas fa-bell text-gray-600 text-lg"></i>
+                    <!-- Notification Badge -->
+                    <span class="absolute -top-1 -right-1 bg-yellow-400 text-black text-xs font-bold px-1.5 py-0.5 rounded-full">8</span>
                 </button>
+            
+                <!-- Dropdown Menu -->
+                <div 
+                    x-show="open" 
+                    @click.away="open = false"
+                    x-transition x-cloak
+                    class="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-64 bg-white border rounded-md shadow-lg z-50"
+                >
+                    <div class="p-3 border-b">
+                        <span class="font-semibold text-gray-700">Notifications</span>
+                    </div>
+                    
+                    <ul class="max-h-60 overflow-auto">
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer">
+                            <span class="text-sm text-gray-700">🔔 You have a new message</span>
+                        </li>
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer">
+                            <span class="text-sm text-gray-700">✅ Task Completed Successfully</span>
+                        </li>
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer">
+                            <span class="text-sm text-gray-700">⚠️ System Alert: Update Required</span>
+                        </li>
+                    </ul>
+            
+                    <div class="p-3 border-t text-center">
+                        <a href="#" class="text-sm text-blue-500 hover:underline">View all</a>
+                    </div>
+                </div>
             </div>
-        </div>
-        
-        <div class="flex items-center">
-            <button class="mr-4 relative">
-                <i class="fas fa-bell text-gray-600"></i>
-            </button>
-            <button class="mr-4">
-                <i class="fas fa-ellipsis-v text-gray-600"></i>
-            </button>
-            <div class="flex items-center bg-white rounded-full p-1 border border-gray-200">
-                <img src="data:image/png;base64,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" alt="User Avatar" class="w-9 h-9 rounded-full mr-2">
-                <div class="mr-2">
-                    <div class="text-sm font-medium">Timothy Jonson</div>
-                    <div class="text-xs text-gray-500">timoj@Quicrefil.ng</div>
+            
+            <div x-data="{ open: false }" class="relative">
+                <!-- Profile Button -->
+                <button @click="open = !open"  class="flex items-center rounded-full px-2 py-1 md:px-4 md:py-2 border border-gray-300 shadow-md focus:outline-none">
+                    <!-- Avatar -->
+                    <div class="relative w-10 h-10 md:w-10 md:h-10 rounded-full bg-gray-300 mr-2">
+                        <!-- Avatar Image -->
+                        <img src="images/Avatar/avatar.png" alt="User Avatar" class="w-full h-full object-cover rounded-full">
+                    
+                        <!-- Green Dot (Move Outside) -->
+                        <div class="absolute top-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"
+                             style="transform: translate(30%, -30%);"></div>
+                    </div>
+                    
+                    <!-- User Info -->
+                    <div class="hidden md:block text-left">
+                        <div class="text-sm font-medium">Timothy Jonson</div>
+                        <div class="text-xs text-gray-500">timoj@Quicrefil.ng</div>
+                    </div>
+                </button>
+            
+                <!-- Dropdown Menu -->
+                <div 
+                    x-show="open" 
+                    @click.away="open = false"
+                    x-transition x-cloak
+                    class="absolute right-0 mt-2 w-48 bg-white border rounded-md shadow-lg z-50"
+                >
+                    <ul class="py-2">
+                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">👤 Profile</li>
+                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">⚙️ Settings</li>
+                        <li class="px-4 py-2 text-red-500 hover:bg-gray-100 cursor-pointer">🚪 Logout</li>
+                    </ul>
                 </div>
             </div>
         </div>
     </header>
 
+    <!-- Main Content -->
     <div class="flex">
         <!-- Sidebar -->
-        <div class="w-64 bg-white h-screen border-r border-gray-200">
-            <nav class="py-4">
+        
+        <aside id="sidebar" class="mobile-sidebar fixed md:relative w-64 bg-white min-h-screen shadow-sm z-20 md:transform-none border border-gray-300S">
+            <nav class="p-4">
                 <ul>
-                    <li class="px-4 py-3">
-                        <a href="#" class="flex items-center text-gray-700 hover:text-gray-900">
+                    <li class="mb-4">
+                        <a href="quicrefill-dashboard.html" class="flex items-center text-gray-600 hover:text-amber-500 ">
                             <i class="fas fa-th-large mr-3"></i>
                             <span>Summary</span>
                         </a>
                     </li>
-                    <li class="px-4 py-3 bg-yellow-50 border-l-4 border-yellow-500">
-                        <a href="#" class="flex items-center text-yellow-500">
+                    <li class="mb-4">
+                        <a href="notifications-center.html" class="flex items-center text-amber-500 font-medium ">
                             <i class="fas fa-bell mr-3"></i>
-                            <span>Notifications Center</span>
+                            <span>Notifications Panel</span>
                         </a>
                     </li>
-                    <li class="px-4 py-3">
-                        <a href="#" class="flex items-center text-gray-700 hover:text-gray-900">
+                    <li class="mb-4">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-clipboard-list mr-3"></i>
                             <span>Order Management</span>
                         </a>
                     </li>
-                    <li class="px-4 py-3">
-                        <a href="#" class="flex items-center text-gray-700 hover:text-gray-900">
-                            <i class="fas fa-briefcase mr-3"></i>
+                    <li class="mb-4">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-concierge-bell mr-3"></i>
                             <span>Service Management</span>
                         </a>
                     </li>
-                    <li class="px-4 py-3">
-                        <a href="#" class="flex items-center text-gray-700 hover:text-gray-900">
+                    <li class="mb-4">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-user mr-3"></i>
                             <span>User Management</span>
                         </a>
                     </li>
-                    <li class="px-4 py-3">
-                        <a href="#" class="flex items-center text-gray-700 hover:text-gray-900">
+                    <li class="mb-4">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-motorcycle mr-3"></i>
                             <span>Rider Management</span>
                         </a>
                     </li>
-                    <li class="px-4 py-3">
-                        <a href="#" class="flex items-center text-gray-700 hover:text-gray-900">
-                            <i class="fas fa-money-bill-alt mr-3"></i>
+                    <li class="mb-4">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-money-bill mr-3"></i>
                             <span>Revenue Management</span>
                         </a>
                     </li>
-                    <li class="px-4 py-3">
-                        <a href="#" class="flex items-center text-gray-700 hover:text-gray-900">
-                            <i class="fas fa-comment mr-3"></i>
+                    <li class="mb-4">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-comments mr-3"></i>
                             <span>Feedback</span>
                         </a>
                     </li>
-                    <li class="px-4 py-3">
-                        <a href="#" class="flex items-center text-gray-700 hover:text-gray-900">
+                    <li class="mb-4">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-chart-bar mr-3"></i>
                             <span>Reports and Analytics</span>
                         </a>
                     </li>
-                    <li class="px-4 py-3">
-                        <a href="#" class="flex items-center text-gray-700 hover:text-gray-900">
+                    <li class="mb-4">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-shield-alt mr-3"></i>
                             <span>Audit Logs & Security</span>
-                            <i class="fas fa-chevron-down ml-auto text-gray-500 text-xs"></i>
+                            <i class="fas fa-chevron-down ml-auto text-xs"></i>
                         </a>
                     </li>
-                    <li class="px-4 py-3">
-                        <a href="#" class="flex items-center text-gray-700 hover:text-gray-900">
+                    <li class="mb-4">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-user-shield mr-3"></i>
                             <span>Admin Management</span>
                         </a>
                     </li>
-                    <li class="px-4 py-3">
-                        <a href="#" class="flex items-center text-gray-700 hover:text-gray-900">
+                    <li class="mb-4">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-cog mr-3"></i>
                             <span>System Settings</span>
                         </a>
                     </li>
                 </ul>
             </nav>
+        </aside>
+
+        <!-- Overlay for sidebar on mobile -->
+        <div id="sidebar-overlay" class="fixed inset-0 bg-black opacity-50 z-10 hidden"></div>
+
+    <!-- Main Content -->
+    <div class="flex-1 p-6">
+        <h1 class="text-2xl font-semibold mb-6">Notifications Center</h1>
+        
+        <!-- Notification Cards -->
+        <div class="space-y-6">
+            <!-- Order Notification -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-100 relative">
+                <div class="w-1 h-full bg-green-500 absolute left-0 top-0 rounded-l-lg"></div>
+                <div class="p-4 pl-6">
+                    <div class="flex items-start">
+                        <div class="mr-3 text-yellow-500 text-xl">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center">
+                                <span class="mr-2">📦</span>
+                                <h3 class="font-semibold text-gray-800">New Order Received</h3>
+                            </div>
+                            <p class="text-gray-700 my-2">A new service order has been placed by [Customer Name]. Order ID: #ORD56789.</p>
+                            <p class="text-gray-500 text-sm">Jan 30, 2025 - 12:45 PM</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vendor Registration -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-100 relative">
+                <div class="w-1 h-full bg-blue-500 absolute left-0 top-0 rounded-l-lg"></div>
+                <div class="p-4 pl-6">
+                    <div class="flex items-start">
+                        <div class="mr-3 text-yellow-500 text-xl">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center">
+                                <span class="mr-2">🔧</span>
+                                <h3 class="font-semibold text-gray-800">New Vendor Registration</h3>
+                            </div>
+                            <p class="text-gray-700 my-2">A new vendor, [Vendor Name], has signed up and is awaiting verification. Review their profile and documents.</p>
+                            <p class="text-gray-500 text-sm">Jan 30, 2025 - 11:30 AM</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Joined -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-100 relative">
+                <div class="w-1 h-full bg-blue-500 absolute left-0 top-0 rounded-l-lg"></div>
+                <div class="p-4 pl-6">
+                    <div class="flex items-start">
+                        <div class="mr-3 text-gray-400 text-xl">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center">
+                                <span class="mr-2">👤</span>
+                                <h3 class="font-semibold text-gray-800">New User Joined</h3>
+                            </div>
+                            <p class="text-gray-700 my-2">[User Name] has successfully created an account. Welcome them to the platform!</p>
+                            <p class="text-gray-500 text-sm">Jan 30, 2025 - 10:15 AM</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Customer Dispute -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-100 relative">
+                <div class="w-1 h-full bg-red-500 absolute left-0 top-0 rounded-l-lg"></div>
+                <div class="p-4 pl-6">
+                    <div class="flex items-start">
+                        <div class="mr-3 text-gray-400 text-xl">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center">
+                                <span class="mr-2">⚠️</span>
+                                <h3 class="font-semibold text-gray-800">Customer Dispute Alert</h3>
+                            </div>
+                            <p class="text-gray-700 my-2">A new dispute has been raised by [Customer Name] regarding Order ID #ORD45678. Review and take action.</p>
+                            <p class="text-gray-500 text-sm">Jan 30, 2025 - 09:50 AM</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <!-- Main Content -->
-        <div class="flex-1 p-6">
-            <h1 class="text-2xl font-semibold mb-6">Notifications Center</h1>
+        <!-- Pagination -->
+        <div class="mt-8 flex items-center justify-between">
+            <button class="flex items-center text-gray-600 hover:text-gray-900">
+                <i class="fas fa-chevron-left mr-2"></i>
+                Previous
+            </button>
             
-            <!-- Notification Cards -->
-            <div class="space-y-6">
-                <!-- Order Notification -->
-                <div class="bg-white rounded-lg shadow-sm border border-gray-100 relative">
-                    <div class="w-1 h-full bg-green-500 absolute left-0 top-0 rounded-l-lg"></div>
-                    <div class="p-4 pl-6">
-                        <div class="flex items-start">
-                            <div class="mr-3 text-yellow-500 text-xl">
-                                <i class="fas fa-envelope"></i>
-                            </div>
-                            <div class="flex-1">
-                                <div class="flex items-center">
-                                    <span class="mr-2">📦</span>
-                                    <h3 class="font-semibold text-gray-800">New Order Received</h3>
-                                </div>
-                                <p class="text-gray-700 my-2">A new service order has been placed by [Customer Name]. Order ID: #ORD56789.</p>
-                                <p class="text-gray-500 text-sm">Jan 30, 2025 - 12:45 PM</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Vendor Registration -->
-                <div class="bg-white rounded-lg shadow-sm border border-gray-100 relative">
-                    <div class="w-1 h-full bg-blue-500 absolute left-0 top-0 rounded-l-lg"></div>
-                    <div class="p-4 pl-6">
-                        <div class="flex items-start">
-                            <div class="mr-3 text-yellow-500 text-xl">
-                                <i class="fas fa-envelope"></i>
-                            </div>
-                            <div class="flex-1">
-                                <div class="flex items-center">
-                                    <span class="mr-2">🔧</span>
-                                    <h3 class="font-semibold text-gray-800">New Vendor Registration</h3>
-                                </div>
-                                <p class="text-gray-700 my-2">A new vendor, [Vendor Name], has signed up and is awaiting verification. Review their profile and documents.</p>
-                                <p class="text-gray-500 text-sm">Jan 30, 2025 - 11:30 AM</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- User Joined -->
-                <div class="bg-white rounded-lg shadow-sm border border-gray-100 relative">
-                    <div class="w-1 h-full bg-blue-500 absolute left-0 top-0 rounded-l-lg"></div>
-                    <div class="p-4 pl-6">
-                        <div class="flex items-start">
-                            <div class="mr-3 text-gray-400 text-xl">
-                                <i class="fas fa-envelope"></i>
-                            </div>
-                            <div class="flex-1">
-                                <div class="flex items-center">
-                                    <span class="mr-2">👤</span>
-                                    <h3 class="font-semibold text-gray-800">New User Joined</h3>
-                                </div>
-                                <p class="text-gray-700 my-2">[User Name] has successfully created an account. Welcome them to the platform!</p>
-                                <p class="text-gray-500 text-sm">Jan 30, 2025 - 10:15 AM</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Customer Dispute -->
-                <div class="bg-white rounded-lg shadow-sm border border-gray-100 relative">
-                    <div class="w-1 h-full bg-red-500 absolute left-0 top-0 rounded-l-lg"></div>
-                    <div class="p-4 pl-6">
-                        <div class="flex items-start">
-                            <div class="mr-3 text-gray-400 text-xl">
-                                <i class="fas fa-envelope"></i>
-                            </div>
-                            <div class="flex-1">
-                                <div class="flex items-center">
-                                    <span class="mr-2">⚠️</span>
-                                    <h3 class="font-semibold text-gray-800">Customer Dispute Alert</h3>
-                                </div>
-                                <p class="text-gray-700 my-2">A new dispute has been raised by [Customer Name] regarding Order ID #ORD45678. Review and take action.</p>
-                                <p class="text-gray-500 text-sm">Jan 30, 2025 - 09:50 AM</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="flex space-x-2">
+                <button class="w-8 h-8 rounded-full bg-yellow-500 text-white flex items-center justify-center">1</button>
+                <button class="w-8 h-8 rounded-full hover:bg-gray-200 text-gray-600 flex items-center justify-center">2</button>
+                <button class="w-8 h-8 rounded-full hover:bg-gray-200 text-gray-600 flex items-center justify-center">3</button>
+                <span class="w-8 h-8 flex items-center justify-center text-gray-600">...</span>
+                <button class="w-8 h-8 rounded-full hover:bg-gray-200 text-gray-600 flex items-center justify-center">8</button>
+                <button class="w-8 h-8 rounded-full hover:bg-gray-200 text-gray-600 flex items-center justify-center">9</button>
+                <button class="w-8 h-8 rounded-full hover:bg-gray-200 text-gray-600 flex items-center justify-center">10</button>
             </div>
-
-            <!-- Pagination -->
-            <div class="mt-8 flex items-center justify-between">
-                <button class="flex items-center text-gray-600 hover:text-gray-900">
-                    <i class="fas fa-chevron-left mr-2"></i>
-                    Previous
-                </button>
-                
-                <div class="flex space-x-2">
-                    <button class="w-8 h-8 rounded-full bg-yellow-500 text-white flex items-center justify-center">1</button>
-                    <button class="w-8 h-8 rounded-full hover:bg-gray-200 text-gray-600 flex items-center justify-center">2</button>
-                    <button class="w-8 h-8 rounded-full hover:bg-gray-200 text-gray-600 flex items-center justify-center">3</button>
-                    <span class="w-8 h-8 flex items-center justify-center text-gray-600">...</span>
-                    <button class="w-8 h-8 rounded-full hover:bg-gray-200 text-gray-600 flex items-center justify-center">8</button>
-                    <button class="w-8 h-8 rounded-full hover:bg-gray-200 text-gray-600 flex items-center justify-center">9</button>
-                    <button class="w-8 h-8 rounded-full hover:bg-gray-200 text-gray-600 flex items-center justify-center">10</button>
-                </div>
-                
-                <button class="flex items-center text-gray-600 hover:text-gray-900">
-                    Next
-                    <i class="fas fa-chevron-right ml-2"></i>
-                </button>
-            </div>
+            
+            <button class="flex items-center text-gray-600 hover:text-gray-900">
+                Next
+                <i class="fas fa-chevron-right ml-2"></i>
+            </button>
         </div>
     </div>
+    </div>
+<!-- Alpine.js (Add this script if not already included in your project) -->
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script>
+        
+    
+
+
+        // Mobile sidebar toggle functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebarToggle = document.querySelector('#sidebar-toggle');
+            const sidebar = document.getElementById('sidebar');
+            const sidebarOverlay = document.getElementById('sidebar-overlay');
+            
+            const hideSidebarButton = document.getElementById('hide-sidebar-button');
+            
+            sidebarToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('open');
+                sidebar.classList.remove('hidden');
+                sidebarOverlay.classList.toggle('hidden');
+            });
+            
+            sidebarOverlay.addEventListener('click', function() {
+                sidebar.classList.remove('open');
+                sidebar.classList.add('hidden');
+                sidebarOverlay.classList.add('hidden');
+            });
+            
+            hideSidebarButton.addEventListener('click', function() {
+                sidebar.classList.toggle("hidden");
+            });
+    
+             // Initialize Pie Chart
+             const pieCtx = document.getElementById('pieChart').getContext('2d');
+            const pieChart = new Chart(pieCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['Petroleum', 'Cooking gas', 'Diesel', 'Electricity'],
+                    datasets: [{
+                        data: [40, 20, 25, 15],
+                        backgroundColor: [
+                            '#4FD1C5', // teal
+                            '#F6E05E', // yellow
+                            '#F56565', // red
+                            '#4299E1'  // blue
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+            // Initialize Bar Chart
+            const barCtx = document.getElementById('barChart').getContext('2d');
+            const barChart = new Chart(barCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['20', '22', '24', '26', '28', '30', '02', '04', '06', '08', '10', '12', '14', '16'],
+                    datasets: [{
+                        label: 'Daily Revenue',
+                        data: [250000, 350000, 200000, 280000, 220000, 180000, 500000, 320000, 450000, 280000, 220000, 380000, 200000, 350000],
+                        backgroundColor: function(context) {
+                            const index = context.dataIndex;
+                            return index === 6 ? '#4299E1' : '#4FD1C5'; // Blue for day 7, teal for others
+                        },
+                        borderWidth: 0,
+                        borderRadius: 4,
+                        maxBarThickness: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    if (value === 0) return '₦0';
+                                    if (value === 100000) return '₦100k';
+                                    if (value === 200000) return '₦200k';
+                                    if (value === 300000) return '₦300k';
+                                    if (value === 400000) return '₦400k';
+                                    if (value === 500000) return '₦500k';
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+        
+            
+        });
+        
+        
+    </script>
+     <script>
+        let datePicker = document.getElementById("datePicker");
+        let dropdownBtn = document.getElementById("dropdownBtn");
+        let dropdownMenu = document.getElementById("dropdownMenu");
+
+        let mode = "monthly"; // Default mode
+
+        function setDateMode(selectedMode) {
+            mode = selectedMode;
+            dropdownBtn.innerHTML = selectedMode.charAt(0).toUpperCase() + selectedMode.slice(1) + ' <i class="fa-solid fa-chevron-down ml-1"></i>';
+            dropdownMenu.classList.add("hidden");
+
+            if (mode === "today") {
+                let today = new Date();
+                let formattedDate = today.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+                datePicker.value = formattedDate;
+            } 
+            else if (mode === "Specific Date") {
+                flatpickr(datePicker, {
+                    dateFormat: "d M, Y",
+                    onChange: function(selectedDates, dateStr) {
+                        datePicker.value = dateStr;
+                    }
+                }).open();
+            } 
+            else if (mode === "monthly") {
+                flatpickr(datePicker, {
+                    mode: "range",
+                    dateFormat: "d M",
+                    onChange: function(selectedDates, dateStr) {
+                        if (selectedDates.length === 2) {
+                            let start = selectedDates[0].toLocaleDateString("en-GB", { day: "2-digit", month: "short" });
+                            let end = selectedDates[1].toLocaleDateString("en-GB", { day: "2-digit", month: "short" });
+                            datePicker.value = `${start} - ${end}`;
+                        }
+                    }
+                }).open();
+            }
+            
+        }
+
+        // Toggle dropdown
+        dropdownBtn.addEventListener("click", () => {
+            dropdownMenu.classList.toggle("hidden");
+        });
+
+        // Close dropdown on outside click
+        document.addEventListener("click", (event) => {
+            if (!dropdownBtn.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                dropdownMenu.classList.add("hidden");
+            }
+        });
+
+        // Set default
+        setDateMode("today");
+    </script>
 </body>
 </html>
