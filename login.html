@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quicrefill Admin Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    width: {
+                        '3/10': '30%',
+                        '4/10': '40%'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-white min-h-screen">
+    <div class="flex flex-col md:flex-row min-h-screen">
+        
+        <div class="hidden md:block w-full md:w-[50%] h-screen bg-gray-100 bg-contain bg-center bg-no-repeat" 
+     style="background-image: url('images/loginpage.png');">
+</div>
+        
+
+        <div class="w-full md:w-[40%] flex flex-col">
+            <!-- Header with Logo -->
+            <header class="p-4 flex justify-between items-center">
+                <div class="flex items-center">
+                    <img src="images/logo.png" alt="Quicrefill Logo" class="w-[150px] md:w-[150px]">
+                    
+                </div>
+                <div class="flex items-center text-sm">
+                    <span class="text-gray-500 mr-2">Don't have an account?</span>
+                    <a href="#" class="bg-gray-800 text-white px-3 py-1 rounded-md text-sm hover:bg-gray-700">
+                        Request access
+                    </a>
+                </div>
+            </header>
+            
+            <!-- Login Form -->
+            <div class="flex-1 flex flex-col justify-center p-6 md:p-8">
+                <div class="w-full">
+                    <h1 class="text-2xl font-bold text-yellow-500 text-center mb-6">Sign In</h1>
+                    
+                    <h2 class="text-xl font-semibold text-gray-800 mb-1">Admin Dashboard</h2>
+                    <p class="text-gray-500 text-sm mb-6">Please enter your login details below.</p>
+                    
+                    <form>
+                        <div class="mb-4">
+                            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email*</label>
+                            <input 
+                                type="email" 
+                                id="email" 
+                                name="email" 
+                                value="superadmin@quicrefill.com"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                                required
+                            >
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password*</label>
+                            <input 
+                                type="password" 
+                                id="password" 
+                                name="password" 
+                                value="••••••••••"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                                required
+                            >
+                        </div>
+                        
+                        <button 
+                            type="submit" 
+                            class="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-medium py-2 px-4 rounded-md flex items-center justify-center"
+                        >
+                            <i class="fas fa-key mr-2 text-sm"></i>
+                            Sign in to admin
+                        </button>
+                        
+                        <div class="mt-4 text-center text-sm">
+                            <span class="text-gray-600">Can't remember the password?</span>
+                            <a href="#" class="text-yellow-500 hover:underline ml-1">Reset password</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Footer -->
+            <footer class="p-4 flex justify-between items-center text-gray-500 text-sm mt-auto">
+                <div>© Quicrefill Company 2025</div>
+                <a href="mailto:help@quicrefill.com" class="flex items-center hover:text-gray-700">
+                    <i class="far fa-envelope mr-2"></i>
+                    help@quicrefill.com
+                </a>
+            </footer>
+        </div>
+        
+        <!-- Right Side - Empty Space - 30% width -->
+        <div class="hidden md:block w-full md:w-[10%] bg-white"></div>
+    </div>
+</body>
+</html>
