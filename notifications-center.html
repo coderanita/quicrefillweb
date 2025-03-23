@@ -26,6 +26,20 @@
                 transform: translateX(0);
             }
         }
+        .flatpickr-day.selected, 
+        .flatpickr-day.startRange, 
+        .flatpickr-day.endRange {
+            background: #FFB600 !important;
+            color: white !important;
+            border-color: #FFB600 !important;
+        }
+
+        /* Change the color of dates between the range */
+        .flatpickr-day.inRange {
+            background: #FFE08A !important; /* Light yellow */
+            color: black !important;
+        }
+
     </style>
 </head>
 <body class="bg-gray-100">

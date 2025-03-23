@@ -25,7 +25,29 @@
             .mobile-sidebar.open {
                 transform: translateX(0);
             }
+
+            .dropdown-menu {
+                @apply left-1/2 -translate-x-1/2 w-80 max-w-[95%];
+            }
+
+
         }
+
+        .flatpickr-day.selected, 
+        .flatpickr-day.startRange, 
+        .flatpickr-day.endRange {
+            background: #FFB600 !important;
+            color: white !important;
+            border-color: #FFB600 !important;
+        }
+
+        /* Change the color of dates between the range */
+        .flatpickr-day.inRange {
+            background: #FFE08A !important; /* Light yellow */
+            color: black !important;
+        }
+
+
     </style>
 </head>
 <body class="bg-gray-100">
@@ -185,13 +207,26 @@
                             <span>Reports and Analytics</span>
                         </a>
                     </li>
-                    <li class="mb-4">
-                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                    <li x-data="{ open: false }" class="mb-4">
+                        <a href="#" @click.prevent="open = !open" class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-shield-alt mr-3"></i>
                             <span>Audit Logs & Security</span>
-                            <i class="fas fa-chevron-down ml-auto text-xs"></i>
+                            <i :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas ml-auto text-xs"></i>
                         </a>
+                    
+                        <!-- Dropdown Menu -->
+                        <ul x-show="open" x-cloak class="mt-2 ml-6 space-y-2 text-gray-500">
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-file-alt mr-3"></i>
+                                <a href="#">Security Logs</a>
+                            </li>
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-user-lock mr-3"></i>
+                                <a href="#">Access Control</a>
+                            </li>
+                        </ul>
                     </li>
+                    
                     <li class="mb-4">
                         <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-user-shield mr-3"></i>
@@ -258,8 +293,9 @@
                     
                             <!-- Dropdown -->
                             <div x-show="open" @click.outside="open = false"
-                                x-cloak
-                                class="absolute left-0 md:left-1/2 md:-translate-x-[70%] top-full mt-2 w-96 bg-white border rounded-lg shadow-lg p-4 z-30">
+                                    x-cloak
+                                    class="dropdown-menu absolute left-0 -translate-x-1/2 top-full mt-2 w-96 bg-white border rounded-lg shadow-lg p-4 z-30">
+
                                 <h3 class="text-gray-700 font-medium mb-3">Select Filter</h3>
                     
                                 <!-- Main Options -->
