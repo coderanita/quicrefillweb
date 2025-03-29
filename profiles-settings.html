@@ -25,7 +25,14 @@
             .mobile-sidebar.open {
                 transform: translateX(0);
             }
+
+            .dropdown-menu {
+                @apply left-1/2 -translate-x-1/2 w-80 max-w-[95%];
+            }
+
+
         }
+
         .flatpickr-day.selected, 
         .flatpickr-day.startRange, 
         .flatpickr-day.endRange {
@@ -39,6 +46,7 @@
             background: #FFE08A !important; /* Light yellow */
             color: black !important;
         }
+
 
     </style>
 </head>
@@ -151,12 +159,12 @@
             <nav class="p-4">
                 <ul>
                     <li class="mb-4">
-                        <a href="quicrefill-dashboard.html" class="flex items-center text-gray-600 hover:text-amber-500 ">
+                        <a href="quicrefill-dashboard.html" class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-th-large mr-3"></i>
                             <span>Summary</span>
                         </a>
                     </li>
-                   
+                  
                     <li class="mb-4">
                         <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-clipboard-list mr-3"></i>
@@ -199,13 +207,26 @@
                             <span>Reports and Analytics</span>
                         </a>
                     </li>
-                    <li class="mb-4">
-                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                    <li x-data="{ open: false }" class="mb-4">
+                        <a href="#" @click.prevent="open = !open" class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-shield-alt mr-3"></i>
                             <span>Audit Logs & Security</span>
-                            <i class="fas fa-chevron-down ml-auto text-xs"></i>
+                            <i :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas ml-auto text-xs"></i>
                         </a>
+                    
+                        <!-- Dropdown Menu -->
+                        <ul x-show="open" x-cloak class="mt-2 ml-6 space-y-2 text-gray-500">
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-file-alt mr-3"></i>
+                                <a href="#">Security Logs</a>
+                            </li>
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-user-lock mr-3"></i>
+                                <a href="#">Access Control</a>
+                            </li>
+                        </ul>
                     </li>
+                    
                     <li class="mb-4">
                         <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-user-shield mr-3"></i>
@@ -225,116 +246,49 @@
         <!-- Overlay for sidebar on mobile -->
         <div id="sidebar-overlay" class="fixed inset-0 bg-black opacity-50 z-10 hidden"></div>
 
-    <!-- Main Content -->
-    <div class="flex-1 p-6">
-        <h1 class="text-2xl font-semibold mb-6">Notifications Center</h1>
+        <!-- Content Area -->
+<main class="flex-1 p-4 md:p-6">
+    <div class="flex flex-col md:flex-row gap-6 max-w-6xl mx-auto">
+        <!-- Left Panel -->
+        <div class="w-full md:w-96 shrink-0">
+            <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-4 h-[450px]">
+                <h2 class="text-lg font-medium text-gray-800 mb-4">Profile Settings</h2>
+                
+                <!-- Navigation Items -->
+                <div class="space-y-1">
+                    <!-- Profile Information - Active -->
+                    <a href="profiles-information.html" class="flex items-center justify-between p-3 rounded-md text-gray-700 hover:bg-gray-50">
+                        <span>Profile Information</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                        </svg>
+                    </a>
+                    
+                    <!-- Security Settings -->
+                    <a href="profiles-security.html" class="flex items-center justify-between p-3 rounded-md text-gray-700 hover:bg-gray-50">
+                        <span>Security Settings</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                        </svg>
+                    </a>
+                    
+                    <!-- Notification Settings -->
+                    <a href="notification-settings.html" class="flex items-center justify-between p-3 rounded-md text-gray-700 hover:bg-gray-50">
+                        <span>Notification Settings</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
         
-        <!-- Notification Cards -->
-        <div class="space-y-6">
-            <!-- Order Notification -->
-            <div class="bg-white rounded-lg shadow-sm border border-gray-100 relative">
-                <div class="w-1 h-full bg-green-500 absolute left-0 top-0 rounded-l-lg"></div>
-                <div class="p-4 pl-6">
-                    <div class="flex items-start">
-                        <div class="mr-3 text-yellow-500 text-xl">
-                            <i class="fas fa-envelope"></i>
-                        </div>
-                        <div class="flex-1">
-                            <div class="flex items-center">
-                                <span class="mr-2">📦</span>
-                                <h3 class="font-semibold text-gray-800">New Order Received</h3>
-                            </div>
-                            <p class="text-gray-700 my-2">A new service order has been placed by [Customer Name]. Order ID: #ORD56789.</p>
-                            <p class="text-gray-500 text-sm">Jan 30, 2025 - 12:45 PM</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Vendor Registration -->
-            <div class="bg-white rounded-lg shadow-sm border border-gray-100 relative">
-                <div class="w-1 h-full bg-blue-500 absolute left-0 top-0 rounded-l-lg"></div>
-                <div class="p-4 pl-6">
-                    <div class="flex items-start">
-                        <div class="mr-3 text-yellow-500 text-xl">
-                            <i class="fas fa-envelope"></i>
-                        </div>
-                        <div class="flex-1">
-                            <div class="flex items-center">
-                                <span class="mr-2">🔧</span>
-                                <h3 class="font-semibold text-gray-800">New Vendor Registration</h3>
-                            </div>
-                            <p class="text-gray-700 my-2">A new vendor, [Vendor Name], has signed up and is awaiting verification. Review their profile and documents.</p>
-                            <p class="text-gray-500 text-sm">Jan 30, 2025 - 11:30 AM</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- User Joined -->
-            <div class="bg-white rounded-lg shadow-sm border border-gray-100 relative">
-                <div class="w-1 h-full bg-blue-500 absolute left-0 top-0 rounded-l-lg"></div>
-                <div class="p-4 pl-6">
-                    <div class="flex items-start">
-                        <div class="mr-3 text-gray-400 text-xl">
-                            <i class="fas fa-envelope"></i>
-                        </div>
-                        <div class="flex-1">
-                            <div class="flex items-center">
-                                <span class="mr-2">👤</span>
-                                <h3 class="font-semibold text-gray-800">New User Joined</h3>
-                            </div>
-                            <p class="text-gray-700 my-2">[User Name] has successfully created an account. Welcome them to the platform!</p>
-                            <p class="text-gray-500 text-sm">Jan 30, 2025 - 10:15 AM</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Customer Dispute -->
-            <div class="bg-white rounded-lg shadow-sm border border-gray-100 relative">
-                <div class="w-1 h-full bg-red-500 absolute left-0 top-0 rounded-l-lg"></div>
-                <div class="p-4 pl-6">
-                    <div class="flex items-start">
-                        <div class="mr-3 text-gray-400 text-xl">
-                            <i class="fas fa-envelope"></i>
-                        </div>
-                        <div class="flex-1">
-                            <div class="flex items-center">
-                                <span class="mr-2">⚠️</span>
-                                <h3 class="font-semibold text-gray-800">Customer Dispute Alert</h3>
-                            </div>
-                            <p class="text-gray-700 my-2">A new dispute has been raised by [Customer Name] regarding Order ID #ORD45678. Review and take action.</p>
-                            <p class="text-gray-500 text-sm">Jan 30, 2025 - 09:50 AM</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Pagination -->
-        <div class="mt-8 flex items-center justify-between">
-            <button class="flex items-center text-gray-600 hover:text-gray-900">
-                <i class="fas fa-chevron-left mr-2"></i>
-                Previous
-            </button>
-            
-            <div class="flex space-x-2">
-                <button class="w-8 h-8 rounded-full bg-yellow-500 text-white flex items-center justify-center">1</button>
-                <button class="w-8 h-8 rounded-full hover:bg-gray-200 text-gray-600 flex items-center justify-center">2</button>
-                <button class="w-8 h-8 rounded-full hover:bg-gray-200 text-gray-600 flex items-center justify-center">3</button>
-                <span class="w-8 h-8 flex items-center justify-center text-gray-600">...</span>
-                <button class="w-8 h-8 rounded-full hover:bg-gray-200 text-gray-600 flex items-center justify-center">8</button>
-                <button class="w-8 h-8 rounded-full hover:bg-gray-200 text-gray-600 flex items-center justify-center">9</button>
-                <button class="w-8 h-8 rounded-full hover:bg-gray-200 text-gray-600 flex items-center justify-center">10</button>
-            </div>
-            
-            <button class="flex items-center text-gray-600 hover:text-gray-900">
-                Next
-                <i class="fas fa-chevron-right ml-2"></i>
-            </button>
-        </div>
+        <!-- Vertical Divider (visible on md screens and up) -->
+        <div class="hidden md:block w-px bg-gray-200 h-auto"></div>
+        
+       
     </div>
+</main>
     </div>
 <!-- Alpine.js (Add this script if not already included in your project) -->
 <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
