@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quicrefill Admin</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Chart.js from cdnjs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js" integrity="sha512-ElRFoEQdI5Ht6kZvyzXhYG9NqjtkmlkfYk0wr6wHxU9JEHakS7UJZNeml5ALk+8IKlU6jDgMabC3vkumRokgJA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- Load Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.js"></script>
+</head>
+
+    <style>
+        [x-cloak] { display: none !important; }
+
+        @media (max-width: 768px) {
+            .mobile-sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease-in-out;
+            }
+            .mobile-sidebar.open {
+                transform: translateX(0);
+            }
+
+            .dropdown-menu {
+                @apply left-1/2 -translate-x-1/2 w-80 max-w-[95%];
+            }
+
+
+        }
+
+        .flatpickr-day.selected, 
+        .flatpickr-day.startRange, 
+        .flatpickr-day.endRange {
+            background: #FFB600 !important;
+            color: white !important;
+            border-color: #FFB600 !important;
+        }
+
+        /* Change the color of dates between the range */
+        .flatpickr-day.inRange {
+            background: #FFE08A !important; /* Light yellow */
+            color: black !important;
+        }
+
+
+    </style>
+</head>
+<body class="bg-gray-100">
+    <!-- Header -->
+        
+    <header class="bg-white shadow-md flex items-center justify-between p-4 sticky top-0 z-30">
+        <div class="flex items-center">
+            <button  id="sidebar-toggle" class=" md:hidden mr-4">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="flex items-center mr-4 md:mr-8">
+                <img src="images/logo.png" class="w-[150px] md:w-[250px]">
+            </div>
+            <button id="hide-sidebar-button" class="border border-gray-200 rounded-md px-2 py-1 z-15 hidden md:block">
+                <i class="fas fa-angle-left"></i>
+            </button>
+        </div>
+        
+        <div class="hidden md:block relative w-1/3">
+            <input type="text" placeholder="Search"
+                class="w-full px-4 py-2 border border-gray-300 rounded-md bg-gray-100 focus:outline-none pl-10">
+            <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+            <button class="absolute right-0 top-0 h-full px-4 bg-gradient-to-b from-[#FFC533] to-[#FFB600] text-black rounded-r-md border border-gray-300 shadow flex items-center justify-center">
+                <i class="fas fa-arrow-left"></i>
+                </button>
+        </div>
+        
+        
+        <div class="flex items-center">
+            <div x-data="{ open: false }" class="relative mr-4">
+                <!-- Notification Icon -->
+                <button @click="open = !open"  class="relative p-2">
+                    <i class="fas fa-bell text-gray-600 text-lg"></i>
+                    <!-- Notification Badge -->
+                    <span class="absolute -top-1 -right-1 bg-yellow-400 text-black text-xs font-bold px-1.5 py-0.5 rounded-full">8</span>
+                </button>
+            
+                <!-- Dropdown Menu -->
+                <div 
+                    x-show="open" 
+                    @click.away="open = false"
+                    x-transition x-cloak
+                    class="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-64 bg-white border rounded-md shadow-lg z-50"
+                >
+                    <div class="p-3 border-b">
+                        <span class="font-semibold text-gray-700">Notifications</span>
+                    </div>
+                    
+                    <ul class="max-h-60 overflow-auto">
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer">
+                            <span class="text-sm text-gray-700">🔔 You have a new message</span>
+                        </li>
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer">
+                            <span class="text-sm text-gray-700">✅ Task Completed Successfully</span>
+                        </li>
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer">
+                            <span class="text-sm text-gray-700">⚠️ System Alert: Update Required</span>
+                        </li>
+                    </ul>
+            
+                    <div class="p-3 border-t text-center">
+                        <a href="notifications-center.html" class="text-sm text-blue-500 hover:underline">View all</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div x-data="{ open: false }" class="relative">
+                <!-- Profile Button -->
+                <button @click="open = !open"  class="flex items-center rounded-full px-2 py-1 md:px-4 md:py-2 border border-gray-300 shadow-md focus:outline-none">
+                    <!-- Avatar -->
+                    <div class="relative w-10 h-10 md:w-10 md:h-10 rounded-full bg-gray-300 mr-2">
+                        <!-- Avatar Image -->
+                        <img src="images/Avatar/avatar.png" alt="User Avatar" class="w-full h-full object-cover rounded-full">
+                    
+                        <!-- Green Dot (Move Outside) -->
+                        <div class="absolute top-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"
+                             style="transform: translate(30%, -30%);"></div>
+                    </div>
+                    
+                    <!-- User Info -->
+                    <div class="hidden md:block text-left">
+                        <div class="text-sm font-medium">Timothy Jonson</div>
+                        <div class="text-xs text-gray-500">timoj@Quicrefil.ng</div>
+                    </div>
+                </button>
+            
+                <!-- Dropdown Menu -->
+                <div 
+                    x-show="open" 
+                    @click.away="open = false"
+                    x-transition x-cloak
+                    class="absolute right-0 mt-2 w-48 bg-white border rounded-md shadow-lg z-50"
+                >
+                    <ul class="py-2">
+                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer"><a href="profiles-settings.html">👤 Profile</a> </li>
+                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">⚙️ Settings</li>
+                        <li class="px-4 py-2 text-red-500 hover:bg-gray-100 cursor-pointer">🚪 Logout</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="flex">
+        <!-- Sidebar -->
+        
+        <aside id="sidebar" class="mobile-sidebar fixed md:relative w-64 bg-white min-h-screen shadow-sm z-20 md:transform-none border border-gray-300S">
+            <nav class="p-4">
+                <ul>
+                    <li class="mb-4">
+                        <a href="quicrefill-dashboard.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-th-large mr-3"></i>
+                            <span>Summary</span>
+                        </a>
+                    </li>
+                  
+                    <li class="mb-4">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-clipboard-list mr-3"></i>
+                            <span>Order Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="service-management.html" class="flex items-center text-amber-500 font-medium">
+                            <i class="fas fa-concierge-bell mr-3"></i>
+                            <span>Service Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-user mr-3"></i>
+                            <span>User Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-motorcycle mr-3"></i>
+                            <span>Rider Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-money-bill mr-3"></i>
+                            <span>Revenue Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-comments mr-3"></i>
+                            <span>Feedback</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-chart-bar mr-3"></i>
+                            <span>Reports and Analytics</span>
+                        </a>
+                    </li>
+                    <li x-data="{ open: false }" class="mb-4">
+                        <a href="#" @click.prevent="open = !open" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-shield-alt mr-3"></i>
+                            <span>Audit Logs & Security</span>
+                            <i :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas ml-auto text-xs"></i>
+                        </a>
+                    
+                        <!-- Dropdown Menu -->
+                        <ul x-show="open" x-cloak class="mt-2 ml-6 space-y-2 text-gray-500">
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-file-alt mr-3"></i>
+                                <a href="#">Security Logs</a>
+                            </li>
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-user-lock mr-3"></i>
+                                <a href="#">Access Control</a>
+                            </li>
+                        </ul>
+                    </li>
+                    
+                    <li class="mb-4">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-user-shield mr-3"></i>
+                            <span>Admin Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-cog mr-3"></i>
+                            <span>System Settings</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Overlay for sidebar on mobile -->
+        <div id="sidebar-overlay" class="fixed inset-0 bg-black opacity-50 z-10 hidden"></div>
+
+        <!-- Content Area -->
+        <main class="flex-1 p-4 md:p-6">
+            <div class=" p-4 mb-6">
+                <!-- Header with back button -->
+                <div class="mb-4 flex items-center">
+                    <a class="mr-2 text-gray-600" href="pending-service-management.html">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                        </svg>
+                    </button>
+                    <div>
+                        <h1 class="text-lg font-medium text-gray-800">Pending Service Detail Page</h1>
+                        <!-- Dynamic Breadcrumb -->
+                        <div class="flex items-center space-x-2 text-gray-600 text-sm">
+                            <a href="#" class="breadcrumb-item hover:text-yellow-500">Dashboard</a>
+                            <span>></span>
+                            <a href="#" class="breadcrumb-item hover:text-yellow-500">Service Management</a>
+                            <span>></span>
+                            <a href="#" class="breadcrumb-item hover:text-yellow-500">Pending Services</a>
+                            <span>></span>
+                            <span class="text-gray-800 font-semibold" id="serviceId">SRV-1001</span>
+                        </div>
+
+                    </div>
+                </div>
+        
+                <!-- Main content -->
+                <div class="flex flex-col md:flex-row gap-6">
+                    <!-- Left section - Service details -->
+                    <div class="bg-white rounded-lg shadow-sm p-4 md:w-7/12">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-lg font-bold text-gray-800">SRV-1001</h2>
+                            <button class="text-gray-500">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                </svg>
+                            </button>
+                        </div>
+        
+                      <!-- Service Information Table -->
+                    <div class="overflow-x-auto bg-white shadow-md rounded-lg p-4">
+                        <table class="w-full border-collapse text-sm">
+                            <thead>
+                                <tr class="bg-gray-100">
+                                    <th class="text-left px-4 py-2 font-medium text-gray-600">Field</th>
+                                    <th class="text-left px-4 py-2 font-medium text-gray-600">Details</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y">
+                                <tr>
+                                    <td class="px-4 py-2 text-gray-500">Service Name</td>
+                                    <td class="px-4 py-2 font-medium text-gray-800">XYZ Gas Ltd</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-2 text-gray-500">Vendor Contact</td>
+                                    <td class="px-4 py-2 font-medium text-gray-800">venodor@example.com,+234 802 345 6789</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-2 text-gray-500">Category</td>
+                                    <td class="px-4 py-2 font-medium text-gray-800">Gas</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-2 text-gray-500">Service Status</td>
+                                    <td class="px-4 py-2 font-medium text-yellow-600">Pedning <i class="fa fa-hourglass-half"></i></td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-2 text-gray-500">Submission Date</td>
+                                    <td class="px-4 py-2 font-medium text-gray-800">12/03/2025</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-2 text-gray-500">Price Per Unit</td>
+                                    <td class="px-4 py-2 font-medium text-gray-800">₦1250.00</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-2 text-gray-500">Estimated Delivery</td>
+                                    <td class="px-4 py-2 font-medium text-gray-800">30 mins</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-2 text-gray-500">Service Location</td>
+                                    <td class="px-4 py-2 font-medium text-gray-800">Jahi</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-2 text-gray-500">Service Radius</td>
+                                    <td class="px-4 py-2 font-medium text-gray-800">10 km</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-2 text-gray-500">Business Hours</td>
+                                    <td class="px-4 py-2 font-medium text-gray-800">6am - 9pm</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-2 text-gray-500">Minimum Order Quantity</td>
+                                    <td class="px-4 py-2 font-medium text-gray-800">2kg</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-2 text-gray-500">Delivery Fee(per km)</td>
+                                    <td class="px-4 py-2 font-medium text-gray-800">₦300</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-2 text-gray-500">Geo Location<td>
+                                    <td class="px-4 py-2 font-medium text-gray-800">Abuja, Nigeria</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+        
+                        <!-- Action buttons -->
+                        <div class="mt-6 flex flex-wrap gap-2">
+                            <button class="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded text-sm">
+                                Approve Service
+                            </button>
+                            <button class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded text-sm ">
+                                Reject Service 
+                            </button>
+                            <button class="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded text-sm">
+                                Request Service Edits
+                            </button>
+                           
+                            
+                        </div>
+                    </div>
+                            
+                    
+                </div>
+            
+            </div>
+            <div class="p-4 mb-6 w-full">
+                <div class="bg-white rounded-lg shadow-md w-full overflow-hidden">
+                    <!-- Card Header -->
+                    <div class="p-6 ">
+                        <h2 class="text-xl font-semibold text-gray-800">Assigned Service Representatives (Riders /Delivery Reps)</h2>
+                    </div>
+                    <div class="p-6 overflow-x-auto">
+                        <table class="w-full border-collapse bg-white shadow-md rounded-lg overflow-hidden">
+                            <thead>
+                                <tr class="bg-gray-200 text-left text-gray-600 text-sm">
+                                    <th class="p-3">Rep Name</th>
+                                    <th class="p-3">Contact</th>
+                                    <th class="p-3">Assinged Date</th>
+                                    <th class="p-3">Status</th>
+                                    <th class="p-3">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-t text-gray-700 hover:bg-gray-100">
+                                    <td class="p-3">John Doe</td>
+                                    <td class="p-3">+234 701 234 5678</td>
+                                    <td class="p-3">11/03/2025</td>
+                                    <td class="p-3 text-green-500 font-semibold">Active</td>
+                                    
+                                    <td class="p-3"><a href="#" class="text-blue-500">View Profile</a></td>
+                                    
+                                </tr>
+                                <tr class="border-t text-gray-700 hover:bg-gray-100">
+                                    <td class="p-3">Jane Smith</td>
+                                    <td class="p-3">+234 802 765 4321 </td>
+                                    <td class="p-3">11/03/2025</td>
+                                    <td class="p-3 text-green-500 font-semibold">Active</td>
+                                    
+                                    <td class="p-3"><a href="#" class="text-blue-500">View Profile</a></td>
+                                    
+                                </tr>
+                                
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                   
+                </div>
+            </div>
+            <div class="mt-6 flex flex-wrap gap-2 mb-6">
+                <button class="bg-gradient-to-b from-gray-100 to-gray-300 hover:from-gray-200 hover:to-gray-400 text-black py-2 px-4 rounded text-sm">
+                    <div class="flex space-x-4">
+                        <!-- Plus Icon -->
+                        <div class="flex items-center justify-center w-5 h-5 border border-black rounded-lg">
+                          <i class="fa-solid fa-plus text-black"></i>
+                        </div> &nbsp;   Assign a New Rep
+                    </div>
+                </button>
+                <button class="bg-gradient-to-b from-gray-100 to-gray-300 hover:from-gray-200 hover:to-gray-400  py-2 px-4 rounded text-sm">
+                    <div class="flex space-x-4">
+                        <!-- Plus Icon -->
+                        <div class="flex items-center justify-center w-5 h-5 border border-black rounded-lg">
+                            <i class="fa-solid fa-minus text-black"></i>
+                        </div> &nbsp;  Remove Rep From Service
+                    </div>
+                    
+                </button>
+                <button class="bg-gradient-to-b from-gray-100 to-gray-300 hover:from-gray-200 hover:to-gray-400  py-2 px-4 rounded text-sm">
+                    <div class="flex space-x-4">
+                        <!-- Plus Icon -->
+                        <div class="flex items-center justify-center w-5 h-5  rounded-lg">
+                            <i class="fa-solid fa-sync"></i>
+                        </div> &nbsp;  Change Service Rep Status
+                    </div>
+                    
+                </button>
+            </div>
+            
+
+            
+            <div class="bg-white rounded-md border border-gray-300 rounded-md shadow-md p-4 mb-6">
+                <div class="container mx-auto">
+                    <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-6">
+                        <h1 class="text-xl md:text-2xl font-bold text-gray-800 mb-4 md:mb-0">Compliance Documents Submitted</h1>
+                        
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full border-collapse bg-white shadow-md rounded-lg overflow-hidden">
+                            <thead>
+                                <tr class="bg-gray-200 text-left text-gray-600 text-sm">
+                                    <th class="p-3">Vendor ID</th>
+                                    <th class="p-3">Vendor Name</th>
+                                    <th class="p-3">Business Name</th>
+                                    <th class="p-3">Region</th>
+                                    <th class="p-3">Status</th>
+                                    <th class="p-3">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-t text-gray-700 hover:bg-gray-100">
+                                    <td class="p-3">#VER786393</td>
+                                    <td class="p-3">N/A</td>
+                                    <td class="p-3">Safety Certification</td>
+                                    <td class="p-3">N/A</td>
+                                    <td class="p-3 text-green-500 font-semibold">Pending</td>
+                                    <td class="p-3"><a href="#" class="text-blue-500">Preview Documents</a></td>
+                                </tr>
+                                <tr class="border-t text-gray-700 hover:bg-gray-100">
+                                    <td class="p-3">#VER7860173</td>
+                                    <td class="p-3">N/A</td>
+                                    <td class="p-3">Quality Assurance Report</td>
+                                    <td class="p-3">N/A</td>
+                                    <td class="p-3 text-green-500 font-semibold">Pending</td>
+                                    <td class="p-3"><a href="#" class="text-blue-500">Preview Documents</a></td>
+                                </tr>
+                                <tr class="border-t text-gray-700 hover:bg-gray-100">
+                                    <td class="p-3">#VER7860328</td>
+                                    <td class="p-3">N/A</td>
+                                    <td class="p-3">Vendor Business Registration</td>
+                                    <td class="p-3">N/A</td>
+                                    <td class="p-3 text-green-500 font-semibold">Pending</td>
+                                    <td class="p-3"><a href="#" class="text-blue-500">Preview Documents</a></td>
+                                </tr>
+                                <tr class="border-t text-gray-700 hover:bg-gray-100">
+                                    <td class="p-3">#VER7860749</td>
+                                    <td class="p-3">N/A</td>
+                                    <td class="p-3">State Registration Certification</td>
+                                    <td class="p-3">N/A</td>
+                                    <td class="p-3 text-green-500 font-semibold">Pending</td>
+                                    <td class="p-3"><a href="#" class="text-blue-500">Preview Documents</a></td>
+                                </tr>
+                            </tbody>
+                            
+                        </table>
+                    </div>
+                    <div class="flex justify-between items-center mt-4 p-4 border-t">
+                        <!-- Left Section: Total Entries & Previous Button -->
+                        <div class="flex items-center space-x-4">
+                            <span class="text-gray-600">Total entries: <span class="font-bold">20</span></span>
+                            <button class="px-3 py-1 text-gray-400 flex items-center space-x-1" disabled>
+                                <i class="fa fa-chevron-left"></i> <span>Previous</span>
+                            </button>
+                        </div>
+                    
+                        <!-- Centered Page Numbers -->
+                        <div class="flex items-center space-x-2">
+                            <button class="px-3 py-1 bg-yellow-500 text-white font-bold rounded-full">1</button>
+                            <span class="text-gray-700">2</span>
+                            <span class="text-gray-700">3</span>
+                            <span class="text-gray-500">..</span>
+                            <span class="text-gray-700">5</span>
+                        </div>
+                    
+                        <!-- Right Section: Next Button -->
+                        <button class="px-3 py-1 text-gray-500 flex items-center space-x-1 hover:text-gray-700">
+                            <span>Next</span> <i class="fa fa-chevron-right"></i>
+                        </button>
+                    </div>
+                    
+                </div>
+            </div>
+         <!-- Action buttons -->
+
+            <div class="mt-6 flex flex-wrap gap-2 mb-6">
+                <button class="bg-gradient-to-b from-gray-100 to-gray-300 hover:from-gray-200 hover:to-gray-400 text-black py-2 px-4 rounded text-sm">
+                    <i class="fa fa-download"></i>   Download Documents
+                </button>
+                <button class="bg-gradient-to-b from-gray-100 to-gray-300 hover:from-gray-200 hover:to-gray-400 text-black py-2 px-4 rounded text-sm">
+                    
+                    <div class="flex space-x-4">
+                        <!-- Plus Icon -->
+                        <div class="flex items-center justify-center w-5 h-5 border border-black rounded-lg">
+                          <i class="fa-solid fa-plus text-black"></i>
+                        </div> &nbsp;   Request Additonal Compliance Documents
+                    </div>
+                </button>
+            </div>
+            
+        </main>
+    </div>
+<!-- Alpine.js (Add this script if not already included in your project) -->
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script>
+        
+    
+
+
+        // Mobile sidebar toggle functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebarToggle = document.querySelector('#sidebar-toggle');
+            const sidebar = document.getElementById('sidebar');
+            const sidebarOverlay = document.getElementById('sidebar-overlay');
+            
+            const hideSidebarButton = document.getElementById('hide-sidebar-button');
+            
+            sidebarToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('open');
+                sidebar.classList.remove('hidden');
+                sidebarOverlay.classList.toggle('hidden');
+            });
+            
+            sidebarOverlay.addEventListener('click', function() {
+                sidebar.classList.remove('open');
+                sidebar.classList.add('hidden');
+                sidebarOverlay.classList.add('hidden');
+            });
+            
+            hideSidebarButton.addEventListener('click', function() {
+                sidebar.classList.toggle("hidden");
+            });
+    
+         
+        
+            
+        });
+        
+        
+    </script>
+     <script>
+        let datePicker = document.getElementById("datePicker");
+        let dropdownBtn = document.getElementById("dropdownBtn");
+        let dropdownMenu = document.getElementById("dropdownMenu");
+
+        let mode = "monthly"; // Default mode
+
+        function setDateMode(selectedMode) {
+            mode = selectedMode;
+            dropdownBtn.innerHTML = selectedMode.charAt(0).toUpperCase() + selectedMode.slice(1) + ' <i class="fa-solid fa-chevron-down ml-1"></i>';
+            dropdownMenu.classList.add("hidden");
+
+            if (mode === "today") {
+                let today = new Date();
+                let formattedDate = today.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+                datePicker.value = formattedDate;
+            } 
+            else if (mode === "Specific Date") {
+                flatpickr(datePicker, {
+                    dateFormat: "d M, Y",
+                    onChange: function(selectedDates, dateStr) {
+                        datePicker.value = dateStr;
+                    }
+                }).open();
+            } 
+            else if (mode === "monthly") {
+                flatpickr(datePicker, {
+                    mode: "range",
+                    dateFormat: "d M",
+                    onChange: function(selectedDates, dateStr) {
+                        if (selectedDates.length === 2) {
+                            let start = selectedDates[0].toLocaleDateString("en-GB", { day: "2-digit", month: "short" });
+                            let end = selectedDates[1].toLocaleDateString("en-GB", { day: "2-digit", month: "short" });
+                            datePicker.value = `${start} - ${end}`;
+                        }
+                    }
+                }).open();
+            }
+            
+        }
+
+        // Toggle dropdown
+        dropdownBtn.addEventListener("click", () => {
+            dropdownMenu.classList.toggle("hidden");
+        });
+
+        // Close dropdown on outside click
+        document.addEventListener("click", (event) => {
+            if (!dropdownBtn.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                dropdownMenu.classList.add("hidden");
+            }
+        });
+
+        // Set default
+        setDateMode("today");
+    </script>
+</body>
+</html>
