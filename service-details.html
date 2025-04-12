@@ -13,6 +13,7 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
     <style>
@@ -346,22 +347,88 @@
 
         
                         <!-- Action buttons -->
-                        <div class="mt-6 flex flex-wrap gap-2">
-                            <button class="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded text-sm">
-                                Edit Service
-                            </button>
-                            <button class="bg-gradient-to-b from-gray-100 to-gray-300 hover:from-gray-200 hover:to-gray-400 text-gray-700 py-2 px-4 rounded text-sm">
-                                Change Status
-                            </button>
-                            <button class="bg-gradient-to-b from-gray-100 to-gray-300 hover:from-gray-200 hover:to-gray-400 text-gray-700 py-2 px-4 rounded text-sm">
-                                Update Pricing
-                            </button>
-                            <button class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded text-sm mt-2 md:mt-0">
-                                Delete Service
-                            </button>
+                        <!-- Alpine root -->
+                        <div x-data="{ showStatus: false, showPricing: false, selectedStatus: 'Active' }">
+                            <!-- Action buttons -->
+                            <div class="mt-6 flex flex-wrap gap-2">
+                                <button class="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded text-sm">
+                                    Edit Service
+                                </button>
+                                <!-- Change Status Button -->
+                                <button @click="showStatus = true"
+                                    class="bg-gradient-to-b from-gray-100 to-gray-300 hover:from-gray-200 hover:to-gray-400 text-gray-700 py-2 px-4 rounded text-sm">
+                                    Change Status
+                                </button>
+                                <!-- Update Pricing Button -->
+                                <button @click="showPricing = true"
+                                    class="bg-gradient-to-b from-gray-100 to-gray-300 hover:from-gray-200 hover:to-gray-400 text-gray-700 py-2 px-4 rounded text-sm">
+                                    Update Pricing
+                                </button>
+                                <button class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded text-sm mt-2 md:mt-0">
+                                    Delete Service
+                                </button>
+                            </div>
+
+                            <!-- STATUS MODAL -->
+                            <div x-show="showStatus"
+                                x-cloak
+                                class="fixed inset-0 flex items-center justify-center bg-black/50 z-50"
+                                x-transition
+                                @click.self="showStatus = false">
+                                <div class="bg-white rounded-xl shadow-lg p-6 w-full max-w-sm space-y-4" @click.stop>
+                                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Status</h3>
+                                    <div class="space-y-2">
+                                        <div @click="selectedStatus = 'Active'"
+                                            :class="{'bg-green-100': selectedStatus === 'Active'}"
+                                            class="text-green-600 font-medium cursor-pointer rounded px-4 py-2 w-fit">Active</div>
+                                        <div @click="selectedStatus = 'Inactive'"
+                                            :class="{'bg-yellow-100': selectedStatus === 'Inactive'}"
+                                            class="text-yellow-600 font-medium cursor-pointer rounded px-4 py-2 w-fit">Inactive</div>
+                                        <div @click="selectedStatus = 'Discontinued'"
+                                            :class="{'bg-red-100': selectedStatus === 'Discontinued'}"
+                                            class="text-red-600 font-medium cursor-pointer rounded px-4 py-2 w-fit">Discontinued</div>
+                                    </div>
+                                    <button @click="showStatus = false"
+                                        class="mt-4 px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded text-sm font-medium text-gray-700">
+                                        Close
+                                    </button>
+                                    <button @click="showStatus = false; showToast('Status Updated: ' + selectedStatus, 'success')"
+                                        class="mt-2 px-4 py-2 bg-yellow-500 hover:bg-yellow-600 rounded text-sm font-medium text-white">
+                                        Update Status
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- PRICING MODAL -->
+                            <div x-show="showPricing"
+                                x-cloak
+                                class="fixed inset-0 flex items-center justify-center bg-black/50 z-50"
+                                x-transition
+                                @click.self="showPricing = false">
+                                <div class="bg-white rounded-xl shadow-lg p-6 w-full max-w-sm space-y-4" @click.stop>
+                                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Update Pricing</h3>
+                                    <label class="block text-gray-600 text-sm mb-1">Price <span class="italic">(per kg)</span></label>
+                                    <input type="text"
+                                        class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                                        placeholder="₦75,000" value="₦75,000" />
+                                    <button @click="showPricing = false; showToast('Pricing Updated', 'success')"
+                                        class="w-full bg-yellow-500 hover:bg-yellow-600 text-white py-2 rounded font-semibold">
+                                        Update Pricing
+                                    </button>
+                                    <button @click="showPricing = false"
+                                        class="w-full mt-2 px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded text-sm font-medium text-gray-700">
+                                        Close
+                                    </button>
+                                </div>
+                            </div>
+
                         </div>
+
+
+
+                        
                     </div>
-                            
+                                                
                     <!-- Right section - Stats cards -->
                     <div class="md:w-5/12 space-y-4">
                         <!-- Total Orders -->
@@ -1008,6 +1075,54 @@
 
         // Set default
         setDateMode("today");
+
+
+        function showToast(message = 'Action completed successfully!', icon = 'success') {
+            let bgGradient = '';
+            let textColor = 'text-white';
+            let borderColor = '';
+
+            // Dynamic background based on icon type
+            switch (icon) {
+            case 'success':
+                bgGradient = 'linear-gradient(to right, #38b000, #70e000)';
+                borderColor = '#38b000';
+                break;
+            case 'error':
+                bgGradient = 'linear-gradient(to right, #d00000, #ff4d4d)';
+                borderColor = '#d00000';
+                break;
+            case 'warning':
+                bgGradient = 'linear-gradient(to right, #ffb600, #ffe066)';
+                borderColor = '#ffb600';
+                textColor = 'text-black';
+                break;
+            case 'info':
+                bgGradient = 'linear-gradient(to right, #0077b6, #90e0ef)';
+                borderColor = '#0077b6';
+                break;
+            default:
+                bgGradient = 'linear-gradient(to right, #333, #555)';
+                break;
+            }
+
+            Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: icon,
+            title: message,
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            background: bgGradient,
+            color: textColor === 'text-white' ? '#fff' : '#000',
+            customClass: {
+                popup: `rounded-xl shadow-lg border ${textColor} px-4 py-2`,
+                title: `font-medium ${textColor}`,
+            }
+            });
+        }
     </script>
+    
 </body>
 </html>

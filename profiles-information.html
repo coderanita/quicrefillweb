@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
     <style>
@@ -334,8 +335,8 @@
                     
                     <!-- Action Buttons -->
                     <div class="flex gap-4">
-                        <button type="button" class="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-md transition-colors">Cancel</button>
-                        <button type="submit" class="flex-1 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-md transition-colors">Save changes</button>
+                        <button type="button" onclick="showToast('Opration Cancelled', 'error');" class="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-md transition-colors">Cancel</button>
+                        <button type="button" onclick="showToast('Saved successfully!', 'success');" class="flex-1 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-md transition-colors">Save changes</button>
                     </div>
                 </form>
             </div>
@@ -505,6 +506,51 @@
 
         // Set default
         setDateMode("today");
+        function showToast(message = 'Action completed successfully!', icon = 'success') {
+            let bgGradient = '';
+            let textColor = 'text-white';
+            let borderColor = '';
+
+            // Dynamic background based on icon type
+            switch (icon) {
+            case 'success':
+                bgGradient = 'linear-gradient(to right, #38b000, #70e000)';
+                borderColor = '#38b000';
+                break;
+            case 'error':
+                bgGradient = 'linear-gradient(to right, #d00000, #ff4d4d)';
+                borderColor = '#d00000';
+                break;
+            case 'warning':
+                bgGradient = 'linear-gradient(to right, #ffb600, #ffe066)';
+                borderColor = '#ffb600';
+                textColor = 'text-black';
+                break;
+            case 'info':
+                bgGradient = 'linear-gradient(to right, #0077b6, #90e0ef)';
+                borderColor = '#0077b6';
+                break;
+            default:
+                bgGradient = 'linear-gradient(to right, #333, #555)';
+                break;
+            }
+
+            Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: icon,
+            title: message,
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            background: bgGradient,
+            color: textColor === 'text-white' ? '#fff' : '#000',
+            customClass: {
+                popup: `rounded-xl shadow-lg border ${textColor} px-4 py-2`,
+                title: `font-medium ${textColor}`,
+            }
+            });
+        }
     </script>
 </body>
 </html>
