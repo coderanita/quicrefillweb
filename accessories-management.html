@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quicrefill Admin</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Chart.js from cdnjs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"
+        integrity="sha512-ElRFoEQdI5Ht6kZvyzXhYG9NqjtkmlkfYk0wr6wHxU9JEHakS7UJZNeml5ALk+8IKlU6jDgMabC3vkumRokgJA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- Load Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.js"></script>
+</head>
+
+<style>
+    [x-cloak] {
+        display: none !important;
+    }
+
+    @media (max-width: 768px) {
+        .mobile-sidebar {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .mobile-sidebar.open {
+            transform: translateX(0);
+        }
+
+        .dropdown-menu {
+            @apply left-1/2 -translate-x-1/2 w-80 max-w-[95%];
+        }
+
+
+    }
+
+    .flatpickr-day.selected,
+    .flatpickr-day.startRange,
+    .flatpickr-day.endRange {
+        background: #FFB600 !important;
+        color: white !important;
+        border-color: #FFB600 !important;
+    }
+
+    /* Change the color of dates between the range */
+    .flatpickr-day.inRange {
+        background: #FFE08A !important;
+        /* Light yellow */
+        color: black !important;
+    }
+</style>
+</head>
+
+<body class="bg-gray-100">
+    <!-- Header -->
+
+    <header class="bg-white shadow-md flex items-center justify-between p-4 sticky top-0 z-30">
+        <div class="flex items-center">
+            <button id="sidebar-toggle" class=" md:hidden mr-4">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="flex items-center mr-4 md:mr-8">
+                <img src="images/logo.png" class="w-[150px] md:w-[250px]">
+            </div>
+            <button id="hide-sidebar-button" class="border border-gray-200 rounded-md px-2 py-1 z-15 hidden md:block">
+                <i class="fas fa-angle-left"></i>
+            </button>
+        </div>
+
+        <div class="hidden md:block relative w-1/3">
+            <input type="text" placeholder="Search"
+                class="w-full px-4 py-2 border border-gray-300 rounded-md bg-gray-100 focus:outline-none pl-10">
+            <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+            <button
+                class="absolute right-0 top-0 h-full px-4 bg-gradient-to-b from-[#FFC533] to-[#FFB600] text-black rounded-r-md border border-gray-300 shadow flex items-center justify-center">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+        </div>
+
+
+        <div class="flex items-center">
+            <div x-data="{ open: false }" class="relative mr-4">
+                <!-- Notification Icon -->
+                <button @click="open = !open" class="relative p-2">
+                    <i class="fas fa-bell text-gray-600 text-lg"></i>
+                    <!-- Notification Badge -->
+                    <span
+                        class="absolute -top-1 -right-1 bg-yellow-400 text-black text-xs font-bold px-1.5 py-0.5 rounded-full">8</span>
+                </button>
+
+                <!-- Dropdown Menu -->
+                <div x-show="open" @click.away="open = false" x-transition x-cloak
+                    class="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-64 bg-white border rounded-md shadow-lg z-50">
+                    <div class="p-3 border-b">
+                        <span class="font-semibold text-gray-700">Notifications</span>
+                    </div>
+
+                    <ul class="max-h-60 overflow-auto">
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer">
+                            <span class="text-sm text-gray-700">🔔 You have a new message</span>
+                        </li>
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer">
+                            <span class="text-sm text-gray-700">✅ Task Completed Successfully</span>
+                        </li>
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer">
+                            <span class="text-sm text-gray-700">⚠️ System Alert: Update Required</span>
+                        </li>
+                    </ul>
+
+                    <div class="p-3 border-t text-center">
+                        <a href="notifications-center.html" class="text-sm text-blue-500 hover:underline">View all</a>
+                    </div>
+                </div>
+            </div>
+
+            <div x-data="{ open: false }" class="relative">
+                <!-- Profile Button -->
+                <button @click="open = !open"
+                    class="flex items-center rounded-full px-2 py-1 md:px-4 md:py-2 border border-gray-300 shadow-md focus:outline-none">
+                    <!-- Avatar -->
+                    <div class="relative w-10 h-10 md:w-10 md:h-10 rounded-full bg-gray-300 mr-2">
+                        <!-- Avatar Image -->
+                        <img src="images/Avatar/avatar.png" alt="User Avatar"
+                            class="w-full h-full object-cover rounded-full">
+
+                        <!-- Green Dot (Move Outside) -->
+                        <div class="absolute top-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"
+                            style="transform: translate(30%, -30%);"></div>
+                    </div>
+
+                    <!-- User Info -->
+                    <div class="hidden md:block text-left">
+                        <div class="text-sm font-medium">Timothy Jonson</div>
+                        <div class="text-xs text-gray-500">timoj@Quicrefil.ng</div>
+                    </div>
+                </button>
+
+                <!-- Dropdown Menu -->
+                <div x-show="open" @click.away="open = false" x-transition x-cloak
+                    class="absolute right-0 mt-2 w-48 bg-white border rounded-md shadow-lg z-50">
+                    <ul class="py-2">
+                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer"><a href="profiles-settings.html">👤
+                                Profile</a> </li>
+                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">⚙️ Settings</li>
+                        <li class="px-4 py-2 text-red-500 hover:bg-gray-100 cursor-pointer">🚪 Logout</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="flex">
+        <!-- Sidebar -->
+
+        <aside id="sidebar"
+            class="mobile-sidebar fixed md:relative w-64 bg-white min-h-screen shadow-sm z-20 md:transform-none border border-gray-300S">
+            <nav class="p-4">
+                <ul>
+                    <li class="mb-4">
+                        <a href="quicrefill-dashboard.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-th-large mr-3"></i>
+                            <span>Summary</span>
+                        </a>
+                    </li>
+
+                    <li class="mb-4">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-clipboard-list mr-3"></i>
+                            <span>Order Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="service-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-briefcase mr-3"></i>
+                            <span>Service Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="accessories-management.html" class="flex items-center text-amber-500 font-medium">
+                            <i class="fas fa-bag-shopping mr-3"></i>
+                            <span>Accessories Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-user mr-3"></i>
+                            <span>User Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-motorcycle mr-3"></i>
+                            <span>Rider Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-money-bill mr-3"></i>
+                            <span>Revenue Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-comments mr-3"></i>
+                            <span>Feedback</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-chart-bar mr-3"></i>
+                            <span>Reports and Analytics</span>
+                        </a>
+                    </li>
+                    <li x-data="{ open: false }" class="mb-4">
+                        <a href="#" @click.prevent="open = !open"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-shield-alt mr-3"></i>
+                            <span>Audit Logs & Security</span>
+                            <i :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas ml-auto text-xs"></i>
+                        </a>
+
+                        <!-- Dropdown Menu -->
+                        <ul x-show="open" x-cloak class="mt-2 ml-6 space-y-2 text-gray-500">
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-file-alt mr-3"></i>
+                                <a href="#">Security Logs</a>
+                            </li>
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-user-lock mr-3"></i>
+                                <a href="#">Access Control</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="mb-4">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-user-shield mr-3"></i>
+                            <span>Admin Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-cog mr-3"></i>
+                            <span>System Settings</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Overlay for sidebar on mobile -->
+        <div id="sidebar-overlay" class="fixed inset-0 bg-black opacity-50 z-10 hidden"></div>
+
+        <!-- Content Area -->
+        <main class="flex-1 p-6 w-full overflow-x-hidden">
+            <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-6">
+                <h1 class="text-xl md:text-xl font-bold text-gray-800 mb-4 md:mb-0">Accessories Management</h1>
+                <div class="flex flex-wrap md:flex-nowrap items-center gap-2 md:gap-4">
+                    <a href="add-accessories-management.html" class="cursor-pointer bg-yellow-400 hover:bg-yellow-500  py-2 px-4 rounded text-sm flex items-center">
+                        <i class="fa fa-plus mr-2"></i>
+                        Add Accessories
+                    </a>
+                    <div class="mb-2 md:mb-0 bg-white relative">
+                        <input type="text" placeholder="Search"
+                            class="bg-white w-40 px-4 py-2 border border-gray-300 rounded-md bg-gray-100 focus:outline-none pr-10">
+                        <i
+                            class="fas fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer"></i>
+                    </div>
+
+                    <div class="mb-2 md:mb-0">
+                        <div class="flex gap-0">
+                            <!-- Date Picker -->
+                            <div class="relative w-40">
+                                <input type="text" id="datePicker"
+                                    class="pl-10 pr-3 py-2 border text-sm rounded-md w-full focus:outline-none cursor-pointer text-gray-700"
+                                    readonly>
+                                <span class="absolute left-3 top-2 text-gray-500">
+                                    <i class="fa-solid fa-calendar"></i>
+                                </span>
+                            </div>
+
+                            <!-- Dropdown -->
+                            <div class="relative z-20">
+                                <button id="dropdownBtn"
+                                    class="text-sm px-4 py-2 border rounded-md bg-white text-gray-700 focus:outline-none">
+                                    Monthly <i class="fa-solid fa-chevron-down ml-1"></i>
+                                </button>
+                                <div id="dropdownMenu"
+                                    class="absolute w-36 mt-2 bg-white border rounded-md shadow-md hidden">
+                                    <button class="block w-full text-left px-4 py-2 hover:bg-gray-200"
+                                        onclick="setDateMode('today')">Today</button>
+                                    <button class="block w-full text-left px-4 py-2 hover:bg-gray-200"
+                                        onclick="setDateMode('Specific Date')">Specific Date</button>
+                                    <button class="block w-full text-left px-4 py-2 hover:bg-gray-200"
+                                        onclick="setDateMode('monthly')">Monthly</button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-2 md:mb-0">
+                        <div class="relative inline-block" x-data="{ 
+                            open: false, 
+                            selected: '', 
+                            orderDropdown: false, 
+                            paymentDropdown: false, 
+                            serviceDropdown: false, 
+                            selectedStatuses: [], 
+                            selectedPayments: [], 
+                            selectedServices: [] 
+                        }">
+                            <!-- Filter Button -->
+                            <button @click="open = !open"
+                                class="flex items-center gap-2 px-4 py-2 text-sm bg-white border rounded-lg">
+                                <i class="fa fa-filter"></i> Filter
+                            </button>
+
+                            <!-- Dropdown -->
+                            <div x-show="open" @click.outside="open = false" x-cloak
+                                class="dropdown-menu absolute left-0 -translate-x-1/2 top-full mt-2 w-96 bg-white border rounded-lg shadow-lg p-4 z-30">
+
+                                <h3 class="text-gray-700 font-medium mb-3">Select Filter</h3>
+
+                                <!-- Main Options -->
+                                <div class="grid grid-cols-3 gap-2">
+                                    <button
+                                        @click="selected = 'Order Status'; orderDropdown = true; paymentDropdown = false; serviceDropdown = false"
+                                        :class="selected === 'Order Status' ? 'bg-yellow-400 ' : 'border'"
+                                        class="px-3 py-2 rounded-lg text-sm">
+                                        Order Status
+                                    </button>
+                                    <button
+                                        @click="selected = 'Payment Type'; paymentDropdown = true; orderDropdown = false; serviceDropdown = false"
+                                        :class="selected === 'Payment Type' ? 'bg-yellow-400 ' : 'border'"
+                                        class="px-3 py-2 rounded-lg text-sm">
+                                        Payment Type
+                                    </button>
+                                    <button
+                                        @click="selected = 'Service Type'; serviceDropdown = true; orderDropdown = false; paymentDropdown = false"
+                                        :class="selected === 'Service Type' ? 'bg-yellow-400 ' : 'border'"
+                                        class="px-3 py-2 rounded-lg text-sm">
+                                        Service Type
+                                    </button>
+                                </div>
+
+                                <!-- Order Status Dropdown -->
+                                <div x-show="orderDropdown" x-cloak class="mt-3">
+                                    <h3 class="text-gray-700 font-medium mb-2">Select Order Status</h3>
+                                    <div class="grid grid-cols-3 gap-2">
+                                        <template
+                                            x-for="status in ['Completed', 'In Progress', 'Cancelled', 'Disputed', 'In Transit']">
+                                            <button
+                                                @click="selectedStatuses.includes(status) ? selectedStatuses = selectedStatuses.filter(s => s !== status) : selectedStatuses.push(status)"
+                                                :class="selectedStatuses.includes(status) ? 'bg-yellow-400 ' : 'border'"
+                                                class="px-3 py-2 rounded-lg text-sm">
+                                                <span x-text="status"></span>
+                                            </button>
+                                        </template>
+                                    </div>
+                                </div>
+
+                                <!-- Payment Type Dropdown -->
+                                <div x-show="paymentDropdown" x-cloak class="mt-3">
+                                    <h3 class="text-gray-700 font-medium mb-2">Select Payment Type</h3>
+                                    <div class="grid grid-cols-3 gap-2">
+                                        <template x-for="payment in ['On delivery', 'Wallet', 'Flutterwave']">
+                                            <button
+                                                @click="selectedPayments.includes(payment) ? selectedPayments = selectedPayments.filter(p => p !== payment) : selectedPayments.push(payment)"
+                                                :class="selectedPayments.includes(payment) ? 'bg-yellow-400 ' : 'border'"
+                                                class="px-3 py-2 rounded-lg text-sm">
+                                                <span x-text="payment"></span>
+                                            </button>
+                                        </template>
+                                    </div>
+                                </div>
+
+                                <!-- Service Type Dropdown -->
+                                <div x-show="serviceDropdown" x-cloak class="mt-3">
+                                    <h3 class="text-gray-700 font-medium mb-2">Select Service Type</h3>
+                                    <div class="grid grid-cols-3 gap-2">
+                                        <template
+                                            x-for="service in ['Gas Refill', 'Peroleum', 'Diesel', 'Accessories', 'Electricity']">
+                                            <button
+                                                @click="selectedServices.includes(service) ? selectedServices = selectedServices.filter(s => s !== service) : selectedServices.push(service)"
+                                                :class="selectedServices.includes(service) ? 'bg-yellow-400 ' : 'border'"
+                                                class="px-3 py-2 rounded-lg text-sm">
+                                                <span x-text="service"></span>
+                                            </button>
+                                        </template>
+                                    </div>
+                                </div>
+
+                                <!-- Apply Button -->
+                                <div class="mt-4 text-center">
+                                    <button @click="open = false"
+                                        class="px-4 py-2 bg-yellow-400  rounded-lg">Apply</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+                <!-- Card -->
+                <div class="border rounded-lg p-4 bg-white shadow-sm">
+                  <div class="flex items-center gap-2 mb-1">
+                    <span class="w-3 h-3 bg-blue-500 rounded-full"></span>
+                    <h2 class="text-sm font-semibold text-gray-700">Total Orders</h2>
+                  </div>
+                  <p class="text-xs text-gray-500 mb-2">All orders placed for accessories</p>
+                  <p class="text-2xl font-bold text-gray-900">5,246</p>
+                </div>
+              
+                <div class="border rounded-lg p-4 bg-white shadow-sm">
+                  <div class="flex items-center gap-2 mb-1">
+                    <span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                    <h2 class="text-sm font-semibold text-gray-700">Completed Orders</h2>
+                  </div>
+                  <p class="text-xs text-gray-500 mb-2">Successfully fulfilled accessories orders</p>
+                  <p class="text-2xl font-bold text-gray-900">1,812</p>
+                </div>
+              
+                <div class="border rounded-lg p-4 bg-white shadow-sm">
+                  <div class="flex items-center gap-2 mb-1">
+                    <span class="w-3 h-3 bg-yellow-500 rounded-full"></span>
+                    <h2 class="text-sm font-semibold text-gray-700">Out for Delivery</h2>
+                  </div>
+                  <p class="text-xs text-gray-500 mb-2">Accessories orders currently being delivered</p>
+                  <p class="text-2xl font-bold text-gray-900">1,262</p>
+                </div>
+              
+                <div class="border rounded-lg p-4 bg-white shadow-sm">
+                  <div class="flex items-center gap-2 mb-1">
+                    <span class="w-3 h-3 bg-red-400 rounded-full"></span>
+                    <h2 class="text-sm font-semibold text-gray-700">Canceled Orders</h2>
+                  </div>
+                  <p class="text-xs text-gray-500 mb-2">Cancelled accessories orders</p>
+                  <p class="text-2xl font-bold text-gray-900">942</p>
+                </div>
+              
+                <div class="border rounded-lg p-4 bg-white shadow-sm">
+                  <div class="flex items-center gap-2 mb-1">
+                    <span class="w-3 h-3 bg-yellow-400 rounded-full"></span>
+                    <h2 class="text-sm font-semibold text-gray-700">Suspicious Orders</h2>
+                  </div>
+                  <p class="text-xs text-gray-500 mb-2">Orders currently being flagged for irregular activities</p>
+                  <p class="text-2xl font-bold text-gray-900">1,230</p>
+                </div>
+              
+                <div class="border rounded-lg p-4 bg-white shadow-sm">
+                  <div class="flex items-center gap-2 mb-1">
+                    <span class="w-3 h-3 bg-orange-600 rounded-full"></span>
+                    <h2 class="text-sm font-semibold text-gray-700">Out of Stock</h2>
+                  </div>
+                  <p class="text-xs text-gray-500 mb-2">Orders currently unavailable</p>
+                  <p class="text-2xl font-bold text-gray-900">1,230</p>
+                </div>
+              
+                <div class="border rounded-lg p-4 bg-white shadow-sm">
+                  <div class="flex items-center gap-2 mb-1">
+                    <span class="w-3 h-3 bg-sky-600 rounded-full"></span>
+                    <h2 class="text-sm font-semibold text-gray-700">Payment Received</h2>
+                  </div>
+                  <p class="text-xs text-gray-500 mb-2">Total amount received from accessories sale</p>
+                  <p class="text-2xl font-bold text-gray-900">1,230</p>
+                </div>
+              </div>
+              
+
+
+            <!--Order Details-->
+            <div class="bg-white rounded-md border border-gray-300 rounded-md shadow-md p-4 mb-6">
+
+                <div class="flex items-center mb-4">
+                    
+                    <span class="text-gray-600 font-medium">Order Details</span>
+                </div>
+                
+                <div class="container mx-auto">
+                    <div class="overflow-x-auto">
+                        <table class="w-full border-collapse bg-white shadow-md rounded-lg overflow-hidden">
+                            <thead>
+                                <tr class="bg-gray-200 text-left text-gray-600 text-sm">
+                                  <th class="p-3">Order ID</th>
+                                  <th class="p-3">Customer Name</th>
+                                  <th class="p-3">Vendor Name</th>
+                                  <th class="p-3">Rider Name</th>
+                                  <th class="p-3">Accessories</th>
+                                  <th class="p-3">Status</th>
+                                  <th class="p-3">Payment</th>
+                                  <th class="p-3">Amount</th>
+                                  <th class="p-3">Date</th>
+                                  <th class="p-3">Actions</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr class="border-t text-gray-700 hover:bg-gray-100">
+                                  <td class="p-3">#ORD1001</td>
+                                  <td class="p-3">John Doe</td>
+                                  <td class="p-3">Elite Gas Hub</td>
+                                  <td class="p-3">James Okoro</td>
+                                  <td class="p-3">Fire extinguisher</td>
+                                  <td class="p-3 text-yellow-500 font-semibold">In Progress</td>
+                                  <td class="p-3">On delivery</td>
+                                  <td class="p-3">₦12,500</td>
+                                  <td class="p-3">25/01/27 10:15 AM</td>
+                                  <td class="p-3 flex space-x-2">
+                                    <a href="add-accessories-management.html" class="text-gray-500"><i class="fa fa-edit"></i></a>
+                                    <button class="text-gray-500"><i class="fa fa-trash"></i></button>
+                                    <a href="view-accessories-management.html" class="text-gray-500"><i class="fa fa-ellipsis-v"></i></a>
+                                  </td>
+                                </tr>
+                                <tr class="border-t text-gray-700 hover:bg-gray-100">
+                                  <td class="p-3">#ORD1002</td>
+                                  <td class="p-3">Mary Johnson</td>
+                                  <td class="p-3">FixIt Plumbers</td>
+                                  <td class="p-3">Ahmed Bello</td>
+                                  <td class="p-3">Gas masks</td>
+                                  <td class="p-3 text-green-500 font-semibold">Completed</td>
+                                  <td class="p-3">Wallet</td>
+                                  <td class="p-3">₦75,000</td>
+                                  <td class="p-3">25/01/27 02:45 PM</td>
+                                  <td class="p-3 flex space-x-2">
+                                    <a href="add-accessories-management.html" class="text-gray-500"><i class="fa fa-edit"></i></a>
+                                    <button class="text-gray-500"><i class="fa fa-trash"></i></button>
+                                    <a href="view-accessories-management.html" class="text-gray-500"><i class="fa fa-ellipsis-v"></i></a>
+                                  </td>
+                                </tr>
+                                <tr class="border-t text-gray-700 hover:bg-gray-100">
+                                  <td class="p-3">#ORD1003</td>
+                                  <td class="p-3">Charles Uche</td>
+                                  <td class="p-3">PowerPlus Ltd.</td>
+                                  <td class="p-3">-</td>
+                                  <td class="p-3">Gas hoses</td>
+                                  <td class="p-3 text-yellow-500 font-semibold">In Progress</td>
+                                  <td class="p-3">Flatterwave</td>
+                                  <td class="p-3">₦8,500</td>
+                                  <td class="p-3">25/01/27 09:30 AM</td>
+                                  <td class="p-3 flex space-x-2">
+                                    <a href="add-accessories-management.html" class="text-gray-500"><i class="fa fa-edit"></i></a>
+                                    <button class="text-gray-500"><i class="fa fa-trash"></i></button>
+                                    <a href="view-accessories-management.html" class="text-gray-500"><i class="fa fa-ellipsis-v"></i></a>
+                                  </td>
+                                </tr>
+                                <tr class="border-t text-gray-700 hover:bg-gray-100">
+                                  <td class="p-3">#ORD1004</td>
+                                  <td class="p-3">Charles Uche</td>
+                                  <td class="p-3">PowerPlus Ltd.</td>
+                                  <td class="p-3">David M.</td>
+                                  <td class="p-3">Safety goggles</td>
+                                  <td class="p-3 text-red-500 font-semibold">Canceled</td>
+                                  <td class="p-3">Flatterwave</td>
+                                  <td class="p-3">₦10,000</td>
+                                  <td class="p-3">25/01/26 11:10 AM</td>
+                                  <td class="p-3 flex space-x-2">
+                                    <a href="add-accessories-management.html" class="text-gray-500"><i class="fa fa-edit"></i></a>
+                                    <button class="text-gray-500"><i class="fa fa-trash"></i></button>
+                                    <a href="view-accessories-management.html" class="text-gray-500"><i class="fa fa-ellipsis-v"></i></a>
+                                  </td>
+                                </tr>
+                                <tr class="border-t text-gray-700 hover:bg-gray-100">
+                                  <td class="p-3">#ORD1005</td>
+                                  <td class="p-3">David Hassan</td>
+                                  <td class="p-3">TechGears Ltd.</td>
+                                  <td class="p-3">-</td>
+                                  <td class="p-3">Gas masks</td>
+                                  <td class="p-3 text-green-500 font-semibold">Completed</td>
+                                  <td class="p-3">Wallet</td>
+                                  <td class="p-3">₦6,900</td>
+                                  <td class="p-3">25/01/24 04:20 PM</td>
+                                  <td class="p-3 flex space-x-2">
+                                    <a href="add-accessories-management.html" class="text-gray-500"><i class="fa fa-edit"></i></a>
+                                    <button class="text-gray-500"><i class="fa fa-trash"></i></button>
+                                    <a href="view-accessories-management.html" class="text-gray-500"><i class="fa fa-ellipsis-v"></i></a>
+                                  </td>
+                                </tr>
+                                <tr class="border-t text-gray-700 hover:bg-gray-100">
+                                  <td class="p-3">#ORD1006</td>
+                                  <td class="p-3">Esther John</td>
+                                  <td class="p-3">GreenGas Ltd.</td>
+                                  <td class="p-3">Sola A.</td>
+                                  <td class="p-3">Gas masks</td>
+                                  <td class="p-3 text-green-500 font-semibold">Completed</td>
+                                  <td class="p-3">On delivery</td>
+                                  <td class="p-3">₦30,000</td>
+                                  <td class="p-3">25/01/26 11:20 AM</td>
+                                  <td class="p-3 flex space-x-2">
+                                    <a href="add-accessories-management.html" class="text-gray-500"><i class="fa fa-edit"></i></a>
+                                    <button class="text-gray-500"><i class="fa fa-trash"></i></button>
+                                    <a href="view-accessories-management.html" class="text-gray-500"><i class="fa fa-ellipsis-v"></i></a>
+                                  </td>
+                                </tr>
+                                <tr class="border-t text-gray-700 hover:bg-gray-100">
+                                  <td class="p-3">#ORD1007</td>
+                                  <td class="p-3">Emmanuel Obi</td>
+                                  <td class="p-3">PetroHub Ltd.</td>
+                                  <td class="p-3">Tunde A.</td>
+                                  <td class="p-3">Safety goggles</td>
+                                  <td class="p-3 text-yellow-500 font-semibold">In Progress</td>
+                                  <td class="p-3">Transfer</td>
+                                  <td class="p-3">₦50,000</td>
+                                  <td class="p-3">25/01/27 12:50 PM</td>
+                                  <td class="p-3 flex space-x-2">
+                                    <a href="add-accessories-management.html" class="text-gray-500"><i class="fa fa-edit"></i></a>
+                                    <button class="text-gray-500"><i class="fa fa-trash"></i></button>
+                                    <a href="view-accessories-management.html" class="text-gray-500"><i class="fa fa-ellipsis-v"></i></a>
+                                  </td>
+                                </tr>
+                              </tbody>
+                              
+                        </table>
+                    </div>
+                    <div class="flex justify-between items-center mt-4 p-4 border-t">
+                        <!-- Left Section: Total Entries & Previous Button -->
+                        <div class="flex items-center space-x-4">
+                            <span class="text-gray-600">Total entries: <span class="font-bold">20</span></span>
+                            <button class="px-3 py-1 text-gray-400 flex items-center space-x-1" disabled>
+                                <i class="fa fa-chevron-left"></i> <span>Previous</span>
+                            </button>
+                        </div>
+
+                        <!-- Centered Page Numbers -->
+                        <div class="flex items-center space-x-2">
+                            <button class="px-3 py-1 bg-yellow-500 text-white font-bold rounded-full">1</button>
+                            <span class="text-gray-700">2</span>
+                            <span class="text-gray-700">3</span>
+                            <span class="text-gray-500">..</span>
+                            <span class="text-gray-700">5</span>
+                        </div>
+
+                        <!-- Right Section: Next Button -->
+                        <button class="px-3 py-1 text-gray-500 flex items-center space-x-1 hover:text-gray-700">
+                            <span>Next</span> <i class="fa fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <!-- Alpine.js (Add this script if not already included in your project) -->
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script>
+
+
+
+
+        // Mobile sidebar toggle functionality
+        document.addEventListener('DOMContentLoaded', function () {
+            const sidebarToggle = document.querySelector('#sidebar-toggle');
+            const sidebar = document.getElementById('sidebar');
+            const sidebarOverlay = document.getElementById('sidebar-overlay');
+
+            const hideSidebarButton = document.getElementById('hide-sidebar-button');
+
+            sidebarToggle.addEventListener('click', function () {
+                sidebar.classList.toggle('open');
+                sidebar.classList.remove('hidden');
+                sidebarOverlay.classList.toggle('hidden');
+            });
+
+            sidebarOverlay.addEventListener('click', function () {
+                sidebar.classList.remove('open');
+                sidebar.classList.add('hidden');
+                sidebarOverlay.classList.add('hidden');
+            });
+
+            hideSidebarButton.addEventListener('click', function () {
+                sidebar.classList.toggle("hidden");
+            });
+
+            // Initialize Pie Chart
+            const pieCtx = document.getElementById('pieChart').getContext('2d');
+            const pieChart = new Chart(pieCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['Petroleum', 'Cooking gas', 'Diesel', 'Electricity'],
+                    datasets: [{
+                        data: [40, 20, 25, 15],
+                        backgroundColor: [
+                            '#4FD1C5', // teal
+                            '#F6E05E', // yellow
+                            '#F56565', // red
+                            '#4299E1'  // blue
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+            // Initialize Bar Chart
+            const barCtx = document.getElementById('barChart').getContext('2d');
+            const barChart = new Chart(barCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['20', '22', '24', '26', '28', '30', '02', '04', '06', '08', '10', '12', '14', '16'],
+                    datasets: [{
+                        label: 'Daily Revenue',
+                        data: [250000, 350000, 200000, 280000, 220000, 180000, 500000, 320000, 450000, 280000, 220000, 380000, 200000, 350000],
+                        backgroundColor: function (context) {
+                            const index = context.dataIndex;
+                            return index === 6 ? '#4299E1' : '#4FD1C5'; // Blue for day 7, teal for others
+                        },
+                        borderWidth: 0,
+                        borderRadius: 4,
+                        maxBarThickness: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function (value) {
+                                    if (value === 0) return '₦0';
+                                    if (value === 100000) return '₦100k';
+                                    if (value === 200000) return '₦200k';
+                                    if (value === 300000) return '₦300k';
+                                    if (value === 400000) return '₦400k';
+                                    if (value === 500000) return '₦500k';
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+
+
+        });
+
+
+    </script>
+    <script>
+        let datePicker = document.getElementById("datePicker");
+        let dropdownBtn = document.getElementById("dropdownBtn");
+        let dropdownMenu = document.getElementById("dropdownMenu");
+
+        let mode = "monthly"; // Default mode
+
+        function setDateMode(selectedMode) {
+            mode = selectedMode;
+            dropdownBtn.innerHTML = selectedMode.charAt(0).toUpperCase() + selectedMode.slice(1) + ' <i class="fa-solid fa-chevron-down ml-1"></i>';
+            dropdownMenu.classList.add("hidden");
+
+            if (mode === "today") {
+                let today = new Date();
+                let formattedDate = today.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+                datePicker.value = formattedDate;
+            }
+            else if (mode === "Specific Date") {
+                flatpickr(datePicker, {
+                    dateFormat: "d M, Y",
+                    onChange: function (selectedDates, dateStr) {
+                        datePicker.value = dateStr;
+                    }
+                }).open();
+            }
+            else if (mode === "monthly") {
+                flatpickr(datePicker, {
+                    mode: "range",
+                    dateFormat: "d M",
+                    onChange: function (selectedDates, dateStr) {
+                        if (selectedDates.length === 2) {
+                            let start = selectedDates[0].toLocaleDateString("en-GB", { day: "2-digit", month: "short" });
+                            let end = selectedDates[1].toLocaleDateString("en-GB", { day: "2-digit", month: "short" });
+                            datePicker.value = `${start} - ${end}`;
+                        }
+                    }
+                }).open();
+            }
+
+        }
+
+        // Toggle dropdown
+        dropdownBtn.addEventListener("click", () => {
+            dropdownMenu.classList.toggle("hidden");
+        });
+
+        // Close dropdown on outside click
+        document.addEventListener("click", (event) => {
+            if (!dropdownBtn.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                dropdownMenu.classList.add("hidden");
+            }
+        });
+
+        // Set default
+        setDateMode("today");
+    </script>
+</body>
+
+</html>
