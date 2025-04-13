@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quicrefill Admin</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Chart.js from cdnjs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"
+        integrity="sha512-ElRFoEQdI5Ht6kZvyzXhYG9NqjtkmlkfYk0wr6wHxU9JEHakS7UJZNeml5ALk+8IKlU6jDgMabC3vkumRokgJA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- Load Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.js"></script>
+</head>
+
+<style>
+    [x-cloak] {
+        display: none !important;
+    }
+
+    @media (max-width: 768px) {
+        .mobile-sidebar {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .mobile-sidebar.open {
+            transform: translateX(0);
+        }
+
+        .dropdown-menu {
+            @apply left-1/2 -translate-x-1/2 w-80 max-w-[95%];
+        }
+
+
+    }
+
+    .flatpickr-day.selected,
+    .flatpickr-day.startRange,
+    .flatpickr-day.endRange {
+        background: #FFB600 !important;
+        color: white !important;
+        border-color: #FFB600 !important;
+    }
+
+    /* Change the color of dates between the range */
+    .flatpickr-day.inRange {
+        background: #FFE08A !important;
+        /* Light yellow */
+        color: black !important;
+    }
+</style>
+</head>
+
+<body class="bg-gray-100">
+    <!-- Header -->
+
+    <header class="bg-white shadow-md flex items-center justify-between p-4 sticky top-0 z-30">
+        <div class="flex items-center">
+            <button id="sidebar-toggle" class=" md:hidden mr-4">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="flex items-center mr-4 md:mr-8">
+                <img src="images/logo.png" class="w-[150px] md:w-[250px]">
+            </div>
+            <button id="hide-sidebar-button" class="border border-gray-200 rounded-md px-2 py-1 z-15 hidden md:block">
+                <i class="fas fa-angle-left"></i>
+            </button>
+        </div>
+
+        <div class="hidden md:block relative w-1/3">
+            <input type="text" placeholder="Search"
+                class="w-full px-4 py-2 border border-gray-300 rounded-md bg-gray-100 focus:outline-none pl-10">
+            <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+            <button
+                class="absolute right-0 top-0 h-full px-4 bg-gradient-to-b from-[#FFC533] to-[#FFB600] text-black rounded-r-md border border-gray-300 shadow flex items-center justify-center">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+        </div>
+
+
+        <div class="flex items-center">
+            <div x-data="{ open: false }" class="relative mr-4">
+                <!-- Notification Icon -->
+                <button @click="open = !open" class="relative p-2">
+                    <i class="fas fa-bell text-gray-600 text-lg"></i>
+                    <!-- Notification Badge -->
+                    <span
+                        class="absolute -top-1 -right-1 bg-yellow-400 text-black text-xs font-bold px-1.5 py-0.5 rounded-full">8</span>
+                </button>
+
+                <!-- Dropdown Menu -->
+                <div x-show="open" @click.away="open = false" x-transition x-cloak
+                    class="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-64 bg-white border rounded-md shadow-lg z-50">
+                    <div class="p-3 border-b">
+                        <span class="font-semibold text-gray-700">Notifications</span>
+                    </div>
+
+                    <ul class="max-h-60 overflow-auto">
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer">
+                            <span class="text-sm text-gray-700">🔔 You have a new message</span>
+                        </li>
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer">
+                            <span class="text-sm text-gray-700">✅ Task Completed Successfully</span>
+                        </li>
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer">
+                            <span class="text-sm text-gray-700">⚠️ System Alert: Update Required</span>
+                        </li>
+                    </ul>
+
+                    <div class="p-3 border-t text-center">
+                        <a href="notifications-center.html" class="text-sm text-blue-500 hover:underline">View all</a>
+                    </div>
+                </div>
+            </div>
+
+            <div x-data="{ open: false }" class="relative">
+                <!-- Profile Button -->
+                <button @click="open = !open"
+                    class="flex items-center rounded-full px-2 py-1 md:px-4 md:py-2 border border-gray-300 shadow-md focus:outline-none">
+                    <!-- Avatar -->
+                    <div class="relative w-10 h-10 md:w-10 md:h-10 rounded-full bg-gray-300 mr-2">
+                        <!-- Avatar Image -->
+                        <img src="images/Avatar/avatar.png" alt="User Avatar"
+                            class="w-full h-full object-cover rounded-full">
+
+                        <!-- Green Dot (Move Outside) -->
+                        <div class="absolute top-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"
+                            style="transform: translate(30%, -30%);"></div>
+                    </div>
+
+                    <!-- User Info -->
+                    <div class="hidden md:block text-left">
+                        <div class="text-sm font-medium">Timothy Jonson</div>
+                        <div class="text-xs text-gray-500">timoj@Quicrefil.ng</div>
+                    </div>
+                </button>
+
+                <!-- Dropdown Menu -->
+                <div x-show="open" @click.away="open = false" x-transition x-cloak
+                    class="absolute right-0 mt-2 w-48 bg-white border rounded-md shadow-lg z-50">
+                    <ul class="py-2">
+                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer"><a href="profiles-settings.html">👤
+                                Profile</a> </li>
+                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">⚙️ Settings</li>
+                        <li class="px-4 py-2 text-red-500 hover:bg-gray-100 cursor-pointer">🚪 Logout</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="flex">
+        <!-- Sidebar -->
+
+        <aside id="sidebar"
+            class="mobile-sidebar fixed md:relative w-64 bg-white min-h-screen shadow-sm z-20 md:transform-none border border-gray-300S">
+            <nav class="p-4">
+                <ul>
+                    <li class="mb-4">
+                        <a href="quicrefill-dashboard.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-th-large mr-3"></i>
+                            <span>Summary</span>
+                        </a>
+                    </li>
+
+                    <li class="mb-4">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-clipboard-list mr-3"></i>
+                            <span>Order Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="service-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-briefcase mr-3"></i>
+                            <span>Service Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="accessories-management.html" class="flex items-center text-amber-500 font-medium">
+                            <i class="fas fa-bag-shopping mr-3"></i>
+                            <span>Accessories Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-user mr-3"></i>
+                            <span>User Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-motorcycle mr-3"></i>
+                            <span>Rider Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-money-bill mr-3"></i>
+                            <span>Revenue Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-comments mr-3"></i>
+                            <span>Feedback</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-chart-bar mr-3"></i>
+                            <span>Reports and Analytics</span>
+                        </a>
+                    </li>
+                    <li x-data="{ open: false }" class="mb-4">
+                        <a href="#" @click.prevent="open = !open"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-shield-alt mr-3"></i>
+                            <span>Audit Logs & Security</span>
+                            <i :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas ml-auto text-xs"></i>
+                        </a>
+
+                        <!-- Dropdown Menu -->
+                        <ul x-show="open" x-cloak class="mt-2 ml-6 space-y-2 text-gray-500">
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-file-alt mr-3"></i>
+                                <a href="#">Security Logs</a>
+                            </li>
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-user-lock mr-3"></i>
+                                <a href="#">Access Control</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="mb-4">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-user-shield mr-3"></i>
+                            <span>Admin Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-cog mr-3"></i>
+                            <span>System Settings</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Overlay for sidebar on mobile -->
+        <div id="sidebar-overlay" class="fixed inset-0 bg-black opacity-50 z-10 hidden"></div>
+
+        <!-- Content Area -->
+        <main class="flex-1 p-6 w-full overflow-x-hidden">
+
+            <!-- Back Button -->
+            <div class="max-w-6xl mx-auto mb-4">
+                <button class="text-xl text-gray-700 bg-white pl-2 pr-2 border p-1 rounded-md"><i class="fa fa-arrow-left"></i></button>
+            </div>
+
+            <!-- Card -->
+            <div class="max-w-6xl mx-auto bg-white rounded-lg shadow overflow-hidden">
+                <div class="flex flex-col md:flex-row">
+            
+                    <div class="flex-1 p-4 md:p-6 border-b md:border-b-0 md:border-r border-gray-300">
+                        <div class="space-y-4 divide-y divide-solid divide-gray-200">
+                            <div class="font-medium">Accessory ID: <span class="text-yellow-600">#ACC1001</span></div>
+                            <div class="pt-4">
+                                <div class="text-sm text-gray-500">Customer name</div>
+                                <div class="font-medium">Mary Johnson</div>
+                            </div>
+                            <div class="pt-4">
+                                <div class="text-sm text-gray-500">Contact</div>
+                                <div class="font-medium">090123456789</div>
+                            </div>
+                            <div class="pt-4">
+                                <div class="text-sm text-gray-500">Location</div>
+                                <div class="font-medium">Third mainland avenue, Ikeja, Lagos</div>
+                                <button class="mt-2 px-2 py-1 text-sm bg-yellow-100 text-yellow-700 rounded">Change</button>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <div class="flex-1 p-4 md:p-6 border-b md:border-b-0 md:border-r border-gray-300">
+                        <div class="space-y-4 divide-y divide-solid divide-gray-200">
+                            <div class="text-yellow-600 font-semibold">Item in order</div>
+                            <div class="pt-4 flex justify-between">
+                                <div>
+                                    <div>• Gas cylinder</div>
+                                    <div class="text-sm text-gray-500">Quantity: x1</div>
+                                </div>
+                                <div class="font-semibold">₦18,000</div>
+                            </div>
+                            <div class="pt-4 flex justify-between text-gray-700">
+                                <span>Service fee</span>
+                                <span>₦1,500</span>
+                            </div>
+                            <div class="pt-4 flex justify-between font-medium items-center">
+                                <div class="flex items-center gap-2">
+                                    <span>Total fee</span>
+                                    <div class="relative group">
+                                        <button
+                                            class="flex items-center border border-2 text-green-600 text-xs px-2 py-1 rounded">
+                                            Paid <i class="fa-solid fa-caret-down ml-1"></i>
+                                        </button>
+                                        <ul
+                                            class="absolute hidden group-hover:block bg-white border border-gray-200 mt-1 w-24 rounded shadow text-sm z-10">
+                                            <li class="px-3 py-1 hover:bg-gray-100 cursor-pointer text-green-600">Paid</li>
+                                            <li class="px-3 py-1 hover:bg-gray-100 cursor-pointer text-red-600">Unpaid</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <span>₦19,500</span>
+            
+                            </div>
+                            <div class="pt-4 flex justify-between">
+                                <span>Payment</span>
+                                <span class="text-gray-600">On delivery</span>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <div class="flex-1 p-4 md:p-6">
+                        <div class="space-y-4 divide-y divide-solid divide-gray-200">
+                            <div class="text-red-600 font-semibold">Report</div>
+                            <div class="pt-4 text-sm text-gray-700">
+                                <div class="font-medium">Risk factors</div>
+                                <div>Unusual payment method, Multiple failed attempts.</div>
+                            </div>
+                            <div class="pt-4 text-sm text-gray-700">
+                                <div class="font-medium">Internal notes</div>
+                                <div>Flagged by system on 25th Feb, 2025.</div>
+                                <div>New user with unverified phone number.</div>
+                            </div>
+                        </div>
+                    </div>
+            
+                </div>
+                <div class="px-4 py-4 md:px-6 bg-white flex justify-center gap-2">
+                    <button class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">Mark as resolved</button>
+                    <button class="bg-yellow-400 hover:bg-yellow-500 text-black px-4 py-2 rounded">Investigate further</button>
+                    <button class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">Block user</button>
+                </div>
+            </div>
+            
+            <div class="max-w-6xl mx-auto bg-white rounded-lg shadow overflow-hidden mt-6">
+                <div class="flex flex-col md:flex-row">
+
+                    <div class="flex-1 p-4 md:p-6 border-b md:border-b-0 md:border-r border-gray-300">
+                        <div class="space-y-4 divide-y divide-solid divide-gray-200">
+                            <div class="font-medium">Accessory ID: <span class="text-yellow-600">#ACC1001</span></div>
+                            <div class="pt-4">
+                                <div class="text-sm text-gray-500">Customer name</div>
+                                <div class="font-medium">Mary Johnson</div>
+                            </div>
+                            <div class="pt-4">
+                                <div class="text-sm text-gray-500">Contact</div>
+                                <div class="font-medium">090123456789</div>
+                            </div>
+                            <div class="pt-4">
+                                <div class="text-sm text-gray-500">Location</div>
+                                <div class="font-medium">Third mainland avenue, Ikeja, Lagos</div>
+                                <button class="mt-2 px-2 py-1 text-sm bg-yellow-100 text-yellow-700 rounded">Change</button>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <div class="flex-1 p-4 md:p-6 border-b md:border-b-0 md:border-r border-gray-300">
+                        <div class="space-y-4 divide-y divide-solid divide-gray-200">
+                            <div class="text-yellow-600 font-semibold">Item in delivery</div>
+                            <div class="pt-4 flex justify-between">
+                                <div>
+                                    <div>• Gas refill</div>
+                                    <div class="text-sm text-gray-500">Quantity: 12kg</div>
+                                </div>
+                                <div class="font-semibold">₦18,000</div>
+                            </div>
+                            <div class="pt-4 flex justify-between text-gray-700">
+                                <span>Service fee</span>
+                                <span>₦1,500</span>
+                            </div>
+                            <div class="pt-4 flex justify-between font-medium items-center">
+                                <div class="flex items-center gap-2">
+                                    <span>Total fee</span>
+                                    <div class="relative group">
+                                        <button
+                                            class="flex items-center border border-2 text-green-600 text-xs px-2 py-1 rounded">
+                                            Paid <i class="fa-solid fa-caret-down ml-1"></i>
+                                        </button>
+                                        <ul
+                                            class="absolute hidden group-hover:block bg-white border border-gray-200 mt-1 w-24 rounded shadow text-sm z-10">
+                                            <li class="px-3 py-1 hover:bg-gray-100 cursor-pointer text-green-600">Paid</li>
+                                            <li class="px-3 py-1 hover:bg-gray-100 cursor-pointer text-red-600">Unpaid</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <span>₦19,500</span>
+            
+                            </div>
+                            <div class="pt-4 flex justify-between">
+                                <span>Payment</span>
+                                <span class="text-gray-600">On delivery</span>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <div class="flex-1 p-4 md:p-6">
+                        <div class="space-y-4 divide-y divide-solid divide-gray-200">
+                            <div class="text-red-600 font-semibold">Report</div>
+                            <div class="pt-4 text-sm text-gray-700">
+                                <div class="font-medium">Risk factors</div>
+                                <div>Unusual payment method, Multiple failed attempts.</div>
+                            </div>
+                            <div class="pt-4 text-sm text-gray-700">
+                                <div class="font-medium">Internal notes</div>
+                                <div>Flagged by system on 25th Feb, 2025.</div>
+                                <div>New user with unverified phone number.</div>
+                            </div>
+                        </div>
+                    </div>
+            
+                </div>
+                <div class="px-4 py-4 bg-white flex justify-center gap-2">
+                    <button class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded text-sm font-semibold">Mark as resolved</button>
+                    <button class="bg-yellow-400 hover:bg-yellow-500 text-black px-6 py-3 rounded text-sm font-semibold">Investigate further</button>
+                    <button class="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded text-sm font-semibold">Block user</button>
+                </div>
+            </div>
+        </main>
+    </div>
+    <!-- Alpine.js (Add this script if not already included in your project) -->
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script>
+
+
+
+
+        // Mobile sidebar toggle functionality
+        document.addEventListener('DOMContentLoaded', function () {
+            const sidebarToggle = document.querySelector('#sidebar-toggle');
+            const sidebar = document.getElementById('sidebar');
+            const sidebarOverlay = document.getElementById('sidebar-overlay');
+
+            const hideSidebarButton = document.getElementById('hide-sidebar-button');
+
+            sidebarToggle.addEventListener('click', function () {
+                sidebar.classList.toggle('open');
+                sidebar.classList.remove('hidden');
+                sidebarOverlay.classList.toggle('hidden');
+            });
+
+            sidebarOverlay.addEventListener('click', function () {
+                sidebar.classList.remove('open');
+                sidebar.classList.add('hidden');
+                sidebarOverlay.classList.add('hidden');
+            });
+
+            hideSidebarButton.addEventListener('click', function () {
+                sidebar.classList.toggle("hidden");
+            });
+
+            // Initialize Pie Chart
+            const pieCtx = document.getElementById('pieChart').getContext('2d');
+            const pieChart = new Chart(pieCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['Petroleum', 'Cooking gas', 'Diesel', 'Electricity'],
+                    datasets: [{
+                        data: [40, 20, 25, 15],
+                        backgroundColor: [
+                            '#4FD1C5', // teal
+                            '#F6E05E', // yellow
+                            '#F56565', // red
+                            '#4299E1'  // blue
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+            // Initialize Bar Chart
+            const barCtx = document.getElementById('barChart').getContext('2d');
+            const barChart = new Chart(barCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['20', '22', '24', '26', '28', '30', '02', '04', '06', '08', '10', '12', '14', '16'],
+                    datasets: [{
+                        label: 'Daily Revenue',
+                        data: [250000, 350000, 200000, 280000, 220000, 180000, 500000, 320000, 450000, 280000, 220000, 380000, 200000, 350000],
+                        backgroundColor: function (context) {
+                            const index = context.dataIndex;
+                            return index === 6 ? '#4299E1' : '#4FD1C5'; // Blue for day 7, teal for others
+                        },
+                        borderWidth: 0,
+                        borderRadius: 4,
+                        maxBarThickness: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function (value) {
+                                    if (value === 0) return '₦0';
+                                    if (value === 100000) return '₦100k';
+                                    if (value === 200000) return '₦200k';
+                                    if (value === 300000) return '₦300k';
+                                    if (value === 400000) return '₦400k';
+                                    if (value === 500000) return '₦500k';
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+
+
+        });
+
+
+    </script>
+    <script>
+        let datePicker = document.getElementById("datePicker");
+        let dropdownBtn = document.getElementById("dropdownBtn");
+        let dropdownMenu = document.getElementById("dropdownMenu");
+
+        let mode = "monthly"; // Default mode
+
+        function setDateMode(selectedMode) {
+            mode = selectedMode;
+            dropdownBtn.innerHTML = selectedMode.charAt(0).toUpperCase() + selectedMode.slice(1) + ' <i class="fa-solid fa-chevron-down ml-1"></i>';
+            dropdownMenu.classList.add("hidden");
+
+            if (mode === "today") {
+                let today = new Date();
+                let formattedDate = today.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+                datePicker.value = formattedDate;
+            }
+            else if (mode === "Specific Date") {
+                flatpickr(datePicker, {
+                    dateFormat: "d M, Y",
+                    onChange: function (selectedDates, dateStr) {
+                        datePicker.value = dateStr;
+                    }
+                }).open();
+            }
+            else if (mode === "monthly") {
+                flatpickr(datePicker, {
+                    mode: "range",
+                    dateFormat: "d M",
+                    onChange: function (selectedDates, dateStr) {
+                        if (selectedDates.length === 2) {
+                            let start = selectedDates[0].toLocaleDateString("en-GB", { day: "2-digit", month: "short" });
+                            let end = selectedDates[1].toLocaleDateString("en-GB", { day: "2-digit", month: "short" });
+                            datePicker.value = `${start} - ${end}`;
+                        }
+                    }
+                }).open();
+            }
+
+        }
+
+        // Toggle dropdown
+        dropdownBtn.addEventListener("click", () => {
+            dropdownMenu.classList.toggle("hidden");
+        });
+
+        // Close dropdown on outside click
+        document.addEventListener("click", (event) => {
+            if (!dropdownBtn.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                dropdownMenu.classList.add("hidden");
+            }
+        });
+
+        // Set default
+        setDateMode("today");
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            // --- Selector Update ---
+            // We need to select the INNER div that directly contains the buttons.
+            // It now has 'inline-flex', 'flex-wrap', 'gap-2', 'bg-white' etc.
+            // This selector targets that specific combination.
+            const tabContainer = document.querySelector('.inline-flex.flex-wrap.gap-2.bg-white');
+
+            if (tabContainer) {
+                // Find buttons ONLY within this specific container
+                const tabs = tabContainer.querySelectorAll('.tab-button');
+
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        // Remove active styles from all tabs within this specific container
+                        tabs.forEach(t => {
+                            t.classList.remove('bg-yellow-400', 'text-black');
+                            t.classList.add('text-gray-600', 'hover:bg-gray-100', 'hover:text-gray-800');
+                        });
+
+                        // Add active styles to the clicked tab
+                        tab.classList.add('bg-yellow-400', 'text-black');
+                        tab.classList.remove('text-gray-600', 'hover:bg-gray-100', 'hover:text-gray-800');
+
+                        // Your logic for handling tab content
+                        console.log(`Selected tab: ${tab.textContent.trim()}`);
+                        // Example: displayPanel(tab.textContent.trim());
+                    });
+                });
+            } else {
+                // If you see this message, the selector is still not matching the HTML element.
+                console.warn("Tab container not found for JavaScript initialization. Check the CSS selector used in the script.");
+            }
+        });
+    </script>
+</body>
+
+</html>

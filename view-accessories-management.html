@@ -264,56 +264,70 @@
         <main class="flex-1 p-6 w-full overflow-x-hidden">
             
             <div class="bg-white w-full max-w-2xl rounded-lg shadow-md p-6">
-                <!-- Header -->
                 <div class="flex items-center space-x-2 mb-4">
-                  <a href="accessories-management.html" class="fa fa-arrow-left text-xl text-gray-700 cursor-pointer"></a>
-                  <h2 class="text-xl font-semibold">Accessory Detail</h2>
+                    <a href="accessories-management.html" class="fa fa-arrow-left text-xl text-gray-700 cursor-pointer"></a>
+                    <h2 class="text-xl font-semibold">Accessory details</h2>
                 </div>
             
-                <!-- Details Card -->
-                <div class="p-5 space-y-4">
+                <div class="space-y-4">
             
-                  <div>
-                    <p><span class="font-semibold text-gray-600">Accessory ID:</span> <span class="text-gray-800">#ACCI001</span></p>
-                    <p class="mt-1"><span class="font-semibold text-gray-600">Name:</span> <span class="text-gray-800">Gas Cylinder</span></p>
-                  </div>
-            
-                  <div>
-                    <p class="font-semibold text-gray-600">Description:</p>
-                    <p class="text-gray-700 mt-1 text-sm">
-                      Ensure consistent gas flow with this reliable pressure regulator. Designed to maintain optimal pressure levels, it prevents leaks and ensures safe operation of your gas appliances. Easy to install and suitable for all standard gas cylinders. Cylinder
-                    </p>
-                  </div>
-            
-                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    <p><span class="font-semibold text-gray-600">Stock count:</span> <span class="text-gray-800">100 Items</span></p>
-                    <p><span class="font-semibold text-gray-600">Price:</span> <span class="text-gray-800">₦75,000</span></p>
-                    <p><span class="font-semibold text-gray-600">Status:</span> <span class="text-green-600 font-medium">Active</span></p>
-                    <p><span class="font-semibold text-gray-600">Date created:</span> <span class="text-gray-800">25/01/27 10:15 AM</span></p>
-                  </div>
-            
-                  <!-- Images -->
-                  <div>
-                    <p class="font-semibold text-gray-600 mb-2">Image</p>
-                    <div class="flex flex-wrap gap-4">
-                      <img src="images/item.png" alt="Accessory Image" class="rounded-md border w-42 h-24 object-cover" />
-                      <img src="images/item.png" alt="Accessory Image" class="rounded-md border w-42 h-24 object-cover" />
+                    <div>
+                        <p><span class="font-semibold text-gray-600">Accessory ID:</span> <span class="text-gray-800">#ACC1001</span></p>
                     </div>
-                  </div>
+                    <div>
+                        <p><span class="font-semibold text-gray-600">Name:</span> <span class="text-gray-800">Gas Cylinder</span></p>
+                    </div>
             
-                  <!-- Buttons -->
-                  <div class="flex flex-col sm:flex-row gap-4 pt-4">
-                    <a href="add-accessories-management.html" class="w-full bg-yellow-500 hover:bg-yellow-600 text-white py-2 rounded-md flex items-center justify-center space-x-2">
-                      <i class="fa fa-edit"></i>
-                      <span>Edit</span>
-                    </a>
-                    <button onclick="showToast('Accessories Suspended', 'error');"  class="w-full bg-orange-600 hover:bg-orange-700 text-white py-2 rounded-md flex items-center justify-center space-x-2">
-                      <i class="fa fa-ban"></i>
-                      <span>Suspend</span>
-                    </button>
-                  </div>
+                    <div>
+                        <p class="font-semibold text-gray-600">Description:</p>
+                        <p class="text-gray-700 mt-1 text-sm">
+                            Ensure consistent gas flow with this reliable pressure regulator. Designed to maintain optimal pressure
+                            levels, it prevents leaks and ensures safe operation of your gas appliances. Easy to install and suitable
+                            for all standard gas cylinders. Cylinder
+                        </p>
+                    </div>
+            
+                    <div class="grid grid-cols-1 gap-2">
+                        <div>
+                            <p><span class="font-semibold text-gray-600">Stock count:</span> <span class="text-gray-800">100 Items</span>
+                            </p>
+                        </div>
+                        <div>
+                            <p><span class="font-semibold text-gray-600">Price:</span> <span class="text-gray-800">₦75,000</span></p>
+                        </div>
+                        <div>
+                            <p><span class="font-semibold text-gray-600">Status:</span> <span
+                                    class="text-green-600 font-medium">Active</span></p>
+                        </div>
+                        <div>
+                            <p><span class="font-semibold text-gray-600">Date created:</span> <span
+                                    class="text-gray-800">25/01/27 10:15 AM</span></p>
+                        </div>
+                    </div>
+            
+                    <div>
+                        <p class="font-semibold text-gray-600 mb-2">Image</p>
+                        <div class="flex flex-wrap gap-4">
+                            <img src="images/item.png" alt="Accessory Image" class="rounded-md border w-42 h-24 object-cover" />
+                            <img src="images/item.png" alt="Accessory Image" class="rounded-md border w-42 h-24 object-cover" />
+                        </div>
+                    </div>
+            
+                    <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                        <a href="add-accessories-management.html"
+                            class="w-full bg-yellow-500 hover:bg-yellow-600 text-white py-2 rounded-md flex items-center justify-center space-x-2">
+                            <i class="fa fa-edit"></i>
+                            <span>Edit</span>
+                        </a>
+                        <button onclick="showToast('Accessories Suspended', 'error');"
+                            class="w-full bg-orange-600 hover:bg-orange-700 text-white py-2 rounded-md flex items-center justify-center space-x-2">
+                            <i class="fa fa-ban"></i>
+                            <span>Suspend</span>
+                        </button>
+                    </div>
                 </div>
-              </div>
+            </div>
+           
             
         </main>
     </div>

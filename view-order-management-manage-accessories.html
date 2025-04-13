@@ -263,68 +263,132 @@
         <!-- Content Area -->
         <main class="flex-1 p-6 w-full overflow-x-hidden">
             
-            <div class="bg-white rounded-lg shadow-md w-full max-w-xl p-6">
-                <!-- Header -->
-                <div class="flex items-center space-x-2 mb-6">
-                  <a  href="accessories-management.html" class="fa fa-arrow-left text-xl text-gray-700 cursor-pointer"></a>
-                  <h2 class="text-xl font-semibold">Add Accessory</h2>
+            <div class="bg-white w-full max-w-2xl rounded-lg shadow-md p-6">
+                <div class="flex items-center space-x-2 mb-4">
+                    <a href="order-management-manage-accessories.html" class="fa fa-arrow-left text-xl text-gray-700 cursor-pointer"></a>
+                    <h2 class="text-xl font-semibold">Accessory details</h2>
                 </div>
             
-                <!-- Form Starts -->
-                <form class="space-y-5">
-                  <!-- Name -->
-                  <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
-                    <input type="text" value="Gas Cylinder" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-yellow-500 outline-none" />
-                  </div>
+                <div class="space-y-4">
             
-                  <!-- Description -->
-                  <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                    <textarea class="w-full border border-gray-300 rounded-md px-3 py-2 resize-none h-24 focus:ring-2 focus:ring-yellow-500 outline-none"></textarea>
-                  </div>
-            
-                  <!-- Price -->
-                  <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Price</label>
-                    <input type="text" value="₦75,000" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-yellow-500 outline-none" />
-                  </div>
-            
-                  <!-- Stock Count -->
-                  <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Stock count</label>
-                    <input type="number" value="100" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-yellow-500 outline-none" />
-                  </div>
-            
-                  <!-- Image Upload -->
-                  <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Image/URL</label>
-                    <div class="relative border-2 border-dashed border-gray-300 rounded-md p-6 flex flex-col items-center justify-center text-center">
-                      <input type="file" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer z-10" onchange="previewImage(event)" />
-                      <div class="z-0">
-                        <i class="fa fa-upload text-2xl text-gray-400 mb-2"></i>
-                        <p class="text-sm text-gray-600">Click to upload or drag and drop<br />SVG, PNG, or GIF (max. 800×400px)</p>
-                        <div id="imagePreviewContainer" class="mt-4 hidden">
-                          <img id="imagePreview" class="mx-auto rounded-md border" />
-                        </div>
-                      </div>
+                    <div>
+                        <p><span class="font-semibold text-gray-600">Accessory ID:</span> <span class="text-gray-800">#ACC1001</span></p>
                     </div>
-                  </div>
+                    <div>
+                        <p><span class="font-semibold text-gray-600">Name:</span> <span class="text-gray-800">Gas Cylinder</span></p>
+                    </div>
             
-                  <!-- Buttons -->
-                  <div class="flex flex-col sm:flex-row gap-4 pt-4">
-                    <button type="button" onclick="showToast('Saved successfully!', 'success');" class="w-full bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-2 rounded-md flex justify-center items-center space-x-2">
-                      <i class="fa fa-plus"></i>
-                      <span>Create</span>
-                    </button>
-                    <button type="button" onclick="showToast('Opration Cancelled', 'error');" class="w-full bg-orange-600 hover:bg-orange-700 text-white px-6 py-2 rounded-md flex justify-center items-center space-x-2">
-                        <i class="fa fa-close"></i>
-                      <span>Cancel</span>
-                    </button>
-                  </div>
-                </form>
-                <!-- Form Ends -->
-              </div>
+                    <div>
+                        <p class="font-semibold text-gray-600">Description:</p>
+                        <p class="text-gray-700 mt-1 text-sm">
+                            Ensure consistent gas flow with this reliable pressure regulator. Designed to maintain optimal pressure
+                            levels, it prevents leaks and ensures safe operation of your gas appliances. Easy to install and suitable
+                            for all standard gas cylinders. Cylinder
+                        </p>
+                    </div>
+            
+                    <div class="grid grid-cols-1 gap-2">
+                        <div>
+                            <p><span class="font-semibold text-gray-600">Stock count:</span> <span class="text-gray-800">100 Items</span>
+                            </p>
+                        </div>
+                        <div>
+                            <p><span class="font-semibold text-gray-600">Price:</span> <span class="text-gray-800">₦75,000</span></p>
+                        </div>
+                        <div>
+                            <p><span class="font-semibold text-gray-600">Status:</span> <span
+                                    class="text-green-600 font-medium">Active</span></p>
+                        </div>
+                        <div>
+                            <p><span class="font-semibold text-gray-600">Date created:</span> <span
+                                    class="text-gray-800">25/01/27 10:15 AM</span></p>
+                        </div>
+                    </div>
+            
+                    <div>
+                        <p class="font-semibold text-gray-600 mb-2">Image</p>
+                        <div class="flex flex-wrap gap-4">
+                            <img src="images/item.png" alt="Accessory Image" class="rounded-md border w-42 h-24 object-cover" />
+                            <img src="images/item.png" alt="Accessory Image" class="rounded-md border w-42 h-24 object-cover" />
+                        </div>
+                    </div>
+            
+                    <div class="flex flex-col sm:flex-row gap-4 pt-4" x-data="{ isEditOpen: false }">
+                        <button @click="isEditOpen = true"
+                            class="w-full bg-yellow-500 hover:bg-yellow-600 text-white py-2 rounded-md flex items-center justify-center space-x-2">
+                            <i class="fa fa-edit"></i>
+                            <span>Edit</span>
+                        </button>
+                    
+                        <button onclick="showToast('Accessories Suspended', 'error');"
+                            class="w-full bg-orange-600 hover:bg-orange-700 text-white py-2 rounded-md flex items-center justify-center space-x-2">
+                            <i class="fa fa-ban"></i>
+                            <span>Suspend</span>
+                        </button>
+                    
+                        <div x-show="isEditOpen" class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50 flex items-center justify-center" style="display: none;">
+                            <div class="bg-white rounded-lg shadow-md w-full max-w-xl p-6 relative overflow-y-auto max-h-[90vh]">
+                                <button @click="isEditOpen = false" class="absolute top-2 right-2 text-gray-700 hover:text-gray-900 text-xl focus:outline-none">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                    
+                                <div class="flex items-center space-x-2 mb-6">
+                                    <h2 class="text-xl font-semibold">Edit Accessory</h2>
+                                </div>
+                    
+                                <form class="space-y-5">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                                        <input type="text" value="Gas Cylinder" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-yellow-500 outline-none" />
+                                    </div>
+                    
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                                        <textarea class="w-full border border-gray-300 rounded-md px-3 py-2 resize-none h-24 focus:ring-2 focus:ring-yellow-500 outline-none"></textarea>
+                                    </div>
+                    
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Price</label>
+                                        <input type="text" value="₦75,000" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-yellow-500 outline-none" />
+                                    </div>
+                    
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Stock count</label>
+                                        <input type="number" value="100" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-yellow-500 outline-none" />
+                                    </div>
+                    
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Image/URL</label>
+                                        <div class="relative border-2 border-dashed border-gray-300 rounded-md p-6 flex flex-col items-center justify-center text-center">
+                                            <input type="file" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer z-10" onchange="previewImage(event)" />
+                                            <div class="z-0">
+                                                <i class="fa fa-upload text-2xl text-gray-400 mb-2"></i>
+                                                <p class="text-sm text-gray-600">Click to upload or drag and drop<br />SVG, PNG, or GIF (max. 800×400px)</p>
+                                                <div id="imagePreviewContainer" class="mt-4 hidden">
+                                                    <img id="imagePreview" class="mx-auto rounded-md border" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                    
+                                    <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                                        <button type="button" onclick="showToast('Saved successfully!', 'success');" class="w-full bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-2 rounded-md flex justify-center items-center space-x-2">
+                                            <i class="fa fa-plus"></i>
+                                            <span>Save Changes</span>
+                                        </button>
+                                        <button type="button" @click="isEditOpen = false" class="w-full bg-orange-600 hover:bg-orange-700 text-white px-6 py-2 rounded-md flex justify-center items-center space-x-2">
+                                            <i class="fa fa-close"></i>
+                                            <span>Cancel</span>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+           
             
         </main>
     </div>
@@ -362,51 +426,51 @@
           
         });
 
-              function showToast(message = 'Action completed successfully!', icon = 'success') {
-                let bgGradient = '';
-                let textColor = 'text-white';
-                let borderColor = '';
+        function showToast(message = 'Action completed successfully!', icon = 'success') {
+            let bgGradient = '';
+            let textColor = 'text-white';
+            let borderColor = '';
 
-                // Dynamic background based on icon type
-                switch (icon) {
-                case 'success':
-                    bgGradient = 'linear-gradient(to right, #38b000, #70e000)';
-                    borderColor = '#38b000';
-                    break;
-                case 'error':
-                    bgGradient = 'linear-gradient(to right, #d00000, #ff4d4d)';
-                    borderColor = '#d00000';
-                    break;
-                case 'warning':
-                    bgGradient = 'linear-gradient(to right, #ffb600, #ffe066)';
-                    borderColor = '#ffb600';
-                    textColor = 'text-black';
-                    break;
-                case 'info':
-                    bgGradient = 'linear-gradient(to right, #0077b6, #90e0ef)';
-                    borderColor = '#0077b6';
-                    break;
-                default:
-                    bgGradient = 'linear-gradient(to right, #333, #555)';
-                    break;
-                }
-
-                Swal.fire({
-                toast: true,
-                position: 'top-end',
-                icon: icon,
-                title: message,
-                showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true,
-                background: bgGradient,
-                color: textColor === 'text-white' ? '#fff' : '#000',
-                customClass: {
-                    popup: `rounded-xl shadow-lg border ${textColor} px-4 py-2`,
-                    title: `font-medium ${textColor}`,
-                }
-                });
+            // Dynamic background based on icon type
+            switch (icon) {
+            case 'success':
+                bgGradient = 'linear-gradient(to right, #38b000, #70e000)';
+                borderColor = '#38b000';
+                break;
+            case 'error':
+                bgGradient = 'linear-gradient(to right, #d00000, #ff4d4d)';
+                borderColor = '#d00000';
+                break;
+            case 'warning':
+                bgGradient = 'linear-gradient(to right, #ffb600, #ffe066)';
+                borderColor = '#ffb600';
+                textColor = 'text-black';
+                break;
+            case 'info':
+                bgGradient = 'linear-gradient(to right, #0077b6, #90e0ef)';
+                borderColor = '#0077b6';
+                break;
+            default:
+                bgGradient = 'linear-gradient(to right, #333, #555)';
+                break;
             }
+
+            Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: icon,
+            title: message,
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            background: bgGradient,
+            color: textColor === 'text-white' ? '#fff' : '#000',
+            customClass: {
+                popup: `rounded-xl shadow-lg border ${textColor} px-4 py-2`,
+                title: `font-medium ${textColor}`,
+            }
+            });
+        }
     </script>
     
   <script>

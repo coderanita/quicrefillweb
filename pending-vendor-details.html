@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quicrefill Admin</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Chart.js from cdnjs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"
+        integrity="sha512-ElRFoEQdI5Ht6kZvyzXhYG9NqjtkmlkfYk0wr6wHxU9JEHakS7UJZNeml5ALk+8IKlU6jDgMabC3vkumRokgJA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- Load Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.js"></script>
+</head>
+
+<style>
+    [x-cloak] {
+        display: none !important;
+    }
+
+    @media (max-width: 768px) {
+        .mobile-sidebar {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .mobile-sidebar.open {
+            transform: translateX(0);
+        }
+
+        .dropdown-menu {
+            @apply left-1/2 -translate-x-1/2 w-80 max-w-[95%];
+        }
+
+
+    }
+
+    .flatpickr-day.selected,
+    .flatpickr-day.startRange,
+    .flatpickr-day.endRange {
+        background: #FFB600 !important;
+        color: white !important;
+        border-color: #FFB600 !important;
+    }
+
+    /* Change the color of dates between the range */
+    .flatpickr-day.inRange {
+        background: #FFE08A !important;
+        /* Light yellow */
+        color: black !important;
+    }
+</style>
+</head>
+
+<body class="bg-gray-100">
+    <!-- Header -->
+
+    <header class="bg-white shadow-md flex items-center justify-between p-4 sticky top-0 z-30">
+        <div class="flex items-center">
+            <button id="sidebar-toggle" class=" md:hidden mr-4">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="flex items-center mr-4 md:mr-8">
+                <img src="images/logo.png" class="w-[150px] md:w-[250px]">
+            </div>
+            <button id="hide-sidebar-button" class="border border-gray-200 rounded-md px-2 py-1 z-15 hidden md:block">
+                <i class="fas fa-angle-left"></i>
+            </button>
+        </div>
+
+        <div class="hidden md:block relative w-1/3">
+            <input type="text" placeholder="Search"
+                class="w-full px-4 py-2 border border-gray-300 rounded-md bg-gray-100 focus:outline-none pl-10">
+            <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+            <button
+                class="absolute right-0 top-0 h-full px-4 bg-gradient-to-b from-[#FFC533] to-[#FFB600] text-black rounded-r-md border border-gray-300 shadow flex items-center justify-center">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+        </div>
+
+
+        <div class="flex items-center">
+            <div x-data="{ open: false }" class="relative mr-4">
+                <!-- Notification Icon -->
+                <button @click="open = !open" class="relative p-2">
+                    <i class="fas fa-bell text-gray-600 text-lg"></i>
+                    <!-- Notification Badge -->
+                    <span
+                        class="absolute -top-1 -right-1 bg-yellow-400 text-black text-xs font-bold px-1.5 py-0.5 rounded-full">8</span>
+                </button>
+
+                <!-- Dropdown Menu -->
+                <div x-show="open" @click.away="open = false" x-transition x-cloak
+                    class="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-64 bg-white border rounded-md shadow-lg z-50">
+                    <div class="p-3 border-b">
+                        <span class="font-semibold text-gray-700">Notifications</span>
+                    </div>
+
+                    <ul class="max-h-60 overflow-auto">
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer">
+                            <span class="text-sm text-gray-700">🔔 You have a new message</span>
+                        </li>
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer">
+                            <span class="text-sm text-gray-700">✅ Task Completed Successfully</span>
+                        </li>
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer">
+                            <span class="text-sm text-gray-700">⚠️ System Alert: Update Required</span>
+                        </li>
+                    </ul>
+
+                    <div class="p-3 border-t text-center">
+                        <a href="notifications-center.html" class="text-sm text-blue-500 hover:underline">View all</a>
+                    </div>
+                </div>
+            </div>
+
+            <div x-data="{ open: false }" class="relative">
+                <!-- Profile Button -->
+                <button @click="open = !open"
+                    class="flex items-center rounded-full px-2 py-1 md:px-4 md:py-2 border border-gray-300 shadow-md focus:outline-none">
+                    <!-- Avatar -->
+                    <div class="relative w-10 h-10 md:w-10 md:h-10 rounded-full bg-gray-300 mr-2">
+                        <!-- Avatar Image -->
+                        <img src="images/Avatar/avatar.png" alt="User Avatar"
+                            class="w-full h-full object-cover rounded-full">
+
+                        <!-- Green Dot (Move Outside) -->
+                        <div class="absolute top-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"
+                            style="transform: translate(30%, -30%);"></div>
+                    </div>
+
+                    <!-- User Info -->
+                    <div class="hidden md:block text-left">
+                        <div class="text-sm font-medium">Timothy Jonson</div>
+                        <div class="text-xs text-gray-500">timoj@Quicrefil.ng</div>
+                    </div>
+                </button>
+
+                <!-- Dropdown Menu -->
+                <div x-show="open" @click.away="open = false" x-transition x-cloak
+                    class="absolute right-0 mt-2 w-48 bg-white border rounded-md shadow-lg z-50">
+                    <ul class="py-2">
+                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer"><a href="profiles-settings.html">👤
+                                Profile</a> </li>
+                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">⚙️ Settings</li>
+                        <li class="px-4 py-2 text-red-500 hover:bg-gray-100 cursor-pointer">🚪 Logout</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="flex">
+        <!-- Sidebar -->
+
+        <aside id="sidebar"
+            class="mobile-sidebar fixed md:relative w-64 bg-white min-h-screen shadow-sm z-20 md:transform-none border border-gray-300S">
+            <nav class="p-4">
+                <ul>
+                    <li class="mb-4">
+                        <a href="quicrefill-dashboard.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-th-large mr-3"></i>
+                            <span>Summary</span>
+                        </a>
+                    </li>
+
+                    <li class="mb-4">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-clipboard-list mr-3"></i>
+                            <span>Order Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="service-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-briefcase mr-3"></i>
+                            <span>Service Management</span>
+                        </a>
+                    </li>
+
+                    <li class="mb-4">
+                        <a href="accessories-management.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-bag-shopping mr-3"></i>
+                            <span>Accessories Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="vendor-management.html" class="flex items-center text-amber-500 font-medium">
+                            <i class="fas fa-store mr-3"></i>
+                            <span>Vendor Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-user mr-3"></i>
+                            <span>User Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-motorcycle mr-3"></i>
+                            <span>Rider Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-money-bill mr-3"></i>
+                            <span>Revenue Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-comments mr-3"></i>
+                            <span>Feedback</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-chart-bar mr-3"></i>
+                            <span>Reports and Analytics</span>
+                        </a>
+                    </li>
+                    <li x-data="{ open: false }" class="mb-4">
+                        <a href="#" @click.prevent="open = !open"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-shield-alt mr-3"></i>
+                            <span>Audit Logs & Security</span>
+                            <i :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas ml-auto text-xs"></i>
+                        </a>
+
+                        <!-- Dropdown Menu -->
+                        <ul x-show="open" x-cloak class="mt-2 ml-6 space-y-2 text-gray-500">
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-file-alt mr-3"></i>
+                                <a href="#">Security Logs</a>
+                            </li>
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-user-lock mr-3"></i>
+                                <a href="#">Access Control</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="mb-4">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-user-shield mr-3"></i>
+                            <span>Admin Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-cog mr-3"></i>
+                            <span>System Settings</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Overlay for sidebar on mobile -->
+        <div id="sidebar-overlay" class="fixed inset-0 bg-black opacity-50 z-10 hidden"></div>
+
+        <!-- Content Area -->
+        <main class="flex-1 p-6 w-full overflow-x-hidden">
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-6">
+                <div class="flex-1">
+                    <div class="flex flex-wrap items-center text-gray-600 text-xs sm:text-sm space-x-1">
+                        <i class="fa fa-arrow-left mr-1 sm:mr-2"></i>
+                        <span class="text-gray-500 hover:underline cursor-pointer">Dashboard</span>
+                        <i class="fa fa-chevron-right text-xs mx-1"></i>
+                        <span class="text-gray-500 hover:underline cursor-pointer">Vendor Management</span>
+                        <i class="fa fa-chevron-right text-xs mx-1"></i>
+                        <span class="text-gray-500 hover:underline cursor-pointer">Pending Vendor</span>
+                        <i class="fa fa-chevron-right text-xs mx-1"></i>
+                        <span class="text-black font-medium">VND-001</span>
+                    </div>
+                    <h1 class="text-lg sm:text-xl font-semibold mt-2">Pending Vendor Detail Page</h1>
+                </div>
+            
+                <div class="flex-shrink-0">
+                    <button
+                        class="w-full sm:w-auto bg-gradient-to-b from-gray-100 to-gray-300 hover:from-gray-200 hover:to-gray-400 text-black py-2 px-3 sm:px-4 rounded text-xs sm:text-sm">
+                        <div class="flex space-x-2 items-center">
+                            <i class="fa fa-flag"></i>
+                            <span>Flag Vendor</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+            
+            
+            <div class="bg-white w-full max-w-xl rounded-lg shadow-md p-6 mb-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-lg font-semibold">VND-001</h2>
+                    <button class="text-gray-500 hover:text-black"><i class="fa fa-copy"></i></button>
+                </div>
+            
+                <div class="border rounded overflow-hidden">
+                    <div class="bg-gray-50 font-semibold text-sm grid grid-cols-2 px-4 py-2 border-b">
+                        <span>Field</span>
+                        <span>Details</span>
+                    </div>
+                    <div class="text-sm divide-y">
+                        <div class="grid grid-cols-2 px-4 py-2">
+                            <span>Vendor ID</span>
+                            <span>VND-001</span>
+                        </div>
+                        <div class="grid grid-cols-2 px-4 py-2">
+                            <span>Business Name</span>
+                            <span>Supreme Gas Ltd</span>
+                        </div>
+                        <div class="grid grid-cols-2 px-4 py-2">
+                            <span>Vendor Name</span>
+                            <span>John Doe</span>
+                        </div>
+                        <div class="grid grid-cols-2 px-4 py-2">
+                            <span>Phone Number</span>
+                            <span>+234 8012345678</span>
+                        </div>
+                        <div class="grid grid-cols-2 px-4 py-2">
+                            <span>Email Address</span>
+                            <span>johndoe@supremegas.com</span>
+                        </div>
+                        <div class="grid grid-cols-2 px-4 py-2">
+                            <span>Business Address</span>
+                            <span>23 Energy Road, Lagos</span>
+                        </div>
+                        <div class="grid grid-cols-2 px-4 py-2">
+                            <span>Category</span>
+                            <span>Gas Refill</span>
+                        </div>
+                        <div class="grid grid-cols-2 px-4 py-2">
+                            <span>Date Applied</span>
+                            <span>2025-03-10</span>
+                        </div>
+                        <div class="grid grid-cols-2 px-4 py-2">
+                            <span>Website (if any)</span>
+                            <span>www.supremegas.com</span>
+                        </div>
+                        <div class="grid grid-cols-2 px-4 py-2">
+                            <span>Social Media</span>
+                            <span>@supremegasng (Instagram)</span>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="mt-6 flex flex-wrap gap-4">
+                    <button class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md text-sm">
+                        Approve Vendor
+                    </button>
+                    <button class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm">
+                        Reject Vendor
+                    </button>
+                    <button class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md text-sm">
+                        Request Vendor Edits
+                    </button>
+                </div>
+            </div>
+            
+
+            <!--Compliance Documents Submitted-->
+            <div class="max-w-7xl mx-auto mt-6">
+                <div class="bg-white rounded-lg shadow-md overflow-hidden mb-4">
+                    <div class="p-4">
+                        <h2 class="text-lg font-semibold text-gray-800">Compliance Documents Submitted</h2>
+                    </div>
+                    <div class="overflow-auto p-4">
+                        <table class="min-w-full divide-y divide-gray-200 text-sm ">
+                            <thead class="bg-gray-100 text-gray-600 tracking-wider">
+                                <tr>
+                                    <th scope="col" class="px-3 py-2 text-left font-medium">Submission ID</th>
+                                    <th scope="col" class="px-3 py-2 text-left font-medium">Document Title</th>
+                                    <th scope="col" class="px-3 py-2 text-left font-medium">Submitted</th>
+                                    <th scope="col" class="px-3 py-2 text-left font-medium">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200 text-gray-600">
+                                <tr>
+                                    <td class="px-3 py-2 whitespace-nowrap">
+                                        <a href="#" class="text-blue-500 hover:underline">#VER786393</a>
+                                    </td>
+                                    <td class="px-3 py-2 whitespace-nowrap">Business Registration Certificate</td>
+                                    <td class="px-3 py-2 whitespace-nowrap">
+                                        <i class="fas fa-check-circle text-green-500 mr-1"></i> Yes
+                                    </td>
+                                    <td class="px-3 py-2 whitespace-nowrap text-blue-500 hover:text-blue-700 cursor-pointer">
+                                        <i class="fas fa-eye mr-1"></i>
+                                        Preview Documents
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="px-3 py-2 whitespace-nowrap">
+                                        <a href="#" class="text-blue-500 hover:underline">#VER7860173</a>
+                                    </td>
+                                    <td class="px-3 py-2 whitespace-nowrap">Tax Identification Number (TIN)</td>
+                                    <td class="px-3 py-2 whitespace-nowrap">
+                                        <i class="fas fa-check-circle text-green-500 mr-1"></i> Yes
+                                    </td>
+                                    <td class="px-3 py-2 whitespace-nowrap text-blue-500 hover:text-blue-700 cursor-pointer">
+                                        <i class="fas fa-eye mr-1"></i>
+                                        Preview Documents
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="px-3 py-2 whitespace-nowrap">
+                                        <a href="#" class="text-blue-500 hover:underline">#VER7860328</a>
+                                    </td>
+                                    <td class="px-3 py-2 whitespace-nowrap">NIN Verification</td>
+                                    <td class="px-3 py-2 whitespace-nowrap">
+                                        <i class="fas fa-check-circle text-green-500 mr-1"></i> Yes
+                                    </td>
+                                    <td class="px-3 py-2 whitespace-nowrap text-blue-500 hover:text-blue-700 cursor-pointer">
+                                        <i class="fas fa-eye mr-1"></i>
+                                        Preview Documents
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="px-3 py-2 whitespace-nowrap">
+                                        <a href="#" class="text-blue-500 hover:underline">#VER7860749</a>
+                                    </td>
+                                    <td class="px-3 py-2 whitespace-nowrap">CAC Registration</td>
+                                    <td class="px-3 py-2 whitespace-nowrap">
+                                        <i class="fas fa-times-circle text-red-500 mr-1"></i> No
+                                    </td>
+                                    <td class="px-3 py-2 whitespace-nowrap text-blue-500 hover:text-blue-700 cursor-pointer">
+                                        <i class="fas fa-eye mr-1"></i>
+                                        Preview Documents
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="px-3 py-2 whitespace-nowrap">
+                                        <a href="#" class="text-blue-500 hover:underline">#VER7860749</a>
+                                    </td>
+                                    <td class="px-3 py-2 whitespace-nowrap">Proof of Address</td>
+                                    <td class="px-3 py-2 whitespace-nowrap">
+                                        <i class="fas fa-check-circle text-green-500 mr-1"></i> Yes
+                                    </td>
+                                    <td class="px-3 py-2 whitespace-nowrap text-blue-500 hover:text-blue-700 cursor-pointer">
+                                        <i class="fas fa-eye mr-1"></i>
+                                        Preview Documents
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="px-3 py-2 whitespace-nowrap">
+                                        <a href="#" class="text-blue-500 hover:underline">#VER7860749</a>
+                                    </td>
+                                    <td class="px-3 py-2 whitespace-nowrap">Safety Certification</td>
+                                    <td class="px-3 py-2 whitespace-nowrap">
+                                        <i class="fas fa-times-circle text-red-500 mr-1"></i> No
+                                    </td>
+                                    <td class="px-3 py-2 whitespace-nowrap text-blue-500 hover:text-blue-700 cursor-pointer">
+                                        <i class="fas fa-eye mr-1"></i>
+                                        Preview Documents
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="p-4 text-sm rounded-b-lg">
+                        <i class="fas fa-exclamation-triangle mr-2  text-yellow-700 bg-yellow-100"></i>
+                        Missing Documents: <span class="font-semibold">CAC Registration, Safety Certification</span>
+                    </div>
+                </div>
+                <div class="flex flex-wrap gap-2 mb-6">
+                    <button class="bg-gradient-to-b from-gray-100 to-gray-300 hover:from-gray-200 hover:to-gray-400 text-black py-2 px-4 rounded text-sm">
+                        <i class="fas fa-download mr-2"></i>
+                        Download Documents
+                    </button>
+                    <button class="bg-gradient-to-b from-gray-100 to-gray-300 hover:from-gray-200 hover:to-gray-400 text-black py-2 px-4 rounded text-sm">
+                        <i class="fas fa-plus mr-2"></i>
+                        Request Additional Compliance Documents
+                    </button>
+                </div>
+            </div>
+            <div class="max-w-7xl mx-auto mt-6">
+                <div class="bg-white rounded-lg shadow-md overflow-hidden mb-4">
+                    <div class="p-4">
+                        <h2 class="text-lg font-semibold text-gray-800">Delivery Representatives Assigned</h2>
+                    </div>
+                    <div class="overflow-auto p-4">
+                        <table class="min-w-full divide-y divide-gray-200 text-sm ">
+                            <thead class="bg-gray-100 text-gray-600 tracking-wider">
+                                <tr>
+                                    <th scope="col" class="px-3 py-2 text-left font-medium">Rep ID</th>
+                                    <th scope="col" class="px-3 py-2 text-left font-medium">Full Name</th>
+                                    <th scope="col" class="px-3 py-2 text-left font-medium">Phone Number</th>
+                                    <th scope="col" class="px-3 py-2 text-left font-medium">Status</th>
+                                    <th scope="col" class="px-3 py-2 text-left font-medium">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200 text-gray-600">
+                                <tr>
+                                    <td class="px-3 py-2 whitespace-nowrap">REP-101</td>
+                                    <td class="px-3 py-2 whitespace-nowrap">James Okoro</td>
+                                    <td class="px-3 py-2 whitespace-nowrap">+234 802 345 6789</td>
+                                    <td class="px-3 py-2 whitespace-nowrap">
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                            Pending
+                                        </span>
+                                    </td>
+                                    <td class="px-3 py-2 whitespace-nowrap text-blue-500 hover:text-blue-700 cursor-pointer">
+                                        <i class="fas fa-user mr-1"></i>
+                                        View Profile
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="px-3 py-2 whitespace-nowrap">REP-102</td>
+                                    <td class="px-3 py-2 whitespace-nowrap">Mary Uche</td>
+                                    <td class="px-3 py-2 whitespace-nowrap">+234 802 345 6789</td>
+                                    <td class="px-3 py-2 whitespace-nowrap">
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                            Pending
+                                        </span>
+                                    </td>
+                                    <td class="px-3 py-2 whitespace-nowrap text-blue-500 hover:text-blue-700 cursor-pointer">
+                                        <i class="fas fa-user mr-1"></i>
+                                        View Profile
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="max-w-7xl mx-auto mt-6">
+                <div class="bg-white rounded-lg shadow-md overflow-hidden mb-4">
+                    <div class="p-4">
+                        <h2 class="text-lg font-semibold text-gray-800">Services Offered by Vendor</h2>
+                    </div>
+                    <div class="overflow-auto p-4">
+                        <table class="min-w-full divide-y divide-gray-200 text-sm ">
+                            <thead class="bg-gray-100 text-gray-600 tracking-wider">
+                                <tr>
+                                    <th scope="col" class="px-3 py-2 text-left font-medium">Service ID</th>
+                                    <th scope="col" class="px-3 py-2 text-left font-medium">Service Name</th>
+                                    <th scope="col" class="px-3 py-2 text-left font-medium">Category</th>
+                                    <th scope="col" class="px-3 py-2 text-left font-medium">Status</th>
+                                    <th scope="col" class="px-3 py-2 text-left font-medium">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200 text-gray-600">
+                                <tr>
+                                    <td class="px-3 py-2 whitespace-nowrap">SVC-001</td>
+                                    <td class="px-3 py-2 whitespace-nowrap">12.5kg Gas Refill</td>
+                                    <td class="px-3 py-2 whitespace-nowrap">Gas Refill</td>
+                                    <td class="px-3 py-2 whitespace-nowrap">
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                            Pending Approval
+                                        </span>
+                                    </td>
+                                    <td class="px-3 py-2 whitespace-nowrap text-blue-500 hover:text-blue-700 cursor-pointer">
+                                        <i class="fas fa-eye mr-1"></i>
+                                        View Service
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="px-3 py-2 whitespace-nowrap">SVC-002</td>
+                                    <td class="px-3 py-2 whitespace-nowrap">Diesel Supply</td>
+                                    <td class="px-3 py-2 whitespace-nowrap">Diesel</td>
+                                    <td class="px-3 py-2 whitespace-nowrap">
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                            Pending Approval
+                                        </span>
+                                    </td>
+                                    <td class="px-3 py-2 whitespace-nowrap text-blue-500 hover:text-blue-700 cursor-pointer">
+                                        <i class="fas fa-eye mr-1"></i>
+                                        View Service
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+        </main>
+    </div>
+    <!-- Alpine.js (Add this script if not already included in your project) -->
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script>
+
+
+
+
+        // Mobile sidebar toggle functionality
+        document.addEventListener('DOMContentLoaded', function () {
+            const sidebarToggle = document.querySelector('#sidebar-toggle');
+            const sidebar = document.getElementById('sidebar');
+            const sidebarOverlay = document.getElementById('sidebar-overlay');
+
+            const hideSidebarButton = document.getElementById('hide-sidebar-button');
+
+            sidebarToggle.addEventListener('click', function () {
+                sidebar.classList.toggle('open');
+                sidebar.classList.remove('hidden');
+                sidebarOverlay.classList.toggle('hidden');
+            });
+
+            sidebarOverlay.addEventListener('click', function () {
+                sidebar.classList.remove('open');
+                sidebar.classList.add('hidden');
+                sidebarOverlay.classList.add('hidden');
+            });
+
+            hideSidebarButton.addEventListener('click', function () {
+                sidebar.classList.toggle("hidden");
+            });
+
+            // Initialize Pie Chart
+            const pieCtx = document.getElementById('pieChart').getContext('2d');
+            const pieChart = new Chart(pieCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['Petroleum', 'Cooking gas', 'Diesel', 'Electricity'],
+                    datasets: [{
+                        data: [40, 20, 25, 15],
+                        backgroundColor: [
+                            '#4FD1C5', // teal
+                            '#F6E05E', // yellow
+                            '#F56565', // red
+                            '#4299E1'  // blue
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+            // Initialize Bar Chart
+            const barCtx = document.getElementById('barChart').getContext('2d');
+            const barChart = new Chart(barCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['20', '22', '24', '26', '28', '30', '02', '04', '06', '08', '10', '12', '14', '16'],
+                    datasets: [{
+                        label: 'Daily Revenue',
+                        data: [250000, 350000, 200000, 280000, 220000, 180000, 500000, 320000, 450000, 280000, 220000, 380000, 200000, 350000],
+                        backgroundColor: function (context) {
+                            const index = context.dataIndex;
+                            return index === 6 ? '#4299E1' : '#4FD1C5'; // Blue for day 7, teal for others
+                        },
+                        borderWidth: 0,
+                        borderRadius: 4,
+                        maxBarThickness: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function (value) {
+                                    if (value === 0) return '₦0';
+                                    if (value === 100000) return '₦100k';
+                                    if (value === 200000) return '₦200k';
+                                    if (value === 300000) return '₦300k';
+                                    if (value === 400000) return '₦400k';
+                                    if (value === 500000) return '₦500k';
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+
+
+        });
+
+
+    </script>
+    
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+          // Select all date picker wrappers
+          const wrappers = document.querySelectorAll('.date-picker-wrapper');
+      
+          wrappers.forEach((wrapper) => {
+            const datePicker = wrapper.querySelector('.datePicker');
+            const dropdownBtn = wrapper.querySelector('.dropdownBtn');
+            const dropdownMenu = wrapper.querySelector('.dropdownMenu');
+            const modeLabel = wrapper.querySelector('.mode-label');
+        
+            let mode = "today"; // Default mode is 'today'
+        
+            function setDateMode(selectedMode) {
+              mode = selectedMode;
+              modeLabel.textContent = selectedMode;
+              dropdownMenu.classList.add("hidden");
+        
+              if (mode === "today") {
+                const today = new Date();
+                const formatted = today.toLocaleDateString("en-GB", {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric"
+                });
+                datePicker.value = formatted;
+              } else if (mode === "Specific Date") {
+                flatpickr(datePicker, {
+                  dateFormat: "d M, Y",
+                  defaultDate: new Date(),
+                  onChange: function (selectedDates, dateStr) {
+                    datePicker.value = dateStr;
+                  }
+                }).open();
+              } else if (mode === "monthly") {
+                flatpickr(datePicker, {
+                  mode: "range",
+                  dateFormat: "d M",
+                  onChange: function (selectedDates) {
+                    if (selectedDates.length === 2) {
+                      const start = selectedDates[0].toLocaleDateString("en-GB", {
+                        day: "2-digit",
+                        month: "short"
+                      });
+                      const end = selectedDates[1].toLocaleDateString("en-GB", {
+                        day: "2-digit",
+                        month: "short"
+                      });
+                      datePicker.value = `${start} - ${end}`;
+                    }
+                  }
+                }).open();
+              }
+            }
+        
+            // Init default mode on page load for each picker
+            setDateMode("today");
+        
+            // Toggle dropdown for each picker
+            dropdownBtn.addEventListener("click", (e) => {
+              e.stopPropagation();
+              dropdownMenu.classList.toggle("hidden");
+            });
+        
+            // Handle dropdown option click for each picker
+            dropdownMenu.querySelectorAll('button[data-mode]').forEach(btn => {
+              btn.addEventListener("click", () => {
+                setDateMode(btn.dataset.mode);
+              });
+            });
+        
+            // Close dropdown if clicked outside
+            document.addEventListener("click", (e) => {
+              if (!wrapper.contains(e.target)) {
+                dropdownMenu.classList.add("hidden");
+              }
+            });
+          });
+        });
+      </script>
+      
+
+</body>
+
+</html>
