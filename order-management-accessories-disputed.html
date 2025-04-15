@@ -102,15 +102,21 @@
                     </div>
 
                     <ul class="max-h-60 overflow-auto">
-                        <li class="p-2 hover:bg-gray-100 cursor-pointer">
-                            <span class="text-sm text-gray-700">🔔 You have a new message</span>
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer flex items-center">
+                            <i class="fas fa-bell text-gray-500 text-sm mr-2"></i>
+                            <span class="text-sm text-gray-700">You have a new message</span>
                         </li>
-                        <li class="p-2 hover:bg-gray-100 cursor-pointer">
-                            <span class="text-sm text-gray-700">✅ Task Completed Successfully</span>
+
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer flex items-center">
+                            <i class="fas fa-check-circle text-green-500 text-sm mr-2"></i>
+                            <span class="text-sm text-gray-700">Task Completed Successfully</span>
                         </li>
-                        <li class="p-2 hover:bg-gray-100 cursor-pointer">
-                            <span class="text-sm text-gray-700">⚠️ System Alert: Update Required</span>
+
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer flex items-center">
+                            <i class="fas fa-exclamation-triangle text-yellow-500 text-sm mr-2"></i>
+                            <span class="text-sm text-gray-700">System Alert: Update Required</span>
                         </li>
+
                     </ul>
 
                     <div class="p-3 border-t text-center">
@@ -145,10 +151,19 @@
                 <div x-show="open" @click.away="open = false" x-transition x-cloak
                     class="absolute right-0 mt-2 w-48 bg-white border rounded-md shadow-lg z-50">
                     <ul class="py-2">
-                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer"><a href="profiles-settings.html">👤
-                                Profile</a> </li>
-                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">⚙️ Settings</li>
-                        <li class="px-4 py-2 text-red-500 hover:bg-gray-100 cursor-pointer">🚪 Logout</li>
+                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                            <a href="profiles-settings.html" class="flex items-center text-gray-700">
+                                <i class="fas fa-user mr-2"></i>
+                                Profile
+                            </a>
+                        </li>
+
+                        <li class="px-4 py-2 text-red-500 hover:bg-gray-100 cursor-pointer">
+                            <a href="login.html" class="flex items-center">
+                                <i class="fas fa-sign-out-alt mr-2"></i>
+                                Logout
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -164,17 +179,22 @@
             <nav class="p-4">
                 <ul>
                     <li class="mb-4">
-                        <a href="quicrefill-dashboard.html"
-                            class="flex items-center text-gray-600 hover:text-amber-500">
+                        <a href="quicrefill-dashboard.html" class="flex items-center text-amber-500 font-medium">
                             <i class="fas fa-th-large mr-3"></i>
                             <span>Summary</span>
                         </a>
                     </li>
 
                     <li class="mb-4">
-                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                        <a href="order-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-clipboard-list mr-3"></i>
                             <span>Order Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="delivery-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-cube mr-3"></i>
+                            <span>Delivery Management</span>
                         </a>
                     </li>
                     <li class="mb-4">
@@ -184,39 +204,112 @@
                         </a>
                     </li>
                     <li class="mb-4">
-                        <a href="accessories-management.html" class="flex items-center text-amber-500 font-medium">
+                        <a href="accessories-management.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-bag-shopping mr-3"></i>
                             <span>Accessories Management</span>
                         </a>
                     </li>
                     <li class="mb-4">
-                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                        <a href="user-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-user mr-3"></i>
                             <span>User Management</span>
                         </a>
                     </li>
                     <li class="mb-4">
-                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
-                            <i class="fas fa-motorcycle mr-3"></i>
-                            <span>Rider Management</span>
+                        <a href="vendor-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-store mr-3"></i>
+                            <span>Vendor Management</span>
                         </a>
                     </li>
                     <li class="mb-4">
-                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
-                            <i class="fas fa-money-bill mr-3"></i>
+                        <a href="delivery-rep-management.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-truck-droplet mr-2"></i>
+                            <span>Delivery Rep Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="verification-and-compliance.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-check-square mr-3"></i>
+                            <span>Verification & Compliance</span>
+                        </a>
+                    </li>
+                    <li x-data="{ open: false }" class="mb-4">
+                        <a href="#" @click.prevent="open = !open"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-sack-dollar mr-3"></i>
                             <span>Revenue Management</span>
+                            <i :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas ml-auto text-xs"></i>
+                        </a>
+
+                        <!-- Dropdown Menu -->
+                        <ul x-show="open" x-cloak class="mt-2 ml-6 space-y-2 text-gray-800">
+
+                            <!-- Revenue Breakdown -->
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-chart-pie mr-3 text-gray-500"></i>
+                                <a href="revenue-breakdown.html">Revenue Breakdown</a>
+                            </li>
+
+                            <!-- Payout Management -->
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-hand-holding-usd mr-3 text-gray-500"></i>
+                                <a href="payout-management.html">Payout Management</a>
+                            </li>
+
+                            <!-- Revenue Analytics -->
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-chart-line mr-3 text-gray-500"></i>
+                                <a href="revenue-analytics.html">Revenue Analytics & Insights</a>
+                            </li>
+
+                        </ul>
+                    </li>
+
+                    <li class="mb-4">
+                        <a href="withdrawal-management.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-money-bill-transfer mr-3"></i>
+                            <span>Withdrawal Management</span>
                         </a>
                     </li>
                     <li class="mb-4">
-                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                        <a href="account-deletion.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-user-xmark mr-3"></i>
+                            <span>Account Deletion</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="account-deletion.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fa fa-map-marker mr-3"></i>
+                            <span>Operating Locations</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="feedback.html" class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-comments mr-3"></i>
                             <span>Feedback</span>
                         </a>
                     </li>
                     <li class="mb-4">
-                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                        <a href="fraud-watch.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fa fa-binoculars mr-3"></i>
+                            <span>Fraud Watch</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="reports-and-analytics.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-chart-bar mr-3"></i>
                             <span>Reports and Analytics</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="crash-analytics.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fa fa-line-chart mr-3"></i>
+                            <span>Crash Analytics</span>
                         </a>
                     </li>
                     <li x-data="{ open: false }" class="mb-4">
@@ -231,26 +324,48 @@
                         <ul x-show="open" x-cloak class="mt-2 ml-6 space-y-2 text-gray-500">
                             <li class="flex items-center hover:text-amber-500">
                                 <i class="fas fa-file-alt mr-3"></i>
-                                <a href="#">Security Logs</a>
+                                <a href="security-logs.html">Security Logs</a>
                             </li>
                             <li class="flex items-center hover:text-amber-500">
                                 <i class="fas fa-user-lock mr-3"></i>
-                                <a href="#">Access Control</a>
+                                <a href="access-control.html">Access Control</a>
                             </li>
                         </ul>
                     </li>
 
                     <li class="mb-4">
-                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                        <a href="staff-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-user-shield mr-3"></i>
-                            <span>Admin Management</span>
+                            <span>Staff Management</span>
                         </a>
                     </li>
-                    <li class="mb-4">
-                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+
+                    <li x-data="{ open: false }" class="mb-4">
+                        <a href="#" @click.prevent="open = !open"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-cog mr-3"></i>
                             <span>System Settings</span>
+                            <i :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas ml-auto text-xs"></i>
                         </a>
+
+                        <!-- Dropdown Menu -->
+                        <ul x-show="open" x-cloak class="mt-2 ml-6 space-y-2 text-gray-500">
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-envelope-open-text mr-3"></i>
+                                <a href="system-message-settings.html">Message Settings</a>
+                            </li>
+
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-bell mr-3"></i>
+                                <a href="system-push-notification-settings.html">Push Notification Settings</a>
+                            </li>
+
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-ticket-alt mr-3"></i>
+                                <a href="system-coupon-settings.html">Coupon Settings</a>
+                            </li>
+
+                        </ul>
                     </li>
                 </ul>
             </nav>
@@ -264,7 +379,7 @@
             <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-6">
                 <h1 class="text-xl md:text-xl font-bold text-gray-800 mb-4 md:mb-0">Order Management</h1>
                 <div class="flex flex-wrap md:flex-nowrap items-center gap-2 md:gap-4">
-                    
+
                     <div class="mb-2 md:mb-0 bg-white relative">
                         <input type="text" placeholder="Search"
                             class="bg-white w-40 px-4 py-2 border border-gray-300 rounded-md bg-gray-100 focus:outline-none pr-10">
@@ -419,7 +534,7 @@
                     <p class="text-xs text-gray-500 mb-2">All orders placed on the platform</p>
                     <p class="text-2xl font-bold text-gray-900">5,246</p>
                 </div>
-            
+
                 <div class="border rounded-lg p-4 bg-white shadow-sm relative">
                     <div class="flex items-center justify-between mb-1">
                         <div class="flex items-center gap-2 flex-nowrap">
@@ -431,7 +546,7 @@
                     <p class="text-xs text-gray-500 mb-2">Orders currently being handled by riders</p>
                     <p class="text-2xl font-bold text-gray-900">1,262</p>
                 </div>
-            
+
                 <div class="border rounded-lg p-4 bg-white shadow-sm relative">
                     <div class="flex items-center justify-between mb-1">
                         <div class="flex items-center gap-2 flex-nowrap">
@@ -445,7 +560,7 @@
                     <p class="text-xs text-gray-500 mb-2">Successfully fulfilled orders</p>
                     <p class="text-2xl font-bold text-gray-900">1,812</p>
                 </div>
-            
+
                 <div class="border rounded-lg p-4 bg-white shadow-sm relative">
                     <div class="flex items-center justify-between mb-1">
                         <div class="flex items-center gap-2 flex-nowrap">
@@ -459,7 +574,7 @@
                     <p class="text-xs text-gray-500 mb-2">Successfully fulfilled orders</p>
                     <p class="text-2xl font-bold text-gray-900">942</p>
                 </div>
-            
+
                 <div class="border rounded-lg p-4 bg-white shadow-sm relative">
                     <div class="flex items-center justify-between mb-1">
                         <div class="flex items-center gap-2 flex-nowrap">
@@ -472,29 +587,34 @@
                     <p class="text-2xl font-bold text-gray-900">1,230</p>
                 </div>
             </div>
-            
+
             <div class="flex justify-center mb-2 mt-4">
 
                 <div class="inline-flex flex-wrap justify-center gap-2 bg-white rounded-lg shadow-md p-2">
-                    <button class="tab-button px-5 py-2 rounded-md text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-800 focus:outline-none transition duration-150 ease-in-out whitespace-nowrap">
+                    <button
+                        class="tab-button px-5 py-2 rounded-md text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-800 focus:outline-none transition duration-150 ease-in-out whitespace-nowrap">
                         All
                     </button>
-                    
-                    <button class="tab-button px-5 py-2 rounded-md text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-800 focus:outline-none transition duration-150 ease-in-out whitespace-nowrap">
+
+                    <button
+                        class="tab-button px-5 py-2 rounded-md text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-800 focus:outline-none transition duration-150 ease-in-out whitespace-nowrap">
                         Pending
                     </button>
-                    <button class="tab-button px-5 py-2 rounded-md text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-800 focus:outline-none transition duration-150 ease-in-out whitespace-nowrap">
+                    <button
+                        class="tab-button px-5 py-2 rounded-md text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-800 focus:outline-none transition duration-150 ease-in-out whitespace-nowrap">
                         In-Progress
                     </button>
-                    <button class="tab-button px-5 py-2 rounded-md text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-800 focus:outline-none transition duration-150 ease-in-out whitespace-nowrap">
+                    <button
+                        class="tab-button px-5 py-2 rounded-md text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-800 focus:outline-none transition duration-150 ease-in-out whitespace-nowrap">
                         Completed
                     </button>
-                    <button class="tab-button px-5 py-2 rounded-md text-sm font-medium bg-yellow-400 text-black focus:outline-none transition duration-150 ease-in-out whitespace-nowrap">
+                    <button
+                        class="tab-button px-5 py-2 rounded-md text-sm font-medium bg-yellow-400 text-black focus:outline-none transition duration-150 ease-in-out whitespace-nowrap">
                         Disputed
-                    </button>                   
-                </div> 
-            </div> 
-            
+                    </button>
+                </div>
+            </div>
+
 
 
             <!--Order Details-->
@@ -503,232 +623,272 @@
                 <div class="flex flex-col md:flex-row justify-between items-center gap-4">
                     <div class="border-b border-gray-200">
                         <nav class="-mb-px flex space-x-6" aria-label="Tabs">
-                            <a href="#" class="whitespace-nowrap py-3 px-1 border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 font-medium text-sm">
+                            <a href="#"
+                                class="whitespace-nowrap py-3 px-1 border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 font-medium text-sm">
                                 Orders
                             </a>
-                            <a href="#" class="whitespace-nowrap py-3 px-1 border-b-2 font-semibold text-sm border-orange-500 text-orange-500" aria-current="page">
+                            <a href="#"
+                                class="whitespace-nowrap py-3 px-1 border-b-2 font-semibold text-sm border-orange-500 text-orange-500"
+                                aria-current="page">
                                 Accessories
                             </a>
                         </nav>
                     </div>
-                
+
                     <div class="ml-auto">
-                        <button class="bg-yellow-400 text-black rounded-lg px-6 py-3 font-semibold hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:ring-offset-2 mb-2">
+                        <button
+                            class="bg-yellow-400 text-black rounded-lg px-6 py-3 font-semibold hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:ring-offset-2 mb-2">
                             Manage all
                         </button>
                     </div>
                 </div>
-        
+
                 <div class="bg-white rounded-md border border-gray-300 shadow-md p-4 mb-6">
                     <div class="container mx-auto">
                         <div class="overflow-x-auto">
-                            
+
                             <table class="w-full border-collapse bg-white shadow-md rounded-lg overflow-hidden">
                                 <thead>
                                     <tr class="bg-gray-200 text-left text-gray-600 text-sm">
-                                      <th class="p-3">Order ID</th>
-                                      <th class="p-3">Customer Name</th>
-                                      <th class="p-3">Amount</th>
-                                      <th class="p-3">Payment</th>
-                                      <th class="p-3">Service Type</th>
-                                      <th class="p-3">Risk Level</th>
-                                      <th class="p-3">Status</th>
-                                      <th class="p-3">Date</th>
-                                      <th class="p-3">Actions</th>
+                                        <th class="p-3">Order ID</th>
+                                        <th class="p-3">Customer Name</th>
+                                        <th class="p-3">Amount</th>
+                                        <th class="p-3">Payment</th>
+                                        <th class="p-3">Service Type</th>
+                                        <th class="p-3">Risk Level</th>
+                                        <th class="p-3">Status</th>
+                                        <th class="p-3">Date</th>
+                                        <th class="p-3">Actions</th>
                                     </tr>
-                                  </thead>
-                                  <tbody>
+                                </thead>
+                                <tbody>
                                     <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
-                                      <td class="p-3">#ORD1001</td>
-                                      <td class="p-3">John Doe</td>
-                                      <td class="p-3">₦75,000</td>
-                                      <td class="p-3">On delivery</td>
-                                      <td class="p-3">Accessories</td>
-                                      <td class="p-3">Medium</td>
-                                      <td class="p-3 text-yellow-500 font-semibold">Under review</td>
-                                      <td class="p-3">25/01/27 10:15 AM</td>
-                                      <td class="p-3 flex space-x-2">
-                                        <a href="#" class="text-gray-500 hover:text-orange-500"><i class="fa fa-edit"></i></a>
-                                        <button class="text-gray-500 hover:text-red-500"><i class="fa fa-trash"></i></button>
-                                        <a href="#" class="text-gray-500 hover:text-gray-700"><i class="fa fa-ellipsis-v"></i></a>
-                                      </td>
-                                    </tr>
-                                    <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
-                                      <td class="p-3">#ORD1002</td>
-                                      <td class="p-3">Mary Johnson</td>
-                                      <td class="p-3">₦75,000</td>
-                                      <td class="p-3">Wallet</td>
-                                      <td class="p-3">Accessories</td>
-                                      <td class="p-3">Low</td>
-                                      <td class="p-3 text-green-500 font-semibold">Resolved</td>
-                                      <td class="p-3">25/01/27 02:45 PM</td>
-                                      <td class="p-3 flex space-x-2">
-                                        <a href="#" class="text-gray-500 hover:text-orange-500"><i class="fa fa-edit"></i></a>
-                                        <button class="text-gray-500 hover:text-red-500"><i class="fa fa-trash"></i></button>
-                                        <a href="#" class="text-gray-500 hover:text-gray-700"><i class="fa fa-ellipsis-v"></i></a>
-                                      </td>
+                                        <td class="p-3">#ORD1001</td>
+                                        <td class="p-3">John Doe</td>
+                                        <td class="p-3">₦75,000</td>
+                                        <td class="p-3">On delivery</td>
+                                        <td class="p-3">Accessories</td>
+                                        <td class="p-3">Medium</td>
+                                        <td class="p-3 text-yellow-500 font-semibold">Under review</td>
+                                        <td class="p-3">25/01/27 10:15 AM</td>
+                                        <td class="p-3 flex space-x-2">
+                                            <a href="#" class="text-gray-500 hover:text-orange-500"><i
+                                                    class="fa fa-edit"></i></a>
+                                            <button class="text-gray-500 hover:text-red-500"><i
+                                                    class="fa fa-trash"></i></button>
+                                            <a href="#" class="text-gray-500 hover:text-gray-700"><i
+                                                    class="fa fa-ellipsis-v"></i></a>
+                                        </td>
                                     </tr>
                                     <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
-                                      <td class="p-3">#ORD1003</td>
-                                      <td class="p-3">Charles Uche</td>
-                                      <td class="p-3">₦75,000</td>
-                                      <td class="p-3">On delivery</td>
-                                      <td class="p-3">Accessories</td>
-                                      <td class="p-3">High</td>
-                                      <td class="p-3 text-yellow-500 font-semibold">Under review</td>
-                                      <td class="p-3">25/01/27 09:30 AM</td>
-                                      <td class="p-3 flex space-x-2">
-                                        <a href="#" class="text-gray-500 hover:text-orange-500"><i class="fa fa-edit"></i></a>
-                                        <button class="text-gray-500 hover:text-red-500"><i class="fa fa-trash"></i></button>
-                                        <a href="#" class="text-gray-500 hover:text-gray-700"><i class="fa fa-ellipsis-v"></i></a>
-                                      </td>
+                                        <td class="p-3">#ORD1002</td>
+                                        <td class="p-3">Mary Johnson</td>
+                                        <td class="p-3">₦75,000</td>
+                                        <td class="p-3">Wallet</td>
+                                        <td class="p-3">Accessories</td>
+                                        <td class="p-3">Low</td>
+                                        <td class="p-3 text-green-500 font-semibold">Resolved</td>
+                                        <td class="p-3">25/01/27 02:45 PM</td>
+                                        <td class="p-3 flex space-x-2">
+                                            <a href="#" class="text-gray-500 hover:text-orange-500"><i
+                                                    class="fa fa-edit"></i></a>
+                                            <button class="text-gray-500 hover:text-red-500"><i
+                                                    class="fa fa-trash"></i></button>
+                                            <a href="#" class="text-gray-500 hover:text-gray-700"><i
+                                                    class="fa fa-ellipsis-v"></i></a>
+                                        </td>
                                     </tr>
                                     <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
-                                      <td class="p-3">#ORD1004</td>
-                                      <td class="p-3">Charles Uche</td>
-                                      <td class="p-3">₦75,000</td>
-                                      <td class="p-3">Flutterwave</td>
-                                      <td class="p-3">Accessories</td>
-                                      <td class="p-3">Low</td>
-                                      <td class="p-3 text-yellow-500 font-semibold">Under review</td>
-                                      <td class="p-3">25/01/26 11:10 AM</td>
-                                      <td class="p-3 flex space-x-2">
-                                        <a href="#" class="text-gray-500 hover:text-orange-500"><i class="fa fa-edit"></i></a>
-                                        <button class="text-gray-500 hover:text-red-500"><i class="fa fa-trash"></i></button>
-                                        <a href="#" class="text-gray-500 hover:text-gray-700"><i class="fa fa-ellipsis-v"></i></a>
-                                      </td>
+                                        <td class="p-3">#ORD1003</td>
+                                        <td class="p-3">Charles Uche</td>
+                                        <td class="p-3">₦75,000</td>
+                                        <td class="p-3">On delivery</td>
+                                        <td class="p-3">Accessories</td>
+                                        <td class="p-3">High</td>
+                                        <td class="p-3 text-yellow-500 font-semibold">Under review</td>
+                                        <td class="p-3">25/01/27 09:30 AM</td>
+                                        <td class="p-3 flex space-x-2">
+                                            <a href="#" class="text-gray-500 hover:text-orange-500"><i
+                                                    class="fa fa-edit"></i></a>
+                                            <button class="text-gray-500 hover:text-red-500"><i
+                                                    class="fa fa-trash"></i></button>
+                                            <a href="#" class="text-gray-500 hover:text-gray-700"><i
+                                                    class="fa fa-ellipsis-v"></i></a>
+                                        </td>
                                     </tr>
                                     <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
-                                      <td class="p-3">#ORD1005</td>
-                                      <td class="p-3">David Hassan</td>
-                                      <td class="p-3">₦75,000</td>
-                                      <td class="p-3">Flutterwave</td>
-                                      <td class="p-3">Accessories</td>
-                                      <td class="p-3">High</td>
-                                      <td class="p-3 text-green-500 font-semibold">Resolved</td>
-                                      <td class="p-3">25/01/24 04:20 PM</td>
-                                      <td class="p-3 flex space-x-2">
-                                        <a href="#" class="text-gray-500 hover:text-orange-500"><i class="fa fa-edit"></i></a>
-                                        <button class="text-gray-500 hover:text-red-500"><i class="fa fa-trash"></i></button>
-                                        <a href="#" class="text-gray-500 hover:text-gray-700"><i class="fa fa-ellipsis-v"></i></a>
-                                      </td>
+                                        <td class="p-3">#ORD1004</td>
+                                        <td class="p-3">Charles Uche</td>
+                                        <td class="p-3">₦75,000</td>
+                                        <td class="p-3">Flutterwave</td>
+                                        <td class="p-3">Accessories</td>
+                                        <td class="p-3">Low</td>
+                                        <td class="p-3 text-yellow-500 font-semibold">Under review</td>
+                                        <td class="p-3">25/01/26 11:10 AM</td>
+                                        <td class="p-3 flex space-x-2">
+                                            <a href="#" class="text-gray-500 hover:text-orange-500"><i
+                                                    class="fa fa-edit"></i></a>
+                                            <button class="text-gray-500 hover:text-red-500"><i
+                                                    class="fa fa-trash"></i></button>
+                                            <a href="#" class="text-gray-500 hover:text-gray-700"><i
+                                                    class="fa fa-ellipsis-v"></i></a>
+                                        </td>
                                     </tr>
                                     <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
-                                      <td class="p-3">#ORD1006</td>
-                                      <td class="p-3">Esther John</td>
-                                      <td class="p-3">₦75,000</td>
-                                      <td class="p-3">Wallet</td>
-                                      <td class="p-3">Accessories</td>
-                                      <td class="p-3">High</td>
-                                      <td class="p-3 text-green-500 font-semibold">Resolved</td>
-                                      <td class="p-3">25/01/26 11:20 AM</td>
-                                      <td class="p-3 flex space-x-2">
-                                        <a href="#" class="text-gray-500 hover:text-orange-500"><i class="fa fa-edit"></i></a>
-                                        <button class="text-gray-500 hover:text-red-500"><i class="fa fa-trash"></i></button>
-                                        <a href="#" class="text-gray-500 hover:text-gray-700"><i class="fa fa-ellipsis-v"></i></a>
-                                      </td>
+                                        <td class="p-3">#ORD1005</td>
+                                        <td class="p-3">David Hassan</td>
+                                        <td class="p-3">₦75,000</td>
+                                        <td class="p-3">Flutterwave</td>
+                                        <td class="p-3">Accessories</td>
+                                        <td class="p-3">High</td>
+                                        <td class="p-3 text-green-500 font-semibold">Resolved</td>
+                                        <td class="p-3">25/01/24 04:20 PM</td>
+                                        <td class="p-3 flex space-x-2">
+                                            <a href="#" class="text-gray-500 hover:text-orange-500"><i
+                                                    class="fa fa-edit"></i></a>
+                                            <button class="text-gray-500 hover:text-red-500"><i
+                                                    class="fa fa-trash"></i></button>
+                                            <a href="#" class="text-gray-500 hover:text-gray-700"><i
+                                                    class="fa fa-ellipsis-v"></i></a>
+                                        </td>
                                     </tr>
                                     <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
-                                      <td class="p-3">#ORD1007</td>
-                                      <td class="p-3">Emmanuel Obi</td>
-                                      <td class="p-3">₦75,000</td>
-                                      <td class="p-3">On delivery</td>
-                                      <td class="p-3">Accessories</td>
-                                      <td class="p-3">Medium</td>
-                                      <td class="p-3 text-yellow-500 font-semibold">Under review</td>
-                                      <td class="p-3">25/01/27 12:50 PM</td>
-                                      <td class="p-3 flex space-x-2">
-                                        <a href="#" class="text-gray-500 hover:text-orange-500"><i class="fa fa-edit"></i></a>
-                                        <button class="text-gray-500 hover:text-red-500"><i class="fa fa-trash"></i></button>
-                                        <a href="#" class="text-gray-500 hover:text-gray-700"><i class="fa fa-ellipsis-v"></i></a>
-                                      </td>
+                                        <td class="p-3">#ORD1006</td>
+                                        <td class="p-3">Esther John</td>
+                                        <td class="p-3">₦75,000</td>
+                                        <td class="p-3">Wallet</td>
+                                        <td class="p-3">Accessories</td>
+                                        <td class="p-3">High</td>
+                                        <td class="p-3 text-green-500 font-semibold">Resolved</td>
+                                        <td class="p-3">25/01/26 11:20 AM</td>
+                                        <td class="p-3 flex space-x-2">
+                                            <a href="#" class="text-gray-500 hover:text-orange-500"><i
+                                                    class="fa fa-edit"></i></a>
+                                            <button class="text-gray-500 hover:text-red-500"><i
+                                                    class="fa fa-trash"></i></button>
+                                            <a href="#" class="text-gray-500 hover:text-gray-700"><i
+                                                    class="fa fa-ellipsis-v"></i></a>
+                                        </td>
                                     </tr>
                                     <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
-                                      <td class="p-3">#ORD1008</td>
-                                      <td class="p-3">Grace Nwosu</td>
-                                      <td class="p-3">₦75,000</td>
-                                      <td class="p-3">Flutterwave</td>
-                                      <td class="p-3">Accessories</td>
-                                      <td class="p-3">Medium</td>
-                                      <td class="p-3 text-green-500 font-semibold">Resolved</td>
-                                      <td class="p-3">25/01/27 12:50 PM</td>
-                                      <td class="p-3 flex space-x-2">
-                                        <a href="#" class="text-gray-500 hover:text-orange-500"><i class="fa fa-edit"></i></a>
-                                        <button class="text-gray-500 hover:text-red-500"><i class="fa fa-trash"></i></button>
-                                        <a href="#" class="text-gray-500 hover:text-gray-700"><i class="fa fa-ellipsis-v"></i></a>
-                                      </td>
+                                        <td class="p-3">#ORD1007</td>
+                                        <td class="p-3">Emmanuel Obi</td>
+                                        <td class="p-3">₦75,000</td>
+                                        <td class="p-3">On delivery</td>
+                                        <td class="p-3">Accessories</td>
+                                        <td class="p-3">Medium</td>
+                                        <td class="p-3 text-yellow-500 font-semibold">Under review</td>
+                                        <td class="p-3">25/01/27 12:50 PM</td>
+                                        <td class="p-3 flex space-x-2">
+                                            <a href="#" class="text-gray-500 hover:text-orange-500"><i
+                                                    class="fa fa-edit"></i></a>
+                                            <button class="text-gray-500 hover:text-red-500"><i
+                                                    class="fa fa-trash"></i></button>
+                                            <a href="#" class="text-gray-500 hover:text-gray-700"><i
+                                                    class="fa fa-ellipsis-v"></i></a>
+                                        </td>
                                     </tr>
                                     <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
-                                      <td class="p-3">#ORD1009</td>
-                                      <td class="p-3">John Ekpo</td>
-                                      <td class="p-3">₦75,000</td>
-                                      <td class="p-3">Wallet</td>
-                                      <td class="p-3">Accessories</td>
-                                      <td class="p-3">Low</td>
-                                      <td class="p-3 text-green-500 font-semibold">Resolved</td>
-                                      <td class="p-3">25/01/24 06:45 PM</td>
-                                      <td class="p-3 flex space-x-2">
-                                        <a href="#" class="text-gray-500 hover:text-orange-500"><i class="fa fa-edit"></i></a>
-                                        <button class="text-gray-500 hover:text-red-500"><i class="fa fa-trash"></i></button>
-                                        <a href="#" class="text-gray-500 hover:text-gray-700"><i class="fa fa-ellipsis-v"></i></a>
-                                      </td>
+                                        <td class="p-3">#ORD1008</td>
+                                        <td class="p-3">Grace Nwosu</td>
+                                        <td class="p-3">₦75,000</td>
+                                        <td class="p-3">Flutterwave</td>
+                                        <td class="p-3">Accessories</td>
+                                        <td class="p-3">Medium</td>
+                                        <td class="p-3 text-green-500 font-semibold">Resolved</td>
+                                        <td class="p-3">25/01/27 12:50 PM</td>
+                                        <td class="p-3 flex space-x-2">
+                                            <a href="#" class="text-gray-500 hover:text-orange-500"><i
+                                                    class="fa fa-edit"></i></a>
+                                            <button class="text-gray-500 hover:text-red-500"><i
+                                                    class="fa fa-trash"></i></button>
+                                            <a href="#" class="text-gray-500 hover:text-gray-700"><i
+                                                    class="fa fa-ellipsis-v"></i></a>
+                                        </td>
                                     </tr>
                                     <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
-                                      <td class="p-3">#ORD1010</td>
-                                      <td class="p-3">Hannah Danjuma</td>
-                                      <td class="p-3">₦75,000</td>
-                                      <td class="p-3">On delivery</td>
-                                      <td class="p-3">Accessories</td>
-                                      <td class="p-3">Medium</td>
-                                      <td class="p-3 text-green-500 font-semibold">Resolved</td>
-                                      <td class="p-3">25/01/25 05:30 PM</td>
-                                      <td class="p-3 flex space-x-2">
-                                        <a href="#" class="text-gray-500 hover:text-orange-500"><i class="fa fa-edit"></i></a>
-                                        <button class="text-gray-500 hover:text-red-500"><i class="fa fa-trash"></i></button>
-                                        <a href="#" class="text-gray-500 hover:text-gray-700"><i class="fa fa-ellipsis-v"></i></a>
-                                      </td>
+                                        <td class="p-3">#ORD1009</td>
+                                        <td class="p-3">John Ekpo</td>
+                                        <td class="p-3">₦75,000</td>
+                                        <td class="p-3">Wallet</td>
+                                        <td class="p-3">Accessories</td>
+                                        <td class="p-3">Low</td>
+                                        <td class="p-3 text-green-500 font-semibold">Resolved</td>
+                                        <td class="p-3">25/01/24 06:45 PM</td>
+                                        <td class="p-3 flex space-x-2">
+                                            <a href="#" class="text-gray-500 hover:text-orange-500"><i
+                                                    class="fa fa-edit"></i></a>
+                                            <button class="text-gray-500 hover:text-red-500"><i
+                                                    class="fa fa-trash"></i></button>
+                                            <a href="#" class="text-gray-500 hover:text-gray-700"><i
+                                                    class="fa fa-ellipsis-v"></i></a>
+                                        </td>
                                     </tr>
                                     <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
-                                      <td class="p-3">#ORD1011</td>
-                                      <td class="p-3">Abdul Yusuf</td>
-                                      <td class="p-3">₦75,000</td>
-                                      <td class="p-3">On delivery</td>
-                                      <td class="p-3">Accessories</td>
-                                      <td class="p-3">Low</td>
-                                      <td class="p-3 text-green-500 font-semibold">Resolved</td>
-                                      <td class="p-3">25/01/27 04:50 PM</td>
-                                      <td class="p-3 flex space-x-2">
-                                        <a href="#" class="text-gray-500 hover:text-orange-500"><i class="fa fa-edit"></i></a>
-                                        <button class="text-gray-500 hover:text-red-500"><i class="fa fa-trash"></i></button>
-                                        <a href="#" class="text-gray-500 hover:text-gray-700"><i class="fa fa-ellipsis-v"></i></a>
-                                      </td>
+                                        <td class="p-3">#ORD1010</td>
+                                        <td class="p-3">Hannah Danjuma</td>
+                                        <td class="p-3">₦75,000</td>
+                                        <td class="p-3">On delivery</td>
+                                        <td class="p-3">Accessories</td>
+                                        <td class="p-3">Medium</td>
+                                        <td class="p-3 text-green-500 font-semibold">Resolved</td>
+                                        <td class="p-3">25/01/25 05:30 PM</td>
+                                        <td class="p-3 flex space-x-2">
+                                            <a href="#" class="text-gray-500 hover:text-orange-500"><i
+                                                    class="fa fa-edit"></i></a>
+                                            <button class="text-gray-500 hover:text-red-500"><i
+                                                    class="fa fa-trash"></i></button>
+                                            <a href="#" class="text-gray-500 hover:text-gray-700"><i
+                                                    class="fa fa-ellipsis-v"></i></a>
+                                        </td>
                                     </tr>
-                                  </tbody>
-                                  
+                                    <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
+                                        <td class="p-3">#ORD1011</td>
+                                        <td class="p-3">Abdul Yusuf</td>
+                                        <td class="p-3">₦75,000</td>
+                                        <td class="p-3">On delivery</td>
+                                        <td class="p-3">Accessories</td>
+                                        <td class="p-3">Low</td>
+                                        <td class="p-3 text-green-500 font-semibold">Resolved</td>
+                                        <td class="p-3">25/01/27 04:50 PM</td>
+                                        <td class="p-3 flex space-x-2">
+                                            <a href="#" class="text-gray-500 hover:text-orange-500"><i
+                                                    class="fa fa-edit"></i></a>
+                                            <button class="text-gray-500 hover:text-red-500"><i
+                                                    class="fa fa-trash"></i></button>
+                                            <a href="#" class="text-gray-500 hover:text-gray-700"><i
+                                                    class="fa fa-ellipsis-v"></i></a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+
                             </table>
                         </div>
-                        
+
                         <div class="flex justify-between items-center mt-4 p-4 border-t">
                             <div class="flex items-center space-x-4">
-                                <span class="text-sm text-gray-600">Total entries: <span class="font-bold">20</span></span>
+                                <span class="text-sm text-gray-600">Total entries: <span
+                                        class="font-bold">20</span></span>
                                 <button class="px-3 py-1 text-gray-400 flex items-center space-x-1 text-sm" disabled>
                                     <i class="fa fa-chevron-left text-xs"></i> <span>Previous</span>
                                 </button>
                             </div>
                             <div class="flex items-center space-x-1">
-                                 <button class="px-3 py-1 bg-yellow-500 text-white font-bold rounded-full text-sm">1</button>
-                                 <span class="px-3 py-1 text-gray-700 text-sm">2</span>
-                                 <span class="px-3 py-1 text-gray-700 text-sm">3</span>
-                                 <span class="px-3 py-1 text-gray-500 text-sm">..</span>
-                                 <span class="px-3 py-1 text-gray-700 text-sm">5</span>
+                                <button
+                                    class="px-3 py-1 bg-yellow-500 text-white font-bold rounded-full text-sm">1</button>
+                                <span class="px-3 py-1 text-gray-700 text-sm">2</span>
+                                <span class="px-3 py-1 text-gray-700 text-sm">3</span>
+                                <span class="px-3 py-1 text-gray-500 text-sm">..</span>
+                                <span class="px-3 py-1 text-gray-700 text-sm">5</span>
                             </div>
-                            <button class="px-3 py-1 text-gray-500 flex items-center space-x-1 hover:text-gray-700 text-sm">
-                                 <span>Next</span> <i class="fa fa-chevron-right text-xs"></i>
+                            <button
+                                class="px-3 py-1 text-gray-500 flex items-center space-x-1 hover:text-gray-700 text-sm">
+                                <span>Next</span> <i class="fa fa-chevron-right text-xs"></i>
                             </button>
                         </div>
                     </div>
                 </div>
-            </div> 
+            </div>
         </main>
     </div>
     <!-- Alpine.js (Add this script if not already included in your project) -->
@@ -901,11 +1061,11 @@
             // It now has 'inline-flex', 'flex-wrap', 'gap-2', 'bg-white' etc.
             // This selector targets that specific combination.
             const tabContainer = document.querySelector('.inline-flex.flex-wrap.gap-2.bg-white');
-    
+
             if (tabContainer) {
                 // Find buttons ONLY within this specific container
                 const tabs = tabContainer.querySelectorAll('.tab-button');
-    
+
                 tabs.forEach(tab => {
                     tab.addEventListener('click', () => {
                         // Remove active styles from all tabs within this specific container
@@ -913,11 +1073,11 @@
                             t.classList.remove('bg-yellow-400', 'text-black');
                             t.classList.add('text-gray-600', 'hover:bg-gray-100', 'hover:text-gray-800');
                         });
-    
+
                         // Add active styles to the clicked tab
                         tab.classList.add('bg-yellow-400', 'text-black');
                         tab.classList.remove('text-gray-600', 'hover:bg-gray-100', 'hover:text-gray-800');
-    
+
                         // Your logic for handling tab content
                         console.log(`Selected tab: ${tab.textContent.trim()}`);
                         // Example: displayPanel(tab.textContent.trim());

@@ -102,15 +102,21 @@
                     </div>
 
                     <ul class="max-h-60 overflow-auto">
-                        <li class="p-2 hover:bg-gray-100 cursor-pointer">
-                            <span class="text-sm text-gray-700">🔔 You have a new message</span>
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer flex items-center">
+                            <i class="fas fa-bell text-gray-500 text-sm mr-2"></i>
+                            <span class="text-sm text-gray-700">You have a new message</span>
                         </li>
-                        <li class="p-2 hover:bg-gray-100 cursor-pointer">
-                            <span class="text-sm text-gray-700">✅ Task Completed Successfully</span>
+
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer flex items-center">
+                            <i class="fas fa-check-circle text-green-500 text-sm mr-2"></i>
+                            <span class="text-sm text-gray-700">Task Completed Successfully</span>
                         </li>
-                        <li class="p-2 hover:bg-gray-100 cursor-pointer">
-                            <span class="text-sm text-gray-700">⚠️ System Alert: Update Required</span>
+
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer flex items-center">
+                            <i class="fas fa-exclamation-triangle text-yellow-500 text-sm mr-2"></i>
+                            <span class="text-sm text-gray-700">System Alert: Update Required</span>
                         </li>
+
                     </ul>
 
                     <div class="p-3 border-t text-center">
@@ -145,16 +151,24 @@
                 <div x-show="open" @click.away="open = false" x-transition x-cloak
                     class="absolute right-0 mt-2 w-48 bg-white border rounded-md shadow-lg z-50">
                     <ul class="py-2">
-                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer"><a href="profiles-settings.html">👤
-                                Profile</a> </li>
-                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">⚙️ Settings</li>
-                        <li class="px-4 py-2 text-red-500 hover:bg-gray-100 cursor-pointer">🚪 Logout</li>
+                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                            <a href="profiles-settings.html" class="flex items-center text-gray-700">
+                                <i class="fas fa-user mr-2"></i>
+                                Profile
+                            </a>
+                        </li>
+
+                        <li class="px-4 py-2 text-red-500 hover:bg-gray-100 cursor-pointer">
+                            <a href="login.html" class="flex items-center">
+                                <i class="fas fa-sign-out-alt mr-2"></i>
+                                Logout
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
         </div>
     </header>
-
     <!-- Main Content -->
     <div class="flex">
         <!-- Sidebar -->
@@ -164,17 +178,22 @@
             <nav class="p-4">
                 <ul>
                     <li class="mb-4">
-                        <a href="quicrefill-dashboard.html"
-                            class="flex items-center text-gray-600 hover:text-amber-500">
+                        <a href="quicrefill-dashboard.html" class="flex items-center text-amber-500 font-medium">
                             <i class="fas fa-th-large mr-3"></i>
                             <span>Summary</span>
                         </a>
                     </li>
 
                     <li class="mb-4">
-                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                        <a href="order-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-clipboard-list mr-3"></i>
                             <span>Order Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="delivery-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-cube mr-3"></i>
+                            <span>Delivery Management</span>
                         </a>
                     </li>
                     <li class="mb-4">
@@ -183,7 +202,6 @@
                             <span>Service Management</span>
                         </a>
                     </li>
-
                     <li class="mb-4">
                         <a href="accessories-management.html"
                             class="flex items-center text-gray-600 hover:text-amber-500">
@@ -192,39 +210,105 @@
                         </a>
                     </li>
                     <li class="mb-4">
-                        <a href="vendor-management.html" class="flex items-center text-amber-500 font-medium">
-                            <i class="fas fa-store mr-3"></i>
-                            <span>Vendor Management</span>
-                        </a>
-                    </li>
-                    <li class="mb-4">
-                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                        <a href="user-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-user mr-3"></i>
                             <span>User Management</span>
                         </a>
                     </li>
                     <li class="mb-4">
-                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
-                            <i class="fas fa-motorcycle mr-3"></i>
-                            <span>Rider Management</span>
+                        <a href="vendor-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-store mr-3"></i>
+                            <span>Vendor Management</span>
                         </a>
                     </li>
                     <li class="mb-4">
-                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
-                            <i class="fas fa-money-bill mr-3"></i>
+                        <a href="delivery-rep-management.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-truck-droplet mr-2"></i>
+                            <span>Delivery Rep Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="verification-and-compliance.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-check-square mr-3"></i>
+                            <span>Verification & Compliance</span>
+                        </a>
+                    </li>
+                    <li x-data="{ open: false }" class="mb-4">
+                        <a href="#" @click.prevent="open = !open"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-sack-dollar mr-3"></i>
                             <span>Revenue Management</span>
+                            <i :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas ml-auto text-xs"></i>
+                        </a>
+
+                        <!-- Dropdown Menu -->
+                        <ul x-show="open" x-cloak class="mt-2 ml-6 space-y-2 text-gray-800">
+
+                            <!-- Revenue Breakdown -->
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-chart-pie mr-3 text-gray-500"></i>
+                                <a href="revenue-breakdown.html">Revenue Breakdown</a>
+                            </li>
+
+                            <!-- Payout Management -->
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-hand-holding-usd mr-3 text-gray-500"></i>
+                                <a href="payout-management.html">Payout Management</a>
+                            </li>
+
+                            <!-- Revenue Analytics -->
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-chart-line mr-3 text-gray-500"></i>
+                                <a href="revenue-analytics.html">Revenue Analytics & Insights</a>
+                            </li>
+
+                        </ul>
+                    </li>
+
+                    <li class="mb-4">
+                        <a href="withdrawal-management.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-money-bill-transfer mr-3"></i>
+                            <span>Withdrawal Management</span>
                         </a>
                     </li>
                     <li class="mb-4">
-                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                        <a href="account-deletion.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-user-xmark mr-3"></i>
+                            <span>Account Deletion</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="account-deletion.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fa fa-map-marker mr-3"></i>
+                            <span>Operating Locations</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="feedback.html" class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-comments mr-3"></i>
                             <span>Feedback</span>
                         </a>
                     </li>
                     <li class="mb-4">
-                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                        <a href="fraud-watch.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fa fa-binoculars mr-3"></i>
+                            <span>Fraud Watch</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="reports-and-analytics.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-chart-bar mr-3"></i>
                             <span>Reports and Analytics</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="crash-analytics.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fa fa-line-chart mr-3"></i>
+                            <span>Crash Analytics</span>
                         </a>
                     </li>
                     <li x-data="{ open: false }" class="mb-4">
@@ -239,31 +323,52 @@
                         <ul x-show="open" x-cloak class="mt-2 ml-6 space-y-2 text-gray-500">
                             <li class="flex items-center hover:text-amber-500">
                                 <i class="fas fa-file-alt mr-3"></i>
-                                <a href="#">Security Logs</a>
+                                <a href="security-logs.html">Security Logs</a>
                             </li>
                             <li class="flex items-center hover:text-amber-500">
                                 <i class="fas fa-user-lock mr-3"></i>
-                                <a href="#">Access Control</a>
+                                <a href="access-control.html">Access Control</a>
                             </li>
                         </ul>
                     </li>
 
                     <li class="mb-4">
-                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                        <a href="staff-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-user-shield mr-3"></i>
-                            <span>Admin Management</span>
+                            <span>Staff Management</span>
                         </a>
                     </li>
-                    <li class="mb-4">
-                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+
+                    <li x-data="{ open: false }" class="mb-4">
+                        <a href="#" @click.prevent="open = !open"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-cog mr-3"></i>
                             <span>System Settings</span>
+                            <i :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas ml-auto text-xs"></i>
                         </a>
+
+                        <!-- Dropdown Menu -->
+                        <ul x-show="open" x-cloak class="mt-2 ml-6 space-y-2 text-gray-500">
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-envelope-open-text mr-3"></i>
+                                <a href="system-message-settings.html">Message Settings</a>
+                            </li>
+
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-bell mr-3"></i>
+                                <a href="system-push-notification-settings.html">Push Notification Settings</a>
+                            </li>
+
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-ticket-alt mr-3"></i>
+                                <a href="system-coupon-settings.html">Coupon Settings</a>
+                            </li>
+
+                        </ul>
                     </li>
                 </ul>
             </nav>
         </aside>
-
         <!-- Overlay for sidebar on mobile -->
         <div id="sidebar-overlay" class="fixed inset-0 bg-black opacity-50 z-10 hidden"></div>
 
@@ -283,7 +388,7 @@
                     </div>
                     <h1 class="text-lg sm:text-xl font-semibold mt-2">Pending Vendor Detail Page</h1>
                 </div>
-            
+
                 <div class="flex-shrink-0">
                     <button
                         class="w-full sm:w-auto bg-gradient-to-b from-gray-100 to-gray-300 hover:from-gray-200 hover:to-gray-400 text-black py-2 px-3 sm:px-4 rounded text-xs sm:text-sm">
@@ -294,14 +399,14 @@
                     </button>
                 </div>
             </div>
-            
-            
+
+
             <div class="bg-white w-full max-w-xl rounded-lg shadow-md p-6 mb-6">
                 <div class="flex justify-between items-center mb-4">
                     <h2 class="text-lg font-semibold">VND-001</h2>
                     <button class="text-gray-500 hover:text-black"><i class="fa fa-copy"></i></button>
                 </div>
-            
+
                 <div class="border rounded overflow-hidden">
                     <div class="bg-gray-50 font-semibold text-sm grid grid-cols-2 px-4 py-2 border-b">
                         <span>Field</span>
@@ -350,7 +455,7 @@
                         </div>
                     </div>
                 </div>
-            
+
                 <div class="mt-6 flex flex-wrap gap-4">
                     <button class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md text-sm">
                         Approve Vendor
@@ -363,7 +468,7 @@
                     </button>
                 </div>
             </div>
-            
+
 
             <!--Compliance Documents Submitted-->
             <div class="max-w-7xl mx-auto mt-6">
@@ -390,7 +495,8 @@
                                     <td class="px-3 py-2 whitespace-nowrap">
                                         <i class="fas fa-check-circle text-green-500 mr-1"></i> Yes
                                     </td>
-                                    <td class="px-3 py-2 whitespace-nowrap text-blue-500 hover:text-blue-700 cursor-pointer">
+                                    <td
+                                        class="px-3 py-2 whitespace-nowrap text-blue-500 hover:text-blue-700 cursor-pointer">
                                         <i class="fas fa-eye mr-1"></i>
                                         Preview Documents
                                     </td>
@@ -403,7 +509,8 @@
                                     <td class="px-3 py-2 whitespace-nowrap">
                                         <i class="fas fa-check-circle text-green-500 mr-1"></i> Yes
                                     </td>
-                                    <td class="px-3 py-2 whitespace-nowrap text-blue-500 hover:text-blue-700 cursor-pointer">
+                                    <td
+                                        class="px-3 py-2 whitespace-nowrap text-blue-500 hover:text-blue-700 cursor-pointer">
                                         <i class="fas fa-eye mr-1"></i>
                                         Preview Documents
                                     </td>
@@ -416,7 +523,8 @@
                                     <td class="px-3 py-2 whitespace-nowrap">
                                         <i class="fas fa-check-circle text-green-500 mr-1"></i> Yes
                                     </td>
-                                    <td class="px-3 py-2 whitespace-nowrap text-blue-500 hover:text-blue-700 cursor-pointer">
+                                    <td
+                                        class="px-3 py-2 whitespace-nowrap text-blue-500 hover:text-blue-700 cursor-pointer">
                                         <i class="fas fa-eye mr-1"></i>
                                         Preview Documents
                                     </td>
@@ -429,7 +537,8 @@
                                     <td class="px-3 py-2 whitespace-nowrap">
                                         <i class="fas fa-times-circle text-red-500 mr-1"></i> No
                                     </td>
-                                    <td class="px-3 py-2 whitespace-nowrap text-blue-500 hover:text-blue-700 cursor-pointer">
+                                    <td
+                                        class="px-3 py-2 whitespace-nowrap text-blue-500 hover:text-blue-700 cursor-pointer">
                                         <i class="fas fa-eye mr-1"></i>
                                         Preview Documents
                                     </td>
@@ -442,7 +551,8 @@
                                     <td class="px-3 py-2 whitespace-nowrap">
                                         <i class="fas fa-check-circle text-green-500 mr-1"></i> Yes
                                     </td>
-                                    <td class="px-3 py-2 whitespace-nowrap text-blue-500 hover:text-blue-700 cursor-pointer">
+                                    <td
+                                        class="px-3 py-2 whitespace-nowrap text-blue-500 hover:text-blue-700 cursor-pointer">
                                         <i class="fas fa-eye mr-1"></i>
                                         Preview Documents
                                     </td>
@@ -455,7 +565,8 @@
                                     <td class="px-3 py-2 whitespace-nowrap">
                                         <i class="fas fa-times-circle text-red-500 mr-1"></i> No
                                     </td>
-                                    <td class="px-3 py-2 whitespace-nowrap text-blue-500 hover:text-blue-700 cursor-pointer">
+                                    <td
+                                        class="px-3 py-2 whitespace-nowrap text-blue-500 hover:text-blue-700 cursor-pointer">
                                         <i class="fas fa-eye mr-1"></i>
                                         Preview Documents
                                     </td>
@@ -469,11 +580,13 @@
                     </div>
                 </div>
                 <div class="flex flex-wrap gap-2 mb-6">
-                    <button class="bg-gradient-to-b from-gray-100 to-gray-300 hover:from-gray-200 hover:to-gray-400 text-black py-2 px-4 rounded text-sm">
+                    <button
+                        class="bg-gradient-to-b from-gray-100 to-gray-300 hover:from-gray-200 hover:to-gray-400 text-black py-2 px-4 rounded text-sm">
                         <i class="fas fa-download mr-2"></i>
                         Download Documents
                     </button>
-                    <button class="bg-gradient-to-b from-gray-100 to-gray-300 hover:from-gray-200 hover:to-gray-400 text-black py-2 px-4 rounded text-sm">
+                    <button
+                        class="bg-gradient-to-b from-gray-100 to-gray-300 hover:from-gray-200 hover:to-gray-400 text-black py-2 px-4 rounded text-sm">
                         <i class="fas fa-plus mr-2"></i>
                         Request Additional Compliance Documents
                     </button>
@@ -501,11 +614,13 @@
                                     <td class="px-3 py-2 whitespace-nowrap">James Okoro</td>
                                     <td class="px-3 py-2 whitespace-nowrap">+234 802 345 6789</td>
                                     <td class="px-3 py-2 whitespace-nowrap">
-                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                        <span
+                                            class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
                                             Pending
                                         </span>
                                     </td>
-                                    <td class="px-3 py-2 whitespace-nowrap text-blue-500 hover:text-blue-700 cursor-pointer">
+                                    <td
+                                        class="px-3 py-2 whitespace-nowrap text-blue-500 hover:text-blue-700 cursor-pointer">
                                         <i class="fas fa-user mr-1"></i>
                                         View Profile
                                     </td>
@@ -515,11 +630,13 @@
                                     <td class="px-3 py-2 whitespace-nowrap">Mary Uche</td>
                                     <td class="px-3 py-2 whitespace-nowrap">+234 802 345 6789</td>
                                     <td class="px-3 py-2 whitespace-nowrap">
-                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                        <span
+                                            class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
                                             Pending
                                         </span>
                                     </td>
-                                    <td class="px-3 py-2 whitespace-nowrap text-blue-500 hover:text-blue-700 cursor-pointer">
+                                    <td
+                                        class="px-3 py-2 whitespace-nowrap text-blue-500 hover:text-blue-700 cursor-pointer">
                                         <i class="fas fa-user mr-1"></i>
                                         View Profile
                                     </td>
@@ -529,7 +646,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="max-w-7xl mx-auto mt-6">
                 <div class="bg-white rounded-lg shadow-md overflow-hidden mb-4">
                     <div class="p-4">
@@ -552,11 +669,13 @@
                                     <td class="px-3 py-2 whitespace-nowrap">12.5kg Gas Refill</td>
                                     <td class="px-3 py-2 whitespace-nowrap">Gas Refill</td>
                                     <td class="px-3 py-2 whitespace-nowrap">
-                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                        <span
+                                            class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
                                             Pending Approval
                                         </span>
                                     </td>
-                                    <td class="px-3 py-2 whitespace-nowrap text-blue-500 hover:text-blue-700 cursor-pointer">
+                                    <td
+                                        class="px-3 py-2 whitespace-nowrap text-blue-500 hover:text-blue-700 cursor-pointer">
                                         <i class="fas fa-eye mr-1"></i>
                                         View Service
                                     </td>
@@ -566,11 +685,13 @@
                                     <td class="px-3 py-2 whitespace-nowrap">Diesel Supply</td>
                                     <td class="px-3 py-2 whitespace-nowrap">Diesel</td>
                                     <td class="px-3 py-2 whitespace-nowrap">
-                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                        <span
+                                            class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
                                             Pending Approval
                                         </span>
                                     </td>
-                                    <td class="px-3 py-2 whitespace-nowrap text-blue-500 hover:text-blue-700 cursor-pointer">
+                                    <td
+                                        class="px-3 py-2 whitespace-nowrap text-blue-500 hover:text-blue-700 cursor-pointer">
                                         <i class="fas fa-eye mr-1"></i>
                                         View Service
                                     </td>
@@ -580,7 +701,7 @@
                     </div>
                 </div>
             </div>
-            
+
         </main>
     </div>
     <!-- Alpine.js (Add this script if not already included in your project) -->
@@ -690,89 +811,89 @@
 
 
     </script>
-    
-    
+
+
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-          // Select all date picker wrappers
-          const wrappers = document.querySelectorAll('.date-picker-wrapper');
-      
-          wrappers.forEach((wrapper) => {
-            const datePicker = wrapper.querySelector('.datePicker');
-            const dropdownBtn = wrapper.querySelector('.dropdownBtn');
-            const dropdownMenu = wrapper.querySelector('.dropdownMenu');
-            const modeLabel = wrapper.querySelector('.mode-label');
-        
-            let mode = "today"; // Default mode is 'today'
-        
-            function setDateMode(selectedMode) {
-              mode = selectedMode;
-              modeLabel.textContent = selectedMode;
-              dropdownMenu.classList.add("hidden");
-        
-              if (mode === "today") {
-                const today = new Date();
-                const formatted = today.toLocaleDateString("en-GB", {
-                  day: "2-digit",
-                  month: "short",
-                  year: "numeric"
-                });
-                datePicker.value = formatted;
-              } else if (mode === "Specific Date") {
-                flatpickr(datePicker, {
-                  dateFormat: "d M, Y",
-                  defaultDate: new Date(),
-                  onChange: function (selectedDates, dateStr) {
-                    datePicker.value = dateStr;
-                  }
-                }).open();
-              } else if (mode === "monthly") {
-                flatpickr(datePicker, {
-                  mode: "range",
-                  dateFormat: "d M",
-                  onChange: function (selectedDates) {
-                    if (selectedDates.length === 2) {
-                      const start = selectedDates[0].toLocaleDateString("en-GB", {
-                        day: "2-digit",
-                        month: "short"
-                      });
-                      const end = selectedDates[1].toLocaleDateString("en-GB", {
-                        day: "2-digit",
-                        month: "short"
-                      });
-                      datePicker.value = `${start} - ${end}`;
+            // Select all date picker wrappers
+            const wrappers = document.querySelectorAll('.date-picker-wrapper');
+
+            wrappers.forEach((wrapper) => {
+                const datePicker = wrapper.querySelector('.datePicker');
+                const dropdownBtn = wrapper.querySelector('.dropdownBtn');
+                const dropdownMenu = wrapper.querySelector('.dropdownMenu');
+                const modeLabel = wrapper.querySelector('.mode-label');
+
+                let mode = "today"; // Default mode is 'today'
+
+                function setDateMode(selectedMode) {
+                    mode = selectedMode;
+                    modeLabel.textContent = selectedMode;
+                    dropdownMenu.classList.add("hidden");
+
+                    if (mode === "today") {
+                        const today = new Date();
+                        const formatted = today.toLocaleDateString("en-GB", {
+                            day: "2-digit",
+                            month: "short",
+                            year: "numeric"
+                        });
+                        datePicker.value = formatted;
+                    } else if (mode === "Specific Date") {
+                        flatpickr(datePicker, {
+                            dateFormat: "d M, Y",
+                            defaultDate: new Date(),
+                            onChange: function (selectedDates, dateStr) {
+                                datePicker.value = dateStr;
+                            }
+                        }).open();
+                    } else if (mode === "monthly") {
+                        flatpickr(datePicker, {
+                            mode: "range",
+                            dateFormat: "d M",
+                            onChange: function (selectedDates) {
+                                if (selectedDates.length === 2) {
+                                    const start = selectedDates[0].toLocaleDateString("en-GB", {
+                                        day: "2-digit",
+                                        month: "short"
+                                    });
+                                    const end = selectedDates[1].toLocaleDateString("en-GB", {
+                                        day: "2-digit",
+                                        month: "short"
+                                    });
+                                    datePicker.value = `${start} - ${end}`;
+                                }
+                            }
+                        }).open();
                     }
-                  }
-                }).open();
-              }
-            }
-        
-            // Init default mode on page load for each picker
-            setDateMode("today");
-        
-            // Toggle dropdown for each picker
-            dropdownBtn.addEventListener("click", (e) => {
-              e.stopPropagation();
-              dropdownMenu.classList.toggle("hidden");
+                }
+
+                // Init default mode on page load for each picker
+                setDateMode("today");
+
+                // Toggle dropdown for each picker
+                dropdownBtn.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    dropdownMenu.classList.toggle("hidden");
+                });
+
+                // Handle dropdown option click for each picker
+                dropdownMenu.querySelectorAll('button[data-mode]').forEach(btn => {
+                    btn.addEventListener("click", () => {
+                        setDateMode(btn.dataset.mode);
+                    });
+                });
+
+                // Close dropdown if clicked outside
+                document.addEventListener("click", (e) => {
+                    if (!wrapper.contains(e.target)) {
+                        dropdownMenu.classList.add("hidden");
+                    }
+                });
             });
-        
-            // Handle dropdown option click for each picker
-            dropdownMenu.querySelectorAll('button[data-mode]').forEach(btn => {
-              btn.addEventListener("click", () => {
-                setDateMode(btn.dataset.mode);
-              });
-            });
-        
-            // Close dropdown if clicked outside
-            document.addEventListener("click", (e) => {
-              if (!wrapper.contains(e.target)) {
-                dropdownMenu.classList.add("hidden");
-              }
-            });
-          });
         });
-      </script>
-      
+    </script>
+
 
 </body>
 

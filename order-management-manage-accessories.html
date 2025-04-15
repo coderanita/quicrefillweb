@@ -103,15 +103,21 @@
                     </div>
 
                     <ul class="max-h-60 overflow-auto">
-                        <li class="p-2 hover:bg-gray-100 cursor-pointer">
-                            <span class="text-sm text-gray-700">🔔 You have a new message</span>
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer flex items-center">
+                            <i class="fas fa-bell text-gray-500 text-sm mr-2"></i>
+                            <span class="text-sm text-gray-700">You have a new message</span>
                         </li>
-                        <li class="p-2 hover:bg-gray-100 cursor-pointer">
-                            <span class="text-sm text-gray-700">✅ Task Completed Successfully</span>
+
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer flex items-center">
+                            <i class="fas fa-check-circle text-green-500 text-sm mr-2"></i>
+                            <span class="text-sm text-gray-700">Task Completed Successfully</span>
                         </li>
-                        <li class="p-2 hover:bg-gray-100 cursor-pointer">
-                            <span class="text-sm text-gray-700">⚠️ System Alert: Update Required</span>
+
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer flex items-center">
+                            <i class="fas fa-exclamation-triangle text-yellow-500 text-sm mr-2"></i>
+                            <span class="text-sm text-gray-700">System Alert: Update Required</span>
                         </li>
+
                     </ul>
 
                     <div class="p-3 border-t text-center">
@@ -146,10 +152,19 @@
                 <div x-show="open" @click.away="open = false" x-transition x-cloak
                     class="absolute right-0 mt-2 w-48 bg-white border rounded-md shadow-lg z-50">
                     <ul class="py-2">
-                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer"><a href="profiles-settings.html">👤
-                                Profile</a> </li>
-                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">⚙️ Settings</li>
-                        <li class="px-4 py-2 text-red-500 hover:bg-gray-100 cursor-pointer">🚪 Logout</li>
+                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                            <a href="profiles-settings.html" class="flex items-center text-gray-700">
+                                <i class="fas fa-user mr-2"></i>
+                                Profile
+                            </a>
+                        </li>
+
+                        <li class="px-4 py-2 text-red-500 hover:bg-gray-100 cursor-pointer">
+                            <a href="login.html" class="flex items-center">
+                                <i class="fas fa-sign-out-alt mr-2"></i>
+                                Logout
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -165,17 +180,22 @@
             <nav class="p-4">
                 <ul>
                     <li class="mb-4">
-                        <a href="quicrefill-dashboard.html"
-                            class="flex items-center text-gray-600 hover:text-amber-500">
+                        <a href="quicrefill-dashboard.html" class="flex items-center text-amber-500 font-medium">
                             <i class="fas fa-th-large mr-3"></i>
                             <span>Summary</span>
                         </a>
                     </li>
 
                     <li class="mb-4">
-                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                        <a href="order-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-clipboard-list mr-3"></i>
                             <span>Order Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="delivery-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-cube mr-3"></i>
+                            <span>Delivery Management</span>
                         </a>
                     </li>
                     <li class="mb-4">
@@ -185,39 +205,112 @@
                         </a>
                     </li>
                     <li class="mb-4">
-                        <a href="accessories-management.html" class="flex items-center text-amber-500 font-medium">
+                        <a href="accessories-management.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-bag-shopping mr-3"></i>
                             <span>Accessories Management</span>
                         </a>
                     </li>
                     <li class="mb-4">
-                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                        <a href="user-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-user mr-3"></i>
                             <span>User Management</span>
                         </a>
                     </li>
                     <li class="mb-4">
-                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
-                            <i class="fas fa-motorcycle mr-3"></i>
-                            <span>Rider Management</span>
+                        <a href="vendor-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-store mr-3"></i>
+                            <span>Vendor Management</span>
                         </a>
                     </li>
                     <li class="mb-4">
-                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
-                            <i class="fas fa-money-bill mr-3"></i>
+                        <a href="delivery-rep-management.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-truck-droplet mr-2"></i>
+                            <span>Delivery Rep Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="verification-and-compliance.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-check-square mr-3"></i>
+                            <span>Verification & Compliance</span>
+                        </a>
+                    </li>
+                    <li x-data="{ open: false }" class="mb-4">
+                        <a href="#" @click.prevent="open = !open"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-sack-dollar mr-3"></i>
                             <span>Revenue Management</span>
+                            <i :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas ml-auto text-xs"></i>
+                        </a>
+
+                        <!-- Dropdown Menu -->
+                        <ul x-show="open" x-cloak class="mt-2 ml-6 space-y-2 text-gray-800">
+
+                            <!-- Revenue Breakdown -->
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-chart-pie mr-3 text-gray-500"></i>
+                                <a href="revenue-breakdown.html">Revenue Breakdown</a>
+                            </li>
+
+                            <!-- Payout Management -->
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-hand-holding-usd mr-3 text-gray-500"></i>
+                                <a href="payout-management.html">Payout Management</a>
+                            </li>
+
+                            <!-- Revenue Analytics -->
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-chart-line mr-3 text-gray-500"></i>
+                                <a href="revenue-analytics.html">Revenue Analytics & Insights</a>
+                            </li>
+
+                        </ul>
+                    </li>
+
+                    <li class="mb-4">
+                        <a href="withdrawal-management.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-money-bill-transfer mr-3"></i>
+                            <span>Withdrawal Management</span>
                         </a>
                     </li>
                     <li class="mb-4">
-                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                        <a href="account-deletion.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-user-xmark mr-3"></i>
+                            <span>Account Deletion</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="account-deletion.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fa fa-map-marker mr-3"></i>
+                            <span>Operating Locations</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="feedback.html" class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-comments mr-3"></i>
                             <span>Feedback</span>
                         </a>
                     </li>
                     <li class="mb-4">
-                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                        <a href="fraud-watch.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fa fa-binoculars mr-3"></i>
+                            <span>Fraud Watch</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="reports-and-analytics.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-chart-bar mr-3"></i>
                             <span>Reports and Analytics</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="crash-analytics.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fa fa-line-chart mr-3"></i>
+                            <span>Crash Analytics</span>
                         </a>
                     </li>
                     <li x-data="{ open: false }" class="mb-4">
@@ -232,26 +325,48 @@
                         <ul x-show="open" x-cloak class="mt-2 ml-6 space-y-2 text-gray-500">
                             <li class="flex items-center hover:text-amber-500">
                                 <i class="fas fa-file-alt mr-3"></i>
-                                <a href="#">Security Logs</a>
+                                <a href="security-logs.html">Security Logs</a>
                             </li>
                             <li class="flex items-center hover:text-amber-500">
                                 <i class="fas fa-user-lock mr-3"></i>
-                                <a href="#">Access Control</a>
+                                <a href="access-control.html">Access Control</a>
                             </li>
                         </ul>
                     </li>
 
                     <li class="mb-4">
-                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                        <a href="staff-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-user-shield mr-3"></i>
-                            <span>Admin Management</span>
+                            <span>Staff Management</span>
                         </a>
                     </li>
-                    <li class="mb-4">
-                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+
+                    <li x-data="{ open: false }" class="mb-4">
+                        <a href="#" @click.prevent="open = !open"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-cog mr-3"></i>
                             <span>System Settings</span>
+                            <i :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas ml-auto text-xs"></i>
                         </a>
+
+                        <!-- Dropdown Menu -->
+                        <ul x-show="open" x-cloak class="mt-2 ml-6 space-y-2 text-gray-500">
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-envelope-open-text mr-3"></i>
+                                <a href="system-message-settings.html">Message Settings</a>
+                            </li>
+
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-bell mr-3"></i>
+                                <a href="system-push-notification-settings.html">Push Notification Settings</a>
+                            </li>
+
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-ticket-alt mr-3"></i>
+                                <a href="system-coupon-settings.html">Coupon Settings</a>
+                            </li>
+
+                        </ul>
                     </li>
                 </ul>
             </nav>
@@ -263,7 +378,8 @@
         <!-- Content Area -->
         <main class="flex-1 p-6 w-full overflow-x-hidden">
             <div class="flex flex-col md:flex-row md:items-center mb-6">
-                <button class="text-xl text-gray-700 bg-white pl-2 pr-2 border p-1 rounded-md mr-4"><i class="fa fa-arrow-left"></i></button>
+                <button class="text-xl text-gray-700 bg-white pl-2 pr-2 border p-1 rounded-md mr-4"><i
+                        class="fa fa-arrow-left"></i></button>
                 <h1 class="text-xl md:text-xl font-bold text-gray-800">Manage Accessory</h1>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 p-4">
@@ -279,7 +395,7 @@
                     <p class="text-xs text-gray-500 mb-2">All available accessories</p>
                     <p class="text-2xl font-bold text-gray-900">50</p>
                 </div>
-            
+
                 <div class="border rounded-lg p-4 bg-white shadow-sm relative">
                     <div class="flex items-center justify-between mb-1">
                         <div class="flex items-center gap-2 flex-nowrap">
@@ -292,7 +408,7 @@
                     <p class="text-xs text-gray-500 mb-2">Accessories that need restocking</p>
                     <p class="text-2xl font-bold text-gray-900">10</p>
                 </div>
-            
+
                 <div class="border rounded-lg p-4 bg-white shadow-sm relative">
                     <div class="flex items-center justify-between mb-1">
                         <div class="flex items-center gap-2 flex-nowrap">
@@ -306,247 +422,295 @@
                     <p class="text-2xl font-bold text-gray-900">14</p>
                 </div>
             </div>
-            
-            
+
+
 
 
             <!--Order Details-->
             <div class="container mx-auto  p-4 md:p-6">
 
                 <div class="flex flex-col md:flex-row justify-between items-center gap-4">
-                    
-                
+
+
                     <div class="ml-auto">
                         <div x-data="{ isOpen: false }">
-                            <button  @click="isOpen = true" class="text-sm bg-yellow-400 text-black rounded-lg px-6 py-3 font-semibold hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:ring-offset-2 mb-2">
-                              Create new Accessory
-                          </button>
-                          
-                            <div x-show="isOpen" class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50 flex items-center justify-center" style="display: none;">
-                              <div class="bg-white rounded-lg shadow-md w-full max-w-xl p-6 relative overflow-y-auto max-h-[90vh]">
-                                <button @click="isOpen = false" class="absolute top-2 right-2 text-gray-700 hover:text-gray-900 text-xl focus:outline-none">
-                                  <i class="fa fa-times"></i>
-                                </button>
-                          
-                                <div class="flex items-center space-x-2 mb-6">
-                                  <h2 class="text-xl font-semibold">Add Accessory</h2>
-                                </div>
-                          
-                                <form class="space-y-5">
-                                  <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
-                                    <input type="text" value="Gas Cylinder" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-yellow-500 outline-none" />
-                                  </div>
-                          
-                                  <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                                    <textarea class="w-full border border-gray-300 rounded-md px-3 py-2 resize-none h-24 focus:ring-2 focus:ring-yellow-500 outline-none"></textarea>
-                                  </div>
-                          
-                                  <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Price</label>
-                                    <input type="text" value="₦75,000" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-yellow-500 outline-none" />
-                                  </div>
-                          
-                                  <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Stock count</label>
-                                    <input type="number" value="100" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-yellow-500 outline-none" />
-                                  </div>
-                          
-                                  <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Image/URL</label>
-                                    <div class="relative border-2 border-dashed border-gray-300 rounded-md p-6 flex flex-col items-center justify-center text-center">
-                                      <input type="file" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer z-10" onchange="previewImage(event)" />
-                                      <div class="z-0">
-                                        <i class="fa fa-upload text-2xl text-gray-400 mb-2"></i>
-                                        <p class="text-sm text-gray-600">Click to upload or drag and drop<br />SVG, PNG, or GIF (max. 800×400px)</p>
-                                        <div id="imagePreviewContainer" class="mt-4 hidden">
-                                          <img id="imagePreview" class="mx-auto rounded-md border" />
-                                        </div>
-                                      </div>
+                            <button @click="isOpen = true"
+                                class="text-sm bg-yellow-400 text-black rounded-lg px-6 py-3 font-semibold hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:ring-offset-2 mb-2">
+                                Create new Accessory
+                            </button>
+
+                            <div x-show="isOpen"
+                                class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50 flex items-center justify-center"
+                                style="display: none;">
+                                <div
+                                    class="bg-white rounded-lg shadow-md w-full max-w-xl p-6 relative overflow-y-auto max-h-[90vh]">
+                                    <button @click="isOpen = false"
+                                        class="absolute top-2 right-2 text-gray-700 hover:text-gray-900 text-xl focus:outline-none">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+
+                                    <div class="flex items-center space-x-2 mb-6">
+                                        <h2 class="text-xl font-semibold">Add Accessory</h2>
                                     </div>
-                                  </div>
-                          
-                                  <div class="flex flex-col sm:flex-row gap-4 pt-4">
-                                    <button type="button" onclick="showToast('Saved successfully!', 'success');" class="w-full bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-2 rounded-md flex justify-center items-center space-x-2">
-                                      <i class="fa fa-plus"></i>
-                                      <span>Create</span>
-                                    </button>
-                                    <button type="button" @click="isOpen = false" class="w-full bg-orange-600 hover:bg-orange-700 text-white px-6 py-2 rounded-md flex justify-center items-center space-x-2">
-                                      <i class="fa fa-close"></i>
-                                      <span>Cancel</span>
-                                    </button>
-                                  </div>
-                                </form>
-                              </div>
+
+                                    <form class="space-y-5">
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                                            <input type="text" value="Gas Cylinder"
+                                                class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-yellow-500 outline-none" />
+                                        </div>
+
+                                        <div>
+                                            <label
+                                                class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                                            <textarea
+                                                class="w-full border border-gray-300 rounded-md px-3 py-2 resize-none h-24 focus:ring-2 focus:ring-yellow-500 outline-none"></textarea>
+                                        </div>
+
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Price</label>
+                                            <input type="text" value="₦75,000"
+                                                class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-yellow-500 outline-none" />
+                                        </div>
+
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Stock
+                                                count</label>
+                                            <input type="number" value="100"
+                                                class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-yellow-500 outline-none" />
+                                        </div>
+
+                                        <div>
+                                            <label
+                                                class="block text-sm font-medium text-gray-700 mb-2">Image/URL</label>
+                                            <div
+                                                class="relative border-2 border-dashed border-gray-300 rounded-md p-6 flex flex-col items-center justify-center text-center">
+                                                <input type="file" accept="image/*"
+                                                    class="absolute inset-0 opacity-0 cursor-pointer z-10"
+                                                    onchange="previewImage(event)" />
+                                                <div class="z-0">
+                                                    <i class="fa fa-upload text-2xl text-gray-400 mb-2"></i>
+                                                    <p class="text-sm text-gray-600">Click to upload or drag and
+                                                        drop<br />SVG, PNG, or GIF (max. 800×400px)</p>
+                                                    <div id="imagePreviewContainer" class="mt-4 hidden">
+                                                        <img id="imagePreview" class="mx-auto rounded-md border" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                                            <button type="button" onclick="showToast('Saved successfully!', 'success');"
+                                                class="w-full bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-2 rounded-md flex justify-center items-center space-x-2">
+                                                <i class="fa fa-plus"></i>
+                                                <span>Create</span>
+                                            </button>
+                                            <button type="button" @click="isOpen = false"
+                                                class="w-full bg-orange-600 hover:bg-orange-700 text-white px-6 py-2 rounded-md flex justify-center items-center space-x-2">
+                                                <i class="fa fa-close"></i>
+                                                <span>Cancel</span>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
-                          </div>
+                        </div>
                     </div>
                 </div>
-        
+
                 <div class="bg-white rounded-md border border-gray-300 shadow-md p-4 mb-6">
                     <div class="container mx-auto">
                         <div class="overflow-x-auto">
-                            
+
                             <table class="w-full border-collapse bg-white shadow-md rounded-lg overflow-hidden">
                                 <thead>
                                     <tr class="bg-gray-200 text-left text-gray-600 text-sm">
-                                      <th class="p-3">Accessory ID</th>
-                                      <th class="p-3">Name</th>
-                                      <th class="p-3">Stock Count</th>
-                                      <th class="p-3">Price</th>
-                                      <th class="p-3">Status</th>
-                                      <th class="p-3">Date Created</th>
-                                      <th class="p-3">Actions</th>
+                                        <th class="p-3">Accessory ID</th>
+                                        <th class="p-3">Name</th>
+                                        <th class="p-3">Stock Count</th>
+                                        <th class="p-3">Price</th>
+                                        <th class="p-3">Status</th>
+                                        <th class="p-3">Date Created</th>
+                                        <th class="p-3">Actions</th>
                                     </tr>
-                                  </thead>
-                                  <tbody>
+                                </thead>
+                                <tbody>
                                     <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
-                                      <td class="p-3">ACC1001</td>
-                                      <td class="p-3">Gas Cylinder</td>
-                                      <td class="p-3">100 items</td>
-                                      <td class="p-3">₦75,000</td>
-                                      <td class="p-3 text-green-500 font-semibold">Active</td>
-                                      <td class="p-3">25/01/27 10:15 AM</td>
-                                      <td class="p-3 flex space-x-2">
-                                        <a href="#" class="text-gray-500 hover:text-orange-500"><i class="fa fa-edit"></i></a>
-                                        <button class="text-gray-500 hover:text-red-500"><i class="fa fa-trash"></i></button>
-                                        <a href="#" class="text-gray-500 hover:text-gray-700"><i class="fa fa-ellipsis-v"></i></a>
-                                      </td>
-                                    </tr>
-                                    <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
-                                      <td class="p-3">ACC1001</td>
-                                      <td class="p-3">Gas Cooker</td>
-                                      <td class="p-3">35 items</td>
-                                      <td class="p-3">₦75,000</td>
-                                      <td class="p-3 text-green-500 font-semibold">Active</td>
-                                      <td class="p-3">25/01/27 02:45 PM</td>
-                                      <td class="p-3 flex space-x-2">
-                                        <a href="#" class="text-gray-500 hover:text-orange-500"><i class="fa fa-edit"></i></a>
-                                        <button class="text-gray-500 hover:text-red-500"><i class="fa fa-trash"></i></button>
-                                        <a href="#" class="text-gray-500 hover:text-gray-700"><i class="fa fa-ellipsis-v"></i></a>
-                                      </td>
+                                        <td class="p-3">ACC1001</td>
+                                        <td class="p-3">Gas Cylinder</td>
+                                        <td class="p-3">100 items</td>
+                                        <td class="p-3">₦75,000</td>
+                                        <td class="p-3 text-green-500 font-semibold">Active</td>
+                                        <td class="p-3">25/01/27 10:15 AM</td>
+                                        <td class="p-3 flex space-x-2">
+                                            <a href="#" class="text-gray-500 hover:text-orange-500"><i
+                                                    class="fa fa-edit"></i></a>
+                                            <button class="text-gray-500 hover:text-red-500"><i
+                                                    class="fa fa-trash"></i></button>
+                                            <a href="#" class="text-gray-500 hover:text-gray-700"><i
+                                                    class="fa fa-ellipsis-v"></i></a>
+                                        </td>
                                     </tr>
                                     <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
-                                      <td class="p-3">ACC1001</td>
-                                      <td class="p-3">Gas Cylinder</td>
-                                      <td class="p-3">2 items</td>
-                                      <td class="p-3">₦75,000</td>
-                                      <td class="p-3 text-red-500 font-semibold">Suspended</td>
-                                      <td class="p-3">25/01/26 11:20 AM</td>
-                                      <td class="p-3 flex space-x-2">
-                                        <a href="#" class="text-gray-500 hover:text-orange-500"><i class="fa fa-edit"></i></a>
-                                        <button class="text-gray-500 hover:text-red-500"><i class="fa fa-trash"></i></button>
-                                        <a href="#" class="text-gray-500 hover:text-gray-700"><i class="fa fa-ellipsis-v"></i></a>
-                                      </td>
+                                        <td class="p-3">ACC1001</td>
+                                        <td class="p-3">Gas Cooker</td>
+                                        <td class="p-3">35 items</td>
+                                        <td class="p-3">₦75,000</td>
+                                        <td class="p-3 text-green-500 font-semibold">Active</td>
+                                        <td class="p-3">25/01/27 02:45 PM</td>
+                                        <td class="p-3 flex space-x-2">
+                                            <a href="#" class="text-gray-500 hover:text-orange-500"><i
+                                                    class="fa fa-edit"></i></a>
+                                            <button class="text-gray-500 hover:text-red-500"><i
+                                                    class="fa fa-trash"></i></button>
+                                            <a href="#" class="text-gray-500 hover:text-gray-700"><i
+                                                    class="fa fa-ellipsis-v"></i></a>
+                                        </td>
                                     </tr>
                                     <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
-                                      <td class="p-3">ACC1001</td>
-                                      <td class="p-3">Gas Cylinder</td>
-                                      <td class="p-3">55 items</td>
-                                      <td class="p-3">₦75,000</td>
-                                      <td class="p-3 text-red-500 font-semibold">Suspended</td>
-                                      <td class="p-3">25/01/26 12:50 PM</td>
-                                      <td class="p-3 flex space-x-2">
-                                        <a href="#" class="text-gray-500 hover:text-orange-500"><i class="fa fa-edit"></i></a>
-                                        <button class="text-gray-500 hover:text-red-500"><i class="fa fa-trash"></i></button>
-                                        <a href="#" class="text-gray-500 hover:text-gray-700"><i class="fa fa-ellipsis-v"></i></a>
-                                      </td>
+                                        <td class="p-3">ACC1001</td>
+                                        <td class="p-3">Gas Cylinder</td>
+                                        <td class="p-3">2 items</td>
+                                        <td class="p-3">₦75,000</td>
+                                        <td class="p-3 text-red-500 font-semibold">Suspended</td>
+                                        <td class="p-3">25/01/26 11:20 AM</td>
+                                        <td class="p-3 flex space-x-2">
+                                            <a href="#" class="text-gray-500 hover:text-orange-500"><i
+                                                    class="fa fa-edit"></i></a>
+                                            <button class="text-gray-500 hover:text-red-500"><i
+                                                    class="fa fa-trash"></i></button>
+                                            <a href="#" class="text-gray-500 hover:text-gray-700"><i
+                                                    class="fa fa-ellipsis-v"></i></a>
+                                        </td>
                                     </tr>
                                     <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
-                                      <td class="p-3">ACC1001</td>
-                                      <td class="p-3">Gas Cooker</td>
-                                      <td class="p-3">74 items</td>
-                                      <td class="p-3">₦75,000</td>
-                                      <td class="p-3 text-green-500 font-semibold">Active</td>
-                                      <td class="p-3">25/01/25 12:50 PM</td>
-                                      <td class="p-3 flex space-x-2">
-                                        <a href="#" class="text-gray-500 hover:text-orange-500"><i class="fa fa-edit"></i></a>
-                                        <button class="text-gray-500 hover:text-red-500"><i class="fa fa-trash"></i></button>
-                                        <a href="#" class="text-gray-500 hover:text-gray-700"><i class="fa fa-ellipsis-v"></i></a>
-                                      </td>
+                                        <td class="p-3">ACC1001</td>
+                                        <td class="p-3">Gas Cylinder</td>
+                                        <td class="p-3">55 items</td>
+                                        <td class="p-3">₦75,000</td>
+                                        <td class="p-3 text-red-500 font-semibold">Suspended</td>
+                                        <td class="p-3">25/01/26 12:50 PM</td>
+                                        <td class="p-3 flex space-x-2">
+                                            <a href="#" class="text-gray-500 hover:text-orange-500"><i
+                                                    class="fa fa-edit"></i></a>
+                                            <button class="text-gray-500 hover:text-red-500"><i
+                                                    class="fa fa-trash"></i></button>
+                                            <a href="#" class="text-gray-500 hover:text-gray-700"><i
+                                                    class="fa fa-ellipsis-v"></i></a>
+                                        </td>
                                     </tr>
                                     <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
-                                      <td class="p-3">ACC1001</td>
-                                      <td class="p-3">Gas Cylinder</td>
-                                      <td class="p-3">55 items</td>
-                                      <td class="p-3">₦75,000</td>
-                                      <td class="p-3 text-red-500 font-semibold">Suspended</td>
-                                      <td class="p-3">25/01/26 12:50 PM</td>
-                                      <td class="p-3 flex space-x-2">
-                                        <a href="#" class="text-gray-500 hover:text-orange-500"><i class="fa fa-edit"></i></a>
-                                        <button class="text-gray-500 hover:text-red-500"><i class="fa fa-trash"></i></button>
-                                        <a href="#" class="text-gray-500 hover:text-gray-700"><i class="fa fa-ellipsis-v"></i></a>
-                                      </td>
+                                        <td class="p-3">ACC1001</td>
+                                        <td class="p-3">Gas Cooker</td>
+                                        <td class="p-3">74 items</td>
+                                        <td class="p-3">₦75,000</td>
+                                        <td class="p-3 text-green-500 font-semibold">Active</td>
+                                        <td class="p-3">25/01/25 12:50 PM</td>
+                                        <td class="p-3 flex space-x-2">
+                                            <a href="#" class="text-gray-500 hover:text-orange-500"><i
+                                                    class="fa fa-edit"></i></a>
+                                            <button class="text-gray-500 hover:text-red-500"><i
+                                                    class="fa fa-trash"></i></button>
+                                            <a href="#" class="text-gray-500 hover:text-gray-700"><i
+                                                    class="fa fa-ellipsis-v"></i></a>
+                                        </td>
                                     </tr>
                                     <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
-                                      <td class="p-3">ACC1001</td>
-                                      <td class="p-3">Gas Cooker</td>
-                                      <td class="p-3">3 items</td>
-                                      <td class="p-3">₦75,000</td>
-                                      <td class="p-3 text-green-500 font-semibold">Active</td>
-                                      <td class="p-3">25/01/25 12:50 PM</td>
-                                      <td class="p-3 flex space-x-2">
-                                        <a href="#" class="text-gray-500 hover:text-orange-500"><i class="fa fa-edit"></i></a>
-                                        <button class="text-gray-500 hover:text-red-500"><i class="fa fa-trash"></i></button>
-                                        <a href="#" class="text-gray-500 hover:text-gray-700"><i class="fa fa-ellipsis-v"></i></a>
-                                      </td>
+                                        <td class="p-3">ACC1001</td>
+                                        <td class="p-3">Gas Cylinder</td>
+                                        <td class="p-3">55 items</td>
+                                        <td class="p-3">₦75,000</td>
+                                        <td class="p-3 text-red-500 font-semibold">Suspended</td>
+                                        <td class="p-3">25/01/26 12:50 PM</td>
+                                        <td class="p-3 flex space-x-2">
+                                            <a href="#" class="text-gray-500 hover:text-orange-500"><i
+                                                    class="fa fa-edit"></i></a>
+                                            <button class="text-gray-500 hover:text-red-500"><i
+                                                    class="fa fa-trash"></i></button>
+                                            <a href="#" class="text-gray-500 hover:text-gray-700"><i
+                                                    class="fa fa-ellipsis-v"></i></a>
+                                        </td>
                                     </tr>
                                     <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
-                                      <td class="p-3">ACC1001</td>
-                                      <td class="p-3">Gas Cooker</td>
-                                      <td class="p-3">42 items</td>
-                                      <td class="p-3">₦75,000</td>
-                                      <td class="p-3 text-green-500 font-semibold">Active</td>
-                                      <td class="p-3">25/01/25 12:50 PM</td>
-                                      <td class="p-3 flex space-x-2">
-                                        <a href="#" class="text-gray-500 hover:text-orange-500"><i class="fa fa-edit"></i></a>
-                                        <button class="text-gray-500 hover:text-red-500"><i class="fa fa-trash"></i></button>
-                                        <a href="#" class="text-gray-500 hover:text-gray-700"><i class="fa fa-ellipsis-v"></i></a>
-                                      </td>
+                                        <td class="p-3">ACC1001</td>
+                                        <td class="p-3">Gas Cooker</td>
+                                        <td class="p-3">3 items</td>
+                                        <td class="p-3">₦75,000</td>
+                                        <td class="p-3 text-green-500 font-semibold">Active</td>
+                                        <td class="p-3">25/01/25 12:50 PM</td>
+                                        <td class="p-3 flex space-x-2">
+                                            <a href="#" class="text-gray-500 hover:text-orange-500"><i
+                                                    class="fa fa-edit"></i></a>
+                                            <button class="text-gray-500 hover:text-red-500"><i
+                                                    class="fa fa-trash"></i></button>
+                                            <a href="#" class="text-gray-500 hover:text-gray-700"><i
+                                                    class="fa fa-ellipsis-v"></i></a>
+                                        </td>
                                     </tr>
                                     <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
-                                      <td class="p-3">ACC1001</td>
-                                      <td class="p-3">Gas Cooker</td>
-                                      <td class="p-3">16 items</td>
-                                      <td class="p-3">₦75,000</td>
-                                      <td class="p-3 text-green-500 font-semibold">Active</td>
-                                      <td class="p-3">25/01/25 12:50 PM</td>
-                                      <td class="p-3 flex space-x-2">
-                                        <a href="#" class="text-gray-500 hover:text-orange-500"><i class="fa fa-edit"></i></a>
-                                        <button class="text-gray-500 hover:text-red-500"><i class="fa fa-trash"></i></button>
-                                        <a href="#" class="text-gray-500 hover:text-gray-700"><i class="fa fa-ellipsis-v"></i></a>
-                                      </td>
+                                        <td class="p-3">ACC1001</td>
+                                        <td class="p-3">Gas Cooker</td>
+                                        <td class="p-3">42 items</td>
+                                        <td class="p-3">₦75,000</td>
+                                        <td class="p-3 text-green-500 font-semibold">Active</td>
+                                        <td class="p-3">25/01/25 12:50 PM</td>
+                                        <td class="p-3 flex space-x-2">
+                                            <a href="#" class="text-gray-500 hover:text-orange-500"><i
+                                                    class="fa fa-edit"></i></a>
+                                            <button class="text-gray-500 hover:text-red-500"><i
+                                                    class="fa fa-trash"></i></button>
+                                            <a href="#" class="text-gray-500 hover:text-gray-700"><i
+                                                    class="fa fa-ellipsis-v"></i></a>
+                                        </td>
                                     </tr>
-                                  </tbody>
-                                  
+                                    <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
+                                        <td class="p-3">ACC1001</td>
+                                        <td class="p-3">Gas Cooker</td>
+                                        <td class="p-3">16 items</td>
+                                        <td class="p-3">₦75,000</td>
+                                        <td class="p-3 text-green-500 font-semibold">Active</td>
+                                        <td class="p-3">25/01/25 12:50 PM</td>
+                                        <td class="p-3 flex space-x-2">
+                                            <a href="#" class="text-gray-500 hover:text-orange-500"><i
+                                                    class="fa fa-edit"></i></a>
+                                            <button class="text-gray-500 hover:text-red-500"><i
+                                                    class="fa fa-trash"></i></button>
+                                            <a href="#" class="text-gray-500 hover:text-gray-700"><i
+                                                    class="fa fa-ellipsis-v"></i></a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+
                             </table>
                         </div>
-                        
+
                         <div class="flex justify-between items-center mt-4 p-4 border-t">
                             <div class="flex items-center space-x-4">
-                                <span class="text-sm text-gray-600">Total entries: <span class="font-bold">20</span></span>
+                                <span class="text-sm text-gray-600">Total entries: <span
+                                        class="font-bold">20</span></span>
                                 <button class="px-3 py-1 text-gray-400 flex items-center space-x-1 text-sm" disabled>
                                     <i class="fa fa-chevron-left text-xs"></i> <span>Previous</span>
                                 </button>
                             </div>
                             <div class="flex items-center space-x-1">
-                                 <button class="px-3 py-1 bg-yellow-500 text-white font-bold rounded-full text-sm">1</button>
-                                 <span class="px-3 py-1 text-gray-700 text-sm">2</span>
-                                 <span class="px-3 py-1 text-gray-700 text-sm">3</span>
-                                 <span class="px-3 py-1 text-gray-500 text-sm">..</span>
-                                 <span class="px-3 py-1 text-gray-700 text-sm">5</span>
+                                <button
+                                    class="px-3 py-1 bg-yellow-500 text-white font-bold rounded-full text-sm">1</button>
+                                <span class="px-3 py-1 text-gray-700 text-sm">2</span>
+                                <span class="px-3 py-1 text-gray-700 text-sm">3</span>
+                                <span class="px-3 py-1 text-gray-500 text-sm">..</span>
+                                <span class="px-3 py-1 text-gray-700 text-sm">5</span>
                             </div>
-                            <button class="px-3 py-1 text-gray-500 flex items-center space-x-1 hover:text-gray-700 text-sm">
-                                 <span>Next</span> <i class="fa fa-chevron-right text-xs"></i>
+                            <button
+                                class="px-3 py-1 text-gray-500 flex items-center space-x-1 hover:text-gray-700 text-sm">
+                                <span>Next</span> <i class="fa fa-chevron-right text-xs"></i>
                             </button>
                         </div>
                     </div>
                 </div>
-                
-                  
-                  
-            </div> 
+
+
+
+            </div>
         </main>
     </div>
     <!-- Alpine.js (Add this script if not already included in your project) -->
@@ -719,11 +883,11 @@
             // It now has 'inline-flex', 'flex-wrap', 'gap-2', 'bg-white' etc.
             // This selector targets that specific combination.
             const tabContainer = document.querySelector('.inline-flex.flex-wrap.gap-2.bg-white');
-    
+
             if (tabContainer) {
                 // Find buttons ONLY within this specific container
                 const tabs = tabContainer.querySelectorAll('.tab-button');
-    
+
                 tabs.forEach(tab => {
                     tab.addEventListener('click', () => {
                         // Remove active styles from all tabs within this specific container
@@ -731,11 +895,11 @@
                             t.classList.remove('bg-yellow-400', 'text-black');
                             t.classList.add('text-gray-600', 'hover:bg-gray-100', 'hover:text-gray-800');
                         });
-    
+
                         // Add active styles to the clicked tab
                         tab.classList.add('bg-yellow-400', 'text-black');
                         tab.classList.remove('text-gray-600', 'hover:bg-gray-100', 'hover:text-gray-800');
-    
+
                         // Your logic for handling tab content
                         console.log(`Selected tab: ${tab.textContent.trim()}`);
                         // Example: displayPanel(tab.textContent.trim());
@@ -747,12 +911,12 @@
             }
         });
         function showToast(message = 'Action completed successfully!', icon = 'success') {
-                let bgGradient = '';
-                let textColor = 'text-white';
-                let borderColor = '';
+            let bgGradient = '';
+            let textColor = 'text-white';
+            let borderColor = '';
 
-                // Dynamic background based on icon type
-                switch (icon) {
+            // Dynamic background based on icon type
+            switch (icon) {
                 case 'success':
                     bgGradient = 'linear-gradient(to right, #38b000, #70e000)';
                     borderColor = '#38b000';
@@ -773,9 +937,9 @@
                 default:
                     bgGradient = 'linear-gradient(to right, #333, #555)';
                     break;
-                }
+            }
 
-                Swal.fire({
+            Swal.fire({
                 toast: true,
                 position: 'top-end',
                 icon: icon,
@@ -789,18 +953,18 @@
                     popup: `rounded-xl shadow-lg border ${textColor} px-4 py-2`,
                     title: `font-medium ${textColor}`,
                 }
-                });
-            }
-            function previewImage(event) {
-                const file = event.target.files[0];
-                const previewContainer = document.getElementById('imagePreviewContainer');
-                const preview = document.getElementById('imagePreview');
+            });
+        }
+        function previewImage(event) {
+            const file = event.target.files[0];
+            const previewContainer = document.getElementById('imagePreviewContainer');
+            const preview = document.getElementById('imagePreview');
 
-                if (file) {
-                    preview.src = URL.createObjectURL(file);
-                    previewContainer.classList.remove('hidden');
-                }
+            if (file) {
+                preview.src = URL.createObjectURL(file);
+                previewContainer.classList.remove('hidden');
             }
+        }
     </script>
 </body>
 

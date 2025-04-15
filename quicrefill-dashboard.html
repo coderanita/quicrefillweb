@@ -97,15 +97,21 @@
                     </div>
                     
                     <ul class="max-h-60 overflow-auto">
-                        <li class="p-2 hover:bg-gray-100 cursor-pointer">
-                            <span class="text-sm text-gray-700">🔔 You have a new message</span>
-                        </li>
-                        <li class="p-2 hover:bg-gray-100 cursor-pointer">
-                            <span class="text-sm text-gray-700">✅ Task Completed Successfully</span>
-                        </li>
-                        <li class="p-2 hover:bg-gray-100 cursor-pointer">
-                            <span class="text-sm text-gray-700">⚠️ System Alert: Update Required</span>
-                        </li>
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer flex items-center">
+                            <i class="fas fa-bell text-gray-500 text-sm mr-2"></i>
+                            <span class="text-sm text-gray-700">You have a new message</span>
+                          </li>
+                          
+                          <li class="p-2 hover:bg-gray-100 cursor-pointer flex items-center">
+                            <i class="fas fa-check-circle text-green-500 text-sm mr-2"></i>
+                            <span class="text-sm text-gray-700">Task Completed Successfully</span>
+                          </li>
+                          
+                          <li class="p-2 hover:bg-gray-100 cursor-pointer flex items-center">
+                            <i class="fas fa-exclamation-triangle text-yellow-500 text-sm mr-2"></i>
+                            <span class="text-sm text-gray-700">System Alert: Update Required</span>
+                          </li>
+                          
                     </ul>
             
                     <div class="p-3 border-t text-center">
@@ -142,8 +148,19 @@
                     class="absolute right-0 mt-2 w-48 bg-white border rounded-md shadow-lg z-50"
                 >
                     <ul class="py-2">
-                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer"><a href="profiles-settings.html">👤 Profile</a> </li>
-                        <li class="px-4 py-2 text-red-500 hover:bg-gray-100 cursor-pointer"><a href="login.html"> Logout</a></li>
+                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                            <a href="profiles-settings.html" class="flex items-center text-gray-700">
+                              <i class="fas fa-user mr-2"></i>
+                              Profile
+                            </a>
+                          </li>
+                          
+                          <li class="px-4 py-2 text-red-500 hover:bg-gray-100 cursor-pointer">
+                            <a href="login.html" class="flex items-center">
+                              <i class="fas fa-sign-out-alt mr-2"></i>
+                              Logout
+                            </a>
+                          </li>
                     </ul>
                 </div>
             </div>
@@ -212,12 +229,38 @@
                             <span>Verification & Compliance</span>
                         </a>
                     </li>
-                    <li class="mb-4">
-                        <a href="revenue-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
-                            <i class="fas fa-wallet mr-3"></i>
-                            <span>Revenue Management</span>
+                    <li x-data="{ open: false }" class="mb-4">
+                        <a href="#" @click.prevent="open = !open"
+                           class="flex items-center text-gray-600 hover:text-amber-500">
+                          <i class="fas fa-sack-dollar mr-3"></i>
+                          <span>Revenue Management</span>
+                          <i :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas ml-auto text-xs"></i>
                         </a>
-                    </li>
+                      
+                        <!-- Dropdown Menu -->
+                        <ul x-show="open" x-cloak class="mt-2 ml-6 space-y-2 text-gray-800">
+                          
+                          <!-- Revenue Breakdown -->
+                          <li class="flex items-center hover:text-amber-500">
+                            <i class="fas fa-chart-pie mr-3 text-gray-500"></i>
+                            <a href="revenue-breakdown.html">Revenue Breakdown</a>
+                          </li>
+                      
+                          <!-- Payout Management -->
+                          <li class="flex items-center hover:text-amber-500">
+                            <i class="fas fa-hand-holding-usd mr-3 text-gray-500"></i>
+                            <a href="payout-management.html">Payout Management</a>
+                          </li>
+                      
+                          <!-- Revenue Analytics -->
+                          <li class="flex items-center hover:text-amber-500">
+                            <i class="fas fa-chart-line mr-3 text-gray-500"></i>
+                            <a href="revenue-analytics.html">Revenue Analytics & Insights</a>
+                          </li>
+                      
+                        </ul>
+                      </li>
+                      
                     <li class="mb-4">
                         <a href="withdrawal-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-money-bill-transfer mr-3"></i>
@@ -286,11 +329,32 @@
                             <span>Staff Management</span>
                         </a>
                     </li>
-                    <li class="mb-4">
-                        <a href="system-setting.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                    
+                    <li x-data="{ open: false }" class="mb-4">
+                        <a href="#" @click.prevent="open = !open" class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-cog mr-3"></i>
                             <span>System Settings</span>
+                            <i :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas ml-auto text-xs"></i>
                         </a>
+                    
+                        <!-- Dropdown Menu -->
+                        <ul x-show="open" x-cloak class="mt-2 ml-6 space-y-2 text-gray-500">
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-envelope-open-text mr-3"></i>
+                                <a href="system-message-settings.html">Message Settings</a>
+                              </li>
+                              
+                              <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-bell mr-3"></i>
+                                <a href="system-push-notification-settings.html">Push Notification Settings</a>
+                              </li>
+                              
+                              <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-ticket-alt mr-3"></i>
+                                <a href="system-coupon-settings.html">Coupon Settings</a>
+                              </li>
+                              
+                        </ul>
                     </li>
                 </ul>
             </nav>

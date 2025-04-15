@@ -103,15 +103,21 @@
                     </div>
 
                     <ul class="max-h-60 overflow-auto">
-                        <li class="p-2 hover:bg-gray-100 cursor-pointer">
-                            <span class="text-sm text-gray-700">🔔 You have a new message</span>
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer flex items-center">
+                            <i class="fas fa-bell text-gray-500 text-sm mr-2"></i>
+                            <span class="text-sm text-gray-700">You have a new message</span>
                         </li>
-                        <li class="p-2 hover:bg-gray-100 cursor-pointer">
-                            <span class="text-sm text-gray-700">✅ Task Completed Successfully</span>
+
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer flex items-center">
+                            <i class="fas fa-check-circle text-green-500 text-sm mr-2"></i>
+                            <span class="text-sm text-gray-700">Task Completed Successfully</span>
                         </li>
-                        <li class="p-2 hover:bg-gray-100 cursor-pointer">
-                            <span class="text-sm text-gray-700">⚠️ System Alert: Update Required</span>
+
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer flex items-center">
+                            <i class="fas fa-exclamation-triangle text-yellow-500 text-sm mr-2"></i>
+                            <span class="text-sm text-gray-700">System Alert: Update Required</span>
                         </li>
+
                     </ul>
 
                     <div class="p-3 border-t text-center">
@@ -146,10 +152,19 @@
                 <div x-show="open" @click.away="open = false" x-transition x-cloak
                     class="absolute right-0 mt-2 w-48 bg-white border rounded-md shadow-lg z-50">
                     <ul class="py-2">
-                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer"><a href="profiles-settings.html">👤
-                                Profile</a> </li>
-                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">⚙️ Settings</li>
-                        <li class="px-4 py-2 text-red-500 hover:bg-gray-100 cursor-pointer">🚪 Logout</li>
+                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                            <a href="profiles-settings.html" class="flex items-center text-gray-700">
+                                <i class="fas fa-user mr-2"></i>
+                                Profile
+                            </a>
+                        </li>
+
+                        <li class="px-4 py-2 text-red-500 hover:bg-gray-100 cursor-pointer">
+                            <a href="login.html" class="flex items-center">
+                                <i class="fas fa-sign-out-alt mr-2"></i>
+                                Logout
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -165,17 +180,22 @@
             <nav class="p-4">
                 <ul>
                     <li class="mb-4">
-                        <a href="quicrefill-dashboard.html"
-                            class="flex items-center text-gray-600 hover:text-amber-500">
+                        <a href="quicrefill-dashboard.html" class="flex items-center text-amber-500 font-medium">
                             <i class="fas fa-th-large mr-3"></i>
                             <span>Summary</span>
                         </a>
                     </li>
 
                     <li class="mb-4">
-                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                        <a href="order-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-clipboard-list mr-3"></i>
                             <span>Order Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="delivery-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-cube mr-3"></i>
+                            <span>Delivery Management</span>
                         </a>
                     </li>
                     <li class="mb-4">
@@ -185,39 +205,112 @@
                         </a>
                     </li>
                     <li class="mb-4">
-                        <a href="accessories-management.html" class="flex items-center text-amber-500 font-medium">
+                        <a href="accessories-management.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-bag-shopping mr-3"></i>
                             <span>Accessories Management</span>
                         </a>
                     </li>
                     <li class="mb-4">
-                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                        <a href="user-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-user mr-3"></i>
                             <span>User Management</span>
                         </a>
                     </li>
                     <li class="mb-4">
-                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
-                            <i class="fas fa-motorcycle mr-3"></i>
-                            <span>Rider Management</span>
+                        <a href="vendor-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-store mr-3"></i>
+                            <span>Vendor Management</span>
                         </a>
                     </li>
                     <li class="mb-4">
-                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
-                            <i class="fas fa-money-bill mr-3"></i>
+                        <a href="delivery-rep-management.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-truck-droplet mr-2"></i>
+                            <span>Delivery Rep Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="verification-and-compliance.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-check-square mr-3"></i>
+                            <span>Verification & Compliance</span>
+                        </a>
+                    </li>
+                    <li x-data="{ open: false }" class="mb-4">
+                        <a href="#" @click.prevent="open = !open"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-sack-dollar mr-3"></i>
                             <span>Revenue Management</span>
+                            <i :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas ml-auto text-xs"></i>
+                        </a>
+
+                        <!-- Dropdown Menu -->
+                        <ul x-show="open" x-cloak class="mt-2 ml-6 space-y-2 text-gray-800">
+
+                            <!-- Revenue Breakdown -->
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-chart-pie mr-3 text-gray-500"></i>
+                                <a href="revenue-breakdown.html">Revenue Breakdown</a>
+                            </li>
+
+                            <!-- Payout Management -->
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-hand-holding-usd mr-3 text-gray-500"></i>
+                                <a href="payout-management.html">Payout Management</a>
+                            </li>
+
+                            <!-- Revenue Analytics -->
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-chart-line mr-3 text-gray-500"></i>
+                                <a href="revenue-analytics.html">Revenue Analytics & Insights</a>
+                            </li>
+
+                        </ul>
+                    </li>
+
+                    <li class="mb-4">
+                        <a href="withdrawal-management.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-money-bill-transfer mr-3"></i>
+                            <span>Withdrawal Management</span>
                         </a>
                     </li>
                     <li class="mb-4">
-                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                        <a href="account-deletion.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-user-xmark mr-3"></i>
+                            <span>Account Deletion</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="account-deletion.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fa fa-map-marker mr-3"></i>
+                            <span>Operating Locations</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="feedback.html" class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-comments mr-3"></i>
                             <span>Feedback</span>
                         </a>
                     </li>
                     <li class="mb-4">
-                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                        <a href="fraud-watch.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fa fa-binoculars mr-3"></i>
+                            <span>Fraud Watch</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="reports-and-analytics.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-chart-bar mr-3"></i>
                             <span>Reports and Analytics</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="crash-analytics.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fa fa-line-chart mr-3"></i>
+                            <span>Crash Analytics</span>
                         </a>
                     </li>
                     <li x-data="{ open: false }" class="mb-4">
@@ -232,26 +325,48 @@
                         <ul x-show="open" x-cloak class="mt-2 ml-6 space-y-2 text-gray-500">
                             <li class="flex items-center hover:text-amber-500">
                                 <i class="fas fa-file-alt mr-3"></i>
-                                <a href="#">Security Logs</a>
+                                <a href="security-logs.html">Security Logs</a>
                             </li>
                             <li class="flex items-center hover:text-amber-500">
                                 <i class="fas fa-user-lock mr-3"></i>
-                                <a href="#">Access Control</a>
+                                <a href="access-control.html">Access Control</a>
                             </li>
                         </ul>
                     </li>
 
                     <li class="mb-4">
-                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+                        <a href="staff-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-user-shield mr-3"></i>
-                            <span>Admin Management</span>
+                            <span>Staff Management</span>
                         </a>
                     </li>
-                    <li class="mb-4">
-                        <a href="#" class="flex items-center text-gray-600 hover:text-amber-500">
+
+                    <li x-data="{ open: false }" class="mb-4">
+                        <a href="#" @click.prevent="open = !open"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-cog mr-3"></i>
                             <span>System Settings</span>
+                            <i :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas ml-auto text-xs"></i>
                         </a>
+
+                        <!-- Dropdown Menu -->
+                        <ul x-show="open" x-cloak class="mt-2 ml-6 space-y-2 text-gray-500">
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-envelope-open-text mr-3"></i>
+                                <a href="system-message-settings.html">Message Settings</a>
+                            </li>
+
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-bell mr-3"></i>
+                                <a href="system-push-notification-settings.html">Push Notification Settings</a>
+                            </li>
+
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-ticket-alt mr-3"></i>
+                                <a href="system-coupon-settings.html">Coupon Settings</a>
+                            </li>
+
+                        </ul>
                     </li>
                 </ul>
             </nav>
@@ -262,38 +377,45 @@
 
         <!-- Content Area -->
         <main class="flex-1 p-6 w-full overflow-x-hidden">
-            
+
             <div class="bg-white w-full max-w-2xl rounded-lg shadow-md p-6">
                 <div class="flex items-center space-x-2 mb-4">
-                    <a href="accessories-management.html" class="fa fa-arrow-left text-xl text-gray-700 cursor-pointer"></a>
+                    <a href="accessories-management.html"
+                        class="fa fa-arrow-left text-xl text-gray-700 cursor-pointer"></a>
                     <h2 class="text-xl font-semibold">Accessory details</h2>
                 </div>
-            
+
                 <div class="space-y-4">
-            
+
                     <div>
-                        <p><span class="font-semibold text-gray-600">Accessory ID:</span> <span class="text-gray-800">#ACC1001</span></p>
+                        <p><span class="font-semibold text-gray-600">Accessory ID:</span> <span
+                                class="text-gray-800">#ACC1001</span></p>
                     </div>
                     <div>
-                        <p><span class="font-semibold text-gray-600">Name:</span> <span class="text-gray-800">Gas Cylinder</span></p>
+                        <p><span class="font-semibold text-gray-600">Name:</span> <span class="text-gray-800">Gas
+                                Cylinder</span></p>
                     </div>
-            
+
                     <div>
                         <p class="font-semibold text-gray-600">Description:</p>
                         <p class="text-gray-700 mt-1 text-sm">
-                            Ensure consistent gas flow with this reliable pressure regulator. Designed to maintain optimal pressure
-                            levels, it prevents leaks and ensures safe operation of your gas appliances. Easy to install and suitable
+                            Ensure consistent gas flow with this reliable pressure regulator. Designed to maintain
+                            optimal pressure
+                            levels, it prevents leaks and ensures safe operation of your gas appliances. Easy to install
+                            and suitable
                             for all standard gas cylinders. Cylinder
                         </p>
                     </div>
-            
+
                     <div class="grid grid-cols-1 gap-2">
                         <div>
-                            <p><span class="font-semibold text-gray-600">Stock count:</span> <span class="text-gray-800">100 Items</span>
+                            <p><span class="font-semibold text-gray-600">Stock count:</span> <span
+                                    class="text-gray-800">100 Items</span>
                             </p>
                         </div>
                         <div>
-                            <p><span class="font-semibold text-gray-600">Price:</span> <span class="text-gray-800">₦75,000</span></p>
+                            <p><span class="font-semibold text-gray-600">Price:</span> <span
+                                    class="text-gray-800">₦75,000</span></p>
                         </div>
                         <div>
                             <p><span class="font-semibold text-gray-600">Status:</span> <span
@@ -304,15 +426,17 @@
                                     class="text-gray-800">25/01/27 10:15 AM</span></p>
                         </div>
                     </div>
-            
+
                     <div>
                         <p class="font-semibold text-gray-600 mb-2">Image</p>
                         <div class="flex flex-wrap gap-4">
-                            <img src="images/item.png" alt="Accessory Image" class="rounded-md border w-42 h-24 object-cover" />
-                            <img src="images/item.png" alt="Accessory Image" class="rounded-md border w-42 h-24 object-cover" />
+                            <img src="images/item.png" alt="Accessory Image"
+                                class="rounded-md border w-42 h-24 object-cover" />
+                            <img src="images/item.png" alt="Accessory Image"
+                                class="rounded-md border w-42 h-24 object-cover" />
                         </div>
                     </div>
-            
+
                     <div class="flex flex-col sm:flex-row gap-4 pt-4">
                         <a href="add-accessories-management.html"
                             class="w-full bg-yellow-500 hover:bg-yellow-600 text-white py-2 rounded-md flex items-center justify-center space-x-2">
@@ -327,8 +451,8 @@
                     </div>
                 </div>
             </div>
-           
-            
+
+
         </main>
     </div>
     <!-- Alpine.js (Add this script if not already included in your project) -->
@@ -362,7 +486,7 @@
                 sidebar.classList.toggle("hidden");
             });
 
-          
+
         });
 
         function showToast(message = 'Action completed successfully!', icon = 'success') {
@@ -372,58 +496,58 @@
 
             // Dynamic background based on icon type
             switch (icon) {
-            case 'success':
-                bgGradient = 'linear-gradient(to right, #38b000, #70e000)';
-                borderColor = '#38b000';
-                break;
-            case 'error':
-                bgGradient = 'linear-gradient(to right, #d00000, #ff4d4d)';
-                borderColor = '#d00000';
-                break;
-            case 'warning':
-                bgGradient = 'linear-gradient(to right, #ffb600, #ffe066)';
-                borderColor = '#ffb600';
-                textColor = 'text-black';
-                break;
-            case 'info':
-                bgGradient = 'linear-gradient(to right, #0077b6, #90e0ef)';
-                borderColor = '#0077b6';
-                break;
-            default:
-                bgGradient = 'linear-gradient(to right, #333, #555)';
-                break;
+                case 'success':
+                    bgGradient = 'linear-gradient(to right, #38b000, #70e000)';
+                    borderColor = '#38b000';
+                    break;
+                case 'error':
+                    bgGradient = 'linear-gradient(to right, #d00000, #ff4d4d)';
+                    borderColor = '#d00000';
+                    break;
+                case 'warning':
+                    bgGradient = 'linear-gradient(to right, #ffb600, #ffe066)';
+                    borderColor = '#ffb600';
+                    textColor = 'text-black';
+                    break;
+                case 'info':
+                    bgGradient = 'linear-gradient(to right, #0077b6, #90e0ef)';
+                    borderColor = '#0077b6';
+                    break;
+                default:
+                    bgGradient = 'linear-gradient(to right, #333, #555)';
+                    break;
             }
 
             Swal.fire({
-            toast: true,
-            position: 'top-end',
-            icon: icon,
-            title: message,
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            background: bgGradient,
-            color: textColor === 'text-white' ? '#fff' : '#000',
-            customClass: {
-                popup: `rounded-xl shadow-lg border ${textColor} px-4 py-2`,
-                title: `font-medium ${textColor}`,
-            }
+                toast: true,
+                position: 'top-end',
+                icon: icon,
+                title: message,
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                background: bgGradient,
+                color: textColor === 'text-white' ? '#fff' : '#000',
+                customClass: {
+                    popup: `rounded-xl shadow-lg border ${textColor} px-4 py-2`,
+                    title: `font-medium ${textColor}`,
+                }
             });
         }
     </script>
-    
-  <script>
-    function previewImage(event) {
-      const file = event.target.files[0];
-      const previewContainer = document.getElementById('imagePreviewContainer');
-      const preview = document.getElementById('imagePreview');
 
-      if (file) {
-        preview.src = URL.createObjectURL(file);
-        previewContainer.classList.remove('hidden');
-      }
-    }
-  </script>
+    <script>
+        function previewImage(event) {
+            const file = event.target.files[0];
+            const previewContainer = document.getElementById('imagePreviewContainer');
+            const preview = document.getElementById('imagePreview');
+
+            if (file) {
+                preview.src = URL.createObjectURL(file);
+                previewContainer.classList.remove('hidden');
+            }
+        }
+    </script>
 </body>
 
 </html>

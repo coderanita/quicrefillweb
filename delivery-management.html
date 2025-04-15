@@ -54,12 +54,13 @@
         /* Light yellow */
         color: black !important;
     }
+
     /* Style for the time input focus/active state to show a yellow gradient */
     input[type="time"]:focus {
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(255, 197, 51, 0.5); /* Soft yellow focus ring */
-        }
-
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(255, 197, 51, 0.5);
+        /* Soft yellow focus ring */
+    }
 </style>
 </head>
 
@@ -108,15 +109,21 @@
                     </div>
 
                     <ul class="max-h-60 overflow-auto">
-                        <li class="p-2 hover:bg-gray-100 cursor-pointer">
-                            <span class="text-sm text-gray-700">🔔 You have a new message</span>
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer flex items-center">
+                            <i class="fas fa-bell text-gray-500 text-sm mr-2"></i>
+                            <span class="text-sm text-gray-700">You have a new message</span>
                         </li>
-                        <li class="p-2 hover:bg-gray-100 cursor-pointer">
-                            <span class="text-sm text-gray-700">✅ Task Completed Successfully</span>
+
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer flex items-center">
+                            <i class="fas fa-check-circle text-green-500 text-sm mr-2"></i>
+                            <span class="text-sm text-gray-700">Task Completed Successfully</span>
                         </li>
-                        <li class="p-2 hover:bg-gray-100 cursor-pointer">
-                            <span class="text-sm text-gray-700">⚠️ System Alert: Update Required</span>
+
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer flex items-center">
+                            <i class="fas fa-exclamation-triangle text-yellow-500 text-sm mr-2"></i>
+                            <span class="text-sm text-gray-700">System Alert: Update Required</span>
                         </li>
+
                     </ul>
 
                     <div class="p-3 border-t text-center">
@@ -151,10 +158,19 @@
                 <div x-show="open" @click.away="open = false" x-transition x-cloak
                     class="absolute right-0 mt-2 w-48 bg-white border rounded-md shadow-lg z-50">
                     <ul class="py-2">
-                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer"><a href="profiles-settings.html">👤
-                                Profile</a> </li>
-                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">⚙️ Settings</li>
-                        <li class="px-4 py-2 text-red-500 hover:bg-gray-100 cursor-pointer">🚪 Logout</li>
+                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                            <a href="profiles-settings.html" class="flex items-center text-gray-700">
+                                <i class="fas fa-user mr-2"></i>
+                                Profile
+                            </a>
+                        </li>
+
+                        <li class="px-4 py-2 text-red-500 hover:bg-gray-100 cursor-pointer">
+                            <a href="login.html" class="flex items-center">
+                                <i class="fas fa-sign-out-alt mr-2"></i>
+                                Logout
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -165,24 +181,25 @@
     <div class="flex">
         <!-- Sidebar -->
 
-        <aside id="sidebar" class="mobile-sidebar fixed md:relative w-64 bg-white min-h-screen shadow-sm z-20 md:transform-none border border-gray-300S">
+        <aside id="sidebar"
+            class="mobile-sidebar fixed md:relative w-64 bg-white min-h-screen shadow-sm z-20 md:transform-none border border-gray-300S">
             <nav class="p-4">
                 <ul>
                     <li class="mb-4">
-                        <a href="quicrefill-dashboard.html" class="flex items-center  text-gray-600 hover:text-amber-500 ">
+                        <a href="quicrefill-dashboard.html" class="flex items-center text-amber-500 font-medium">
                             <i class="fas fa-th-large mr-3"></i>
                             <span>Summary</span>
                         </a>
                     </li>
-                  
+
                     <li class="mb-4">
-                        <a href="order-management.html" class="flex items-center  text-gray-600 hover:text-amber-500">
+                        <a href="order-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-clipboard-list mr-3"></i>
                             <span>Order Management</span>
                         </a>
                     </li>
                     <li class="mb-4">
-                        <a href="delivery-management.html" class="flex items-center text-amber-500 font-medium">
+                        <a href="delivery-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-cube mr-3"></i>
                             <span>Delivery Management</span>
                         </a>
@@ -194,7 +211,8 @@
                         </a>
                     </li>
                     <li class="mb-4">
-                        <a href="accessories-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                        <a href="accessories-management.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-bag-shopping mr-3"></i>
                             <span>Accessories Management</span>
                         </a>
@@ -212,25 +230,54 @@
                         </a>
                     </li>
                     <li class="mb-4">
-                        <a href="delivery-rep-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                        <a href="delivery-rep-management.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-truck-droplet mr-2"></i>
                             <span>Delivery Rep Management</span>
                         </a>
                     </li>
                     <li class="mb-4">
-                        <a href="verification-and-compliance.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                        <a href="verification-and-compliance.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-check-square mr-3"></i>
                             <span>Verification & Compliance</span>
                         </a>
                     </li>
-                    <li class="mb-4">
-                        <a href="revenue-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
-                            <i class="fas fa-wallet mr-3"></i>
+                    <li x-data="{ open: false }" class="mb-4">
+                        <a href="#" @click.prevent="open = !open"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-sack-dollar mr-3"></i>
                             <span>Revenue Management</span>
+                            <i :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas ml-auto text-xs"></i>
                         </a>
+
+                        <!-- Dropdown Menu -->
+                        <ul x-show="open" x-cloak class="mt-2 ml-6 space-y-2 text-gray-800">
+
+                            <!-- Revenue Breakdown -->
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-chart-pie mr-3 text-gray-500"></i>
+                                <a href="revenue-breakdown.html">Revenue Breakdown</a>
+                            </li>
+
+                            <!-- Payout Management -->
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-hand-holding-usd mr-3 text-gray-500"></i>
+                                <a href="payout-management.html">Payout Management</a>
+                            </li>
+
+                            <!-- Revenue Analytics -->
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-chart-line mr-3 text-gray-500"></i>
+                                <a href="revenue-analytics.html">Revenue Analytics & Insights</a>
+                            </li>
+
+                        </ul>
                     </li>
+
                     <li class="mb-4">
-                        <a href="withdrawal-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                        <a href="withdrawal-management.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-money-bill-transfer mr-3"></i>
                             <span>Withdrawal Management</span>
                         </a>
@@ -260,7 +307,8 @@
                         </a>
                     </li>
                     <li class="mb-4">
-                        <a href="reports-and-analytics.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                        <a href="reports-and-analytics.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-chart-bar mr-3"></i>
                             <span>Reports and Analytics</span>
                         </a>
@@ -272,12 +320,13 @@
                         </a>
                     </li>
                     <li x-data="{ open: false }" class="mb-4">
-                        <a href="#" @click.prevent="open = !open" class="flex items-center text-gray-600 hover:text-amber-500">
+                        <a href="#" @click.prevent="open = !open"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-shield-alt mr-3"></i>
                             <span>Audit Logs & Security</span>
                             <i :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas ml-auto text-xs"></i>
                         </a>
-                    
+
                         <!-- Dropdown Menu -->
                         <ul x-show="open" x-cloak class="mt-2 ml-6 space-y-2 text-gray-500">
                             <li class="flex items-center hover:text-amber-500">
@@ -290,18 +339,40 @@
                             </li>
                         </ul>
                     </li>
-                    
+
                     <li class="mb-4">
                         <a href="staff-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-user-shield mr-3"></i>
                             <span>Staff Management</span>
                         </a>
                     </li>
-                    <li class="mb-4">
-                        <a href="system-setting.html" class="flex items-center text-gray-600 hover:text-amber-500">
+
+                    <li x-data="{ open: false }" class="mb-4">
+                        <a href="#" @click.prevent="open = !open"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-cog mr-3"></i>
                             <span>System Settings</span>
+                            <i :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas ml-auto text-xs"></i>
                         </a>
+
+                        <!-- Dropdown Menu -->
+                        <ul x-show="open" x-cloak class="mt-2 ml-6 space-y-2 text-gray-500">
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-envelope-open-text mr-3"></i>
+                                <a href="system-message-settings.html">Message Settings</a>
+                            </li>
+
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-bell mr-3"></i>
+                                <a href="system-push-notification-settings.html">Push Notification Settings</a>
+                            </li>
+
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-ticket-alt mr-3"></i>
+                                <a href="system-coupon-settings.html">Coupon Settings</a>
+                            </li>
+
+                        </ul>
                     </li>
                 </ul>
             </nav>
@@ -315,7 +386,7 @@
             <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-6">
                 <h1 class="text-xl md:text-xl font-bold text-gray-800 mb-4 md:mb-0">Delivery Management</h1>
                 <div class="flex flex-wrap md:flex-nowrap items-center gap-2 md:gap-4">
-                    
+
                     <div class="mb-2 md:mb-0 bg-white relative">
                         <input type="text" placeholder="Search"
                             class="bg-white w-40 px-4 py-2 border border-gray-300 rounded-md bg-gray-100 focus:outline-none pr-10">
@@ -460,25 +531,24 @@
             </div>
             <div class="bg-white rounded-none shadow p-4 w-full mb-6">
                 <h2 class="text-lg font-semibold mb-4">Real-time delivery status</h2>
-          
+
                 <!-- Full Width Map Container -->
                 <div class="relative w-full h-[500px]">
-                  <!-- Google Maps Embed -->
-                  <iframe
-                    class="absolute top-0 left-0 w-full h-full"
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3939.772262690828!2d7.470960275105768!3d9.070285488104895!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x104e0a573893c25f%3A0x708d31d778cf9b25!2sWuse%20II%2C%20Abuja!5e0!3m2!1sen!2sng!4v1683121459637!5m2!1sen!2sng"
-                    allowfullscreen=""
-                    loading="lazy"
-                    referrerpolicy="no-referrer-when-downgrade"
-                  ></iframe>
-          
-                  <!-- Status Markers (example placements) -->
-                  <div class="absolute top-[20%] left-[30%] bg-red-500 text-white text-xs px-2 py-1 rounded-full">🛵 Busy</div>
-                  <div class="absolute top-[40%] left-[50%] bg-green-500 text-white text-xs px-2 py-1 rounded-full">✅ Delivered</div>
-                  <div class="absolute top-[60%] left-[70%] bg-yellow-500 text-white text-xs px-2 py-1 rounded-full">⌛ Pending</div>
+                    <!-- Google Maps Embed -->
+                    <iframe class="absolute top-0 left-0 w-full h-full"
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3939.772262690828!2d7.470960275105768!3d9.070285488104895!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x104e0a573893c25f%3A0x708d31d778cf9b25!2sWuse%20II%2C%20Abuja!5e0!3m2!1sen!2sng!4v1683121459637!5m2!1sen!2sng"
+                        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+
+                    <!-- Status Markers (example placements) -->
+                    <div class="absolute top-[20%] left-[30%] bg-red-500 text-white text-xs px-2 py-1 rounded-full">🛵
+                        Busy</div>
+                    <div class="absolute top-[40%] left-[50%] bg-green-500 text-white text-xs px-2 py-1 rounded-full">✅
+                        Delivered</div>
+                    <div class="absolute top-[60%] left-[70%] bg-yellow-500 text-white text-xs px-2 py-1 rounded-full">⌛
+                        Pending</div>
                 </div>
-              </div>
-              <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 ">
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 ">
 
                 <!-- LEFT: Delivery Zone Configuration -->
                 <div class="col-span-2 bg-white rounded-xl shadow p-4">
@@ -486,30 +556,22 @@
                         <div class="flex justify-between items-center mb-4">
                             <h2 class="font-semibold text-lg">Delivery Zone Configuration</h2>
                             <div x-data="{ isOpen: false, startTime: '09:00', endTime: '19:00' }" x-cloak>
-                                <button
-                                    @click="isOpen = true"
-                                    class="px-4 bg-gradient-to-b from-[#FFC533] to-[#FFB600] text-black rounded-md border border-gray-300 shadow flex items-center justify-center py-2"
-                                >
+                                <button @click="isOpen = true"
+                                    class="px-4 bg-gradient-to-b from-[#FFC533] to-[#FFB600] text-black rounded-md border border-gray-300 shadow flex items-center justify-center py-2">
                                     <i class="fa fa-plus mr-2"></i> Add zone
                                 </button>
-                
-                                <div
-                                    x-show="isOpen"
+
+                                <div x-show="isOpen"
                                     class="fixed z-20 inset-0 overflow-y-auto bg-gray-500 bg-opacity-75 flex items-center justify-center"
-                                    aria-labelledby="modal-title"
-                                    role="dialog"
-                                    aria-modal="true"
-                                >
-                                    <div
-                                        x-transition:enter="ease-out duration-300"
+                                    aria-labelledby="modal-title" role="dialog" aria-modal="true">
+                                    <div x-transition:enter="ease-out duration-300"
                                         x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                                         x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
                                         x-transition:leave="ease-in duration-200"
                                         x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
                                         x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                                         class="relative bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:max-w-md sm:w-full"
-                                        @click.away="isOpen = false"
-                                    >
+                                        @click.away="isOpen = false">
                                         <div class="p-6">
                                             <h3 class="text-lg font-medium text-gray-900 mb-4" id="modal-title">
                                                 Add Delivery Zone
@@ -518,34 +580,25 @@
                                                 <label for="zoneName" class="block text-sm font-medium text-gray-700">
                                                     Zone name
                                                 </label>
-                                                <input
-                                                    type="text"
-                                                    id="zoneName"
-                                                    class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm 
+                                                <input type="text" id="zoneName" class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm 
                                                            focus:outline-none focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500 
-                                                           py-2 px-3 text-base bg-white"
-                                                    placeholder="Enter zone name"
-                                                    value="Order Confirmation"
-                                                />
+                                                           py-2 px-3 text-base bg-white" placeholder="Enter zone name"
+                                                    value="Order Confirmation" />
                                             </div>
-                                            
+
                                             <div class="mb-4">
-                                                <label for="deliveryEstimate" class="block text-sm font-medium text-gray-700">
+                                                <label for="deliveryEstimate"
+                                                    class="block text-sm font-medium text-gray-700">
                                                     Delivery time estimate
                                                 </label>
-                                                <input
-                                                    type="text"
-                                                    id="deliveryEstimate"
-                                                    class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm 
+                                                <input type="text" id="deliveryEstimate" class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm 
                                                            focus:outline-none focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500 
-                                                           py-2 px-3 text-base bg-white"
-                                                    placeholder="e.g., 2-5 days"
-                                                    value="2 - 5 days"
-                                                />
+                                                           py-2 px-3 text-base bg-white" placeholder="e.g., 2-5 days"
+                                                    value="2 - 5 days" />
                                             </div>
-                                                                                      
-                                            
-                
+
+
+
                                             <div class="mb-4" x-data="{
                                                 isOpen: false,
                                                 startHour: '06',
@@ -556,52 +609,57 @@
                                                     return `${this.startHour} ${this.startPeriod} – ${this.endHour} ${this.endPeriod}`;
                                                 }
                                             }">
-                                                <label class="block text-sm font-medium text-gray-700">Delivery time</label>
-                                                
+                                                <label class="block text-sm font-medium text-gray-700">Delivery
+                                                    time</label>
+
                                                 <div class="relative">
-                                                    <button 
-                                                        @click="isOpen = !isOpen" 
-                                                        type="button"
-                                                        class="mt-1 block w-full rounded-md border border-gray-400 shadow-sm focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500 py-2 px-3 text-base text-left bg-white"
-                                                    >
+                                                    <button @click="isOpen = !isOpen" type="button"
+                                                        class="mt-1 block w-full rounded-md border border-gray-400 shadow-sm focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500 py-2 px-3 text-base text-left bg-white">
                                                         <span x-text="formattedTime"></span>
                                                         <i class="fa fa-clock absolute right-3 top-3 text-gray-500"></i>
                                                     </button>
-                                            
+
                                                     <!-- Dropdown -->
-                                                    <div 
-                                                        x-show="isOpen" 
-                                                        @click.away="isOpen = false" 
+                                                    <div x-show="isOpen" @click.away="isOpen = false"
                                                         class="absolute z-50 mt-2 w-full bg-white border border-gray-300 rounded-md shadow-lg p-4"
-                                                        x-transition
-                                                    >
+                                                        x-transition>
                                                         <div class="flex justify-between gap-4 mb-4">
                                                             <!-- Start Time -->
                                                             <div class="flex-1">
-                                                                <label class="block text-xs text-gray-500 mb-1">Start</label>
+                                                                <label
+                                                                    class="block text-xs text-gray-500 mb-1">Start</label>
                                                                 <div class="flex items-center gap-2">
-                                                                    <select x-model="startHour" class="border rounded px-2 py-1">
+                                                                    <select x-model="startHour"
+                                                                        class="border rounded px-2 py-1">
                                                                         <template x-for="h in 12" :key="h">
-                                                                            <option :value="String(h).padStart(2, '0')" x-text="String(h).padStart(2, '0')"></option>
+                                                                            <option :value="String(h).padStart(2, '0')"
+                                                                                x-text="String(h).padStart(2, '0')">
+                                                                            </option>
                                                                         </template>
                                                                     </select>
-                                                                    <select x-model="startPeriod" class="border rounded px-2 py-1">
+                                                                    <select x-model="startPeriod"
+                                                                        class="border rounded px-2 py-1">
                                                                         <option>AM</option>
                                                                         <option>PM</option>
                                                                     </select>
                                                                 </div>
                                                             </div>
-                                            
+
                                                             <!-- End Time -->
                                                             <div class="flex-1">
-                                                                <label class="block text-xs text-gray-500 mb-1">End</label>
+                                                                <label
+                                                                    class="block text-xs text-gray-500 mb-1">End</label>
                                                                 <div class="flex items-center gap-2">
-                                                                    <select x-model="endHour" class="border rounded px-2 py-1">
+                                                                    <select x-model="endHour"
+                                                                        class="border rounded px-2 py-1">
                                                                         <template x-for="h in 12" :key="'e' + h">
-                                                                            <option :value="String(h).padStart(2, '0')" x-text="String(h).padStart(2, '0')"></option>
+                                                                            <option :value="String(h).padStart(2, '0')"
+                                                                                x-text="String(h).padStart(2, '0')">
+                                                                            </option>
                                                                         </template>
                                                                     </select>
-                                                                    <select x-model="endPeriod" class="border rounded px-2 py-1">
+                                                                    <select x-model="endPeriod"
+                                                                        class="border rounded px-2 py-1">
                                                                         <option>AM</option>
                                                                         <option>PM</option>
                                                                     </select>
@@ -609,32 +667,30 @@
                                                             </div>
                                                         </div>
                                                         <div class="text-right">
-                                                            <button 
-                                                                @click="isOpen = false" 
-                                                                class="text-yellow-600 font-medium hover:underline"
-                                                            >Done</button>
+                                                            <button @click="isOpen = false"
+                                                                class="text-yellow-600 font-medium hover:underline">Done</button>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            
-                
+
+
                                             <div class="mb-4 flex items-center justify-between">
                                                 <label for="status" class="block text-sm font-medium text-gray-700">
                                                     Status
                                                 </label>
                                                 <label class="relative inline-flex items-center cursor-pointer">
                                                     <input type="checkbox" id="status" class="sr-only peer" checked>
-                                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-yellow-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-yellow-500"></div>
+                                                    <div
+                                                        class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-yellow-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-yellow-500">
+                                                    </div>
                                                 </label>
                                             </div>
-                
+
                                             <div class="mt-6">
-                                                <button
-                                                    type="button"
+                                                <button type="button"
                                                     class="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-yellow-500 text-base font-medium text-white hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
-                                                    @click="isOpen = false"
-                                                >
+                                                    @click="isOpen = false">
                                                     Add zone
                                                 </button>
                                             </div>
@@ -644,289 +700,330 @@
                             </div>
                         </div>
                     </div>
-            
-                  <!-- Delivery Zones -->
-                  <div class="space-y-3">
-            
-                    <!-- Expanded card -->
-                    <div class="border border-gray-300 rounded-md p-4 bg-gray-50">
-                      <div class="flex justify-between items-start">
-                        <p class="font-medium">Zone name: <span class="font-semibold">Downtown region</span></p>
-                        <div class="space-x-3">
-                          <button class="text-gray-500 hover:text-blue-600"><i class="fa fa-pen"></i></button>
-                          <button class="text-red-500 hover:text-red-600"><i class="fa fa-trash"></i></button>
+
+                    <!-- Delivery Zones -->
+                    <div class="space-y-3">
+
+                        <!-- Expanded card -->
+                        <div class="border border-gray-300 rounded-md p-4 bg-gray-50">
+                            <div class="flex justify-between items-start">
+                                <p class="font-medium">Zone name: <span class="font-semibold">Downtown region</span></p>
+                                <div class="space-x-3">
+                                    <button class="text-gray-500 hover:text-blue-600"><i class="fa fa-pen"></i></button>
+                                    <button class="text-red-500 hover:text-red-600"><i class="fa fa-trash"></i></button>
+                                </div>
+                            </div>
+                            <p class="text-sm mt-2">Delivery time estimate: <span class="font-semibold">2–4 days</span>
+                                (Min days: 2 – Max days: 4)</p>
+                            <p class="text-sm">Order cutoff time: <span class="font-semibold">5:00 PM</span></p>
+                            <p class="text-sm">Status: <span class="text-green-600 font-semibold">Active</span></p>
                         </div>
-                      </div>
-                      <p class="text-sm mt-2">Delivery time estimate: <span class="font-semibold">2–4 days</span> (Min days: 2 – Max days: 4)</p>
-                      <p class="text-sm">Order cutoff time: <span class="font-semibold">5:00 PM</span></p>
-                      <p class="text-sm">Status: <span class="text-green-600 font-semibold">Active</span></p>
+
+                        <!-- Collapsed cards -->
+                        <div
+                            class="border border-gray-300 rounded-md px-4 py-2 flex justify-between items-center bg-white">
+                            <p class="text-sm">Zone name: <span class="font-semibold">Downtown region</span></p>
+                            <div class="space-x-3">
+                                <button class="text-gray-500 hover:text-blue-600"><i class="fa fa-pen"></i></button>
+                                <button class="text-red-500 hover:text-red-600"><i class="fa fa-trash"></i></button>
+                            </div>
+                        </div>
+
+                        <div
+                            class="border border-gray-300 rounded-md px-4 py-2 flex justify-between items-center bg-white">
+                            <p class="text-sm">Zone name: <span class="font-semibold">Downtown region</span></p>
+                            <div class="space-x-3">
+                                <button class="text-gray-500 hover:text-blue-600"><i class="fa fa-pen"></i></button>
+                                <button class="text-red-500 hover:text-red-600"><i class="fa fa-trash"></i></button>
+                            </div>
+                        </div>
+
+                        <div
+                            class="border border-gray-300 rounded-md px-4 py-2 flex justify-between items-center bg-white">
+                            <p class="text-sm">Zone name: <span class="font-semibold">Downtown region</span></p>
+                            <div class="space-x-3">
+                                <button class="text-gray-500 hover:text-blue-600"><i class="fa fa-pen"></i></button>
+                                <button class="text-red-500 hover:text-red-600"><i class="fa fa-trash"></i></button>
+                            </div>
+                        </div>
                     </div>
-            
-                    <!-- Collapsed cards -->
-                    <div class="border border-gray-300 rounded-md px-4 py-2 flex justify-between items-center bg-white">
-                      <p class="text-sm">Zone name: <span class="font-semibold">Downtown region</span></p>
-                      <div class="space-x-3">
-                        <button class="text-gray-500 hover:text-blue-600"><i class="fa fa-pen"></i></button>
-                        <button class="text-red-500 hover:text-red-600"><i class="fa fa-trash"></i></button>
-                      </div>
-                    </div>
-            
-                    <div class="border border-gray-300 rounded-md px-4 py-2 flex justify-between items-center bg-white">
-                      <p class="text-sm">Zone name: <span class="font-semibold">Downtown region</span></p>
-                      <div class="space-x-3">
-                        <button class="text-gray-500 hover:text-blue-600"><i class="fa fa-pen"></i></button>
-                        <button class="text-red-500 hover:text-red-600"><i class="fa fa-trash"></i></button>
-                      </div>
-                    </div>
-            
-                    <div class="border border-gray-300 rounded-md px-4 py-2 flex justify-between items-center bg-white">
-                      <p class="text-sm">Zone name: <span class="font-semibold">Downtown region</span></p>
-                      <div class="space-x-3">
-                        <button class="text-gray-500 hover:text-blue-600"><i class="fa fa-pen"></i></button>
-                        <button class="text-red-500 hover:text-red-600"><i class="fa fa-trash"></i></button>
-                      </div>
-                    </div>
-                  </div>
                 </div>
-            
+
                 <!-- RIGHT: Delivery Rep Leaderboard -->
                 <!-- Delivery Rep Leaderboard -->
                 <div class="bg-white rounded-xl shadow p-4 flex-1">
                     <div class="flex justify-between items-center mb-4">
-                    <h2 class="font-semibold text-sm">Delivery Rep Leaderboard</h2>
-                    <a href="#" class="text-xs text-yellow-500 font-medium">View all</a>
+                        <h2 class="font-semibold text-sm">Delivery Rep Leaderboard</h2>
+                        <a href="#" class="text-xs text-yellow-500 font-medium">View all</a>
                     </div>
-                
+
                     <!-- Top 3 Olympic Style -->
                     <div class="flex justify-center items-end gap-6 mb-6">
-                    <!-- 2nd -->
-                    <div class="flex flex-col items-center">
-                        <div class="relative mb-1">
-                        <img src="images/Avatar/Frank Marcus.png" class="w-14 h-14 rounded-full" />
-                        <div class="absolute -top-1 -left-1 w-6 h-6 bg-yellow-400 text-white text-xs font-bold rounded-full flex items-center justify-center">2</div>
+                        <!-- 2nd -->
+                        <div class="flex flex-col items-center">
+                            <div class="relative mb-1">
+                                <img src="images/Avatar/Frank Marcus.png" class="w-14 h-14 rounded-full" />
+                                <div
+                                    class="absolute -top-1 -left-1 w-6 h-6 bg-yellow-400 text-white text-xs font-bold rounded-full flex items-center justify-center">
+                                    2</div>
+                            </div>
+                            <p class="text-xs font-medium">Frank Marcus</p>
+                            <div class="text-yellow-400 text-xs">
+                                <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                    class="fa fa-star"></i><i class="fa fa-star"></i>
+                            </div>
                         </div>
-                        <p class="text-xs font-medium">Frank Marcus</p>
-                        <div class="text-yellow-400 text-xs">
-                        <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>
+
+                        <!-- 1st -->
+                        <div class="flex flex-col items-center mb-6">
+                            <div class="relative mb-1">
+                                <img src="images/Avatar/Uchenna Paul.png"
+                                    class="w-16 h-16 rounded-full border-4 border-yellow-400" />
+                                <div
+                                    class="absolute -top-1 -left-1 w-6 h-6 bg-yellow-400 text-white text-xs font-bold rounded-full flex items-center justify-center">
+                                    1</div>
+                                <i
+                                    class="fa fa-trophy text-yellow-400 text-xl absolute -top-4 left-1/2 -translate-x-1/2"></i>
+                            </div>
+                            <p class="text-xs font-medium">Uchenna Paul</p>
+                            <div class="text-yellow-400 text-xs">
+                                <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                    class="fa fa-star"></i><i class="fa fa-star"></i>
+                            </div>
+                        </div>
+
+                        <!-- 3rd -->
+                        <div class="flex flex-col items-center">
+                            <div class="relative mb-1">
+                                <img src="images/Avatar/Glory Amina.png" class="w-14 h-14 rounded-full" />
+                                <div
+                                    class="absolute -top-1 -left-1 w-6 h-6 bg-yellow-400 text-white text-xs font-bold rounded-full flex items-center justify-center">
+                                    3</div>
+                            </div>
+                            <p class="text-xs font-medium">Glory Amina</p>
+                            <div class="text-yellow-400 text-xs">
+                                <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                    class="fa fa-star"></i><i class="fa fa-star"></i>
+                            </div>
                         </div>
                     </div>
-                
-                    <!-- 1st -->
-                    <div class="flex flex-col items-center mb-6">
-                        <div class="relative mb-1">
-                        <img src="images/Avatar/Uchenna Paul.png" class="w-16 h-16 rounded-full border-4 border-yellow-400" />
-                        <div class="absolute -top-1 -left-1 w-6 h-6 bg-yellow-400 text-white text-xs font-bold rounded-full flex items-center justify-center">1</div>
-                        <i class="fa fa-trophy text-yellow-400 text-xl absolute -top-4 left-1/2 -translate-x-1/2"></i>
-                        </div>
-                        <p class="text-xs font-medium">Uchenna Paul</p>
-                        <div class="text-yellow-400 text-xs">
-                        <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>
-                        </div>
-                    </div>
-                
-                    <!-- 3rd -->
-                    <div class="flex flex-col items-center">
-                        <div class="relative mb-1">
-                        <img src="images/Avatar/Glory Amina.png" class="w-14 h-14 rounded-full" />
-                        <div class="absolute -top-1 -left-1 w-6 h-6 bg-yellow-400 text-white text-xs font-bold rounded-full flex items-center justify-center">3</div>
-                        </div>
-                        <p class="text-xs font-medium">Glory Amina</p>
-                        <div class="text-yellow-400 text-xs">
-                        <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>
-                        </div>
-                    </div>
-                    </div>
-                
+
                     <!-- Others -->
                     <div class="space-y-4 text-sm">
                         <!-- Rank 4 -->
                         <div class="flex justify-between items-center">
-                        <div class="flex items-center gap-3">
-                            <div class="bg-black text-white text-xs font-bold px-2 py-1 rounded-md w-6 flex items-center justify-center">4</div>
-                            <img src="images/Avatar/Collins Emeka.png" class="w-9 h-9 rounded-full" />
-                            <p>Collins Emeka</p>
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="bg-black text-white text-xs font-bold px-2 py-1 rounded-md w-6 flex items-center justify-center">
+                                    4</div>
+                                <img src="images/Avatar/Collins Emeka.png" class="w-9 h-9 rounded-full" />
+                                <p>Collins Emeka</p>
+                            </div>
+                            <div class="text-yellow-400 text-xs">
+                                <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                    class="fa fa-star"></i><i class="fa fa-star"></i>
+                            </div>
                         </div>
-                        <div class="text-yellow-400 text-xs">
-                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>
-                        </div>
-                        </div>
-                    
+
                         <!-- Rank 5 -->
                         <div class="flex justify-between items-center">
-                        <div class="flex items-center gap-3">
-                            <div class="bg-black text-white text-xs font-bold px-2 py-1 rounded-md w-6 flex items-center justify-center">5</div>
-                            <img src="images/Avatar/Stephen George.png" class="w-9 h-9 rounded-full" />
-                            <p>Stephen George</p>
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="bg-black text-white text-xs font-bold px-2 py-1 rounded-md w-6 flex items-center justify-center">
+                                    5</div>
+                                <img src="images/Avatar/Stephen George.png" class="w-9 h-9 rounded-full" />
+                                <p>Stephen George</p>
+                            </div>
+                            <div class="text-yellow-400 text-xs">
+                                <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                    class="fa fa-star"></i><i class="fa fa-star"></i>
+                            </div>
                         </div>
-                        <div class="text-yellow-400 text-xs">
-                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>
-                        </div>
-                        </div>
-                    
+
                         <!-- Rank 6 -->
                         <div class="flex justify-between items-center">
-                        <div class="flex items-center gap-3">
-                            <div class="bg-black text-white text-xs font-bold px-2 py-1 rounded-md w-6 flex items-center justify-center">6</div>
-                            <img src="images/Avatar/John Gregory.png" class="w-9 h-9 rounded-full" />
-                            <p>John Gregory</p>
-                        </div>
-                        <div class="text-yellow-400 text-xs">
-                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa-regular fa-star-half-stroke"></i>
-                        </div>
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="bg-black text-white text-xs font-bold px-2 py-1 rounded-md w-6 flex items-center justify-center">
+                                    6</div>
+                                <img src="images/Avatar/John Gregory.png" class="w-9 h-9 rounded-full" />
+                                <p>John Gregory</p>
+                            </div>
+                            <div class="text-yellow-400 text-xs">
+                                <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                    class="fa fa-star"></i><i class="fa-regular fa-star-half-stroke"></i>
+                            </div>
                         </div>
                     </div>
-  
+
                 </div>
-  
-              </div>
-            
-              <div class="flex justify-center items-center mt-6 ">
+
+            </div>
+
+            <div class="flex justify-center items-center mt-6 ">
                 <div class="inline-flex items-center border rounded-lg overflow-hidden shadow-sm">
-                  <!-- Pending Tab -->
-                  <button class="px-6 py-2 text-sm font-medium text-gray-800 bg-white hover:bg-gray-100">
-                    Pending orders
-                  </button>
-              
-                  <!-- Assigned Tab (active) -->
-                  <button class="px-6 py-2 text-sm font-medium text-black bg-yellow-400 hover:bg-yellow-500">
-                    Assigned orders
-                  </button>
+                    <!-- Pending Tab -->
+                    <button class="px-6 py-2 text-sm font-medium text-gray-800 bg-white hover:bg-gray-100">
+                        Pending orders
+                    </button>
+
+                    <!-- Assigned Tab (active) -->
+                    <button class="px-6 py-2 text-sm font-medium text-black bg-yellow-400 hover:bg-yellow-500">
+                        Assigned orders
+                    </button>
                 </div>
-              </div>
-              
+            </div>
+
 
             <!--Order Details-->
             <div class="container mx-auto  p-4 md:p-6">
 
-                
-        
+
+
                 <div class="bg-white rounded-md border border-gray-300 shadow-md p-4 mb-6">
                     <div class="container mx-auto">
                         <div class="overflow-x-auto">
-                            
+
                             <table class="w-full border-collapse bg-white shadow-md rounded-lg overflow-hidden">
                                 <thead>
                                     <tr class="bg-gray-200 text-left text-gray-600 text-sm">
-                                      <th class="p-3">Order ID</th>
-                                      <th class="p-3">Customer Name</th>
-                                      <th class="p-3">Rider Name</th>
-                                      <th class="p-3">Delivery Address</th>
-                                      <th class="p-3">Status</th>
-                                      <th class="p-3">ETA</th>
-                                      <th class="p-3">Actions</th>
+                                        <th class="p-3">Order ID</th>
+                                        <th class="p-3">Customer Name</th>
+                                        <th class="p-3">Rider Name</th>
+                                        <th class="p-3">Delivery Address</th>
+                                        <th class="p-3">Status</th>
+                                        <th class="p-3">ETA</th>
+                                        <th class="p-3">Actions</th>
                                     </tr>
-                                  </thead>
-                                  <tbody>
+                                </thead>
+                                <tbody>
                                     <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
-                                      <td class="p-3">#ORD1001</td>
-                                      <td class="p-3">John Doe</td>
-                                      <td class="p-3">Salami Ahmed</td>
-                                      <td class="p-3">Third mainland avenue, Ikeja, Lagos</td>
-                                      <td class="p-3 text-yellow-500 font-semibold">Out for delivery</td>
-                                      <td class="p-3">25/01/27 10:15 AM</td>
-                                      <td class="p-3 flex space-x-2">
-                                        <button class="text-red-500 hover:text-red-700"><i class="fa fa-trash"></i></button>
-                                        <a href="#" class="text-blue-500 hover:text-blue-700 underline">View Details</a>
-                                      </td>
-                                    </tr>
-                                    <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
-                                      <td class="p-3">#ORD1001</td>
-                                      <td class="p-3">Salami Ahmed</td>
-                                      <td class="p-3">Cynthia Micheal</td>
-                                      <td class="p-3">Third mainland avenue, Ikeja, Lagos</td>
-                                      <td class="p-3 text-green-500 font-semibold">Delivered</td>
-                                      <td class="p-3">25/01/27 02:45 PM</td>
-                                      <td class="p-3 flex space-x-2">
-                                        <button class="text-red-500 hover:text-red-700"><i class="fa fa-trash"></i></button>
-                                        <a href="#" class="text-blue-500 hover:text-blue-700 underline">View Details</a>
-                                      </td>
+                                        <td class="p-3">#ORD1001</td>
+                                        <td class="p-3">John Doe</td>
+                                        <td class="p-3">Salami Ahmed</td>
+                                        <td class="p-3">Third mainland avenue, Ikeja, Lagos</td>
+                                        <td class="p-3 text-yellow-500 font-semibold">Out for delivery</td>
+                                        <td class="p-3">25/01/27 10:15 AM</td>
+                                        <td class="p-3 flex space-x-2">
+                                            <button class="text-red-500 hover:text-red-700"><i
+                                                    class="fa fa-trash"></i></button>
+                                            <a href="#" class="text-blue-500 hover:text-blue-700 underline">View
+                                                Details</a>
+                                        </td>
                                     </tr>
                                     <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
-                                      <td class="p-3">#ORD1001</td>
-                                      <td class="p-3">Cynthia Micheal</td>
-                                      <td class="p-3">Joseph Yemi</td>
-                                      <td class="p-3">Third mainland avenue, Ikeja, Lagos</td>
-                                      <td class="p-3 text-yellow-500 font-semibold">Out for delivery</td>
-                                      <td class="p-3">25/01/27 09:30 AM</td>
-                                      <td class="p-3 flex space-x-2">
-                                        <button class="text-red-500 hover:text-red-700"><i class="fa fa-trash"></i></button>
-                                        <a href="#" class="text-blue-500 hover:text-blue-700 underline">View Details</a>
-                                      </td>
+                                        <td class="p-3">#ORD1001</td>
+                                        <td class="p-3">Salami Ahmed</td>
+                                        <td class="p-3">Cynthia Micheal</td>
+                                        <td class="p-3">Third mainland avenue, Ikeja, Lagos</td>
+                                        <td class="p-3 text-green-500 font-semibold">Delivered</td>
+                                        <td class="p-3">25/01/27 02:45 PM</td>
+                                        <td class="p-3 flex space-x-2">
+                                            <button class="text-red-500 hover:text-red-700"><i
+                                                    class="fa fa-trash"></i></button>
+                                            <a href="#" class="text-blue-500 hover:text-blue-700 underline">View
+                                                Details</a>
+                                        </td>
                                     </tr>
                                     <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
-                                      <td class="p-3">#ORD1001</td>
-                                      <td class="p-3">Chinedu Kalu</td>
-                                      <td class="p-3">Chinedu Kalu</td>
-                                      <td class="p-3">Third mainland avenue, Ikeja, Lagos</td>
-                                      <td class="p-3 text-yellow-500 font-semibold">Out for delivery</td>
-                                      <td class="p-3">25/01/26 11:10 AM</td>
-                                      <td class="p-3 flex space-x-2">
-                                        <button class="text-red-500 hover:text-red-700"><i class="fa fa-trash"></i></button>
-                                        <a href="#" class="text-blue-500 hover:text-blue-700 underline">View Details</a>
-                                      </td>
+                                        <td class="p-3">#ORD1001</td>
+                                        <td class="p-3">Cynthia Micheal</td>
+                                        <td class="p-3">Joseph Yemi</td>
+                                        <td class="p-3">Third mainland avenue, Ikeja, Lagos</td>
+                                        <td class="p-3 text-yellow-500 font-semibold">Out for delivery</td>
+                                        <td class="p-3">25/01/27 09:30 AM</td>
+                                        <td class="p-3 flex space-x-2">
+                                            <button class="text-red-500 hover:text-red-700"><i
+                                                    class="fa fa-trash"></i></button>
+                                            <a href="#" class="text-blue-500 hover:text-blue-700 underline">View
+                                                Details</a>
+                                        </td>
                                     </tr>
                                     <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
-                                      <td class="p-3">#ORD1001</td>
-                                      <td class="p-3">Priscilla Madu</td>
-                                      <td class="p-3">Priscilla Madu</td>
-                                      <td class="p-3">Third mainland avenue, Ikeja, Lagos</td>
-                                      <td class="p-3 text-green-500 font-semibold">Delivered</td>
-                                      <td class="p-3">25/01/24 04:20 PM</td>
-                                      <td class="p-3 flex space-x-2">
-                                        <button class="text-red-500 hover:text-red-700"><i class="fa fa-trash"></i></button>
-                                        <a href="#" class="text-blue-500 hover:text-blue-700 underline">View Details</a>
-                                      </td>
+                                        <td class="p-3">#ORD1001</td>
+                                        <td class="p-3">Chinedu Kalu</td>
+                                        <td class="p-3">Chinedu Kalu</td>
+                                        <td class="p-3">Third mainland avenue, Ikeja, Lagos</td>
+                                        <td class="p-3 text-yellow-500 font-semibold">Out for delivery</td>
+                                        <td class="p-3">25/01/26 11:10 AM</td>
+                                        <td class="p-3 flex space-x-2">
+                                            <button class="text-red-500 hover:text-red-700"><i
+                                                    class="fa fa-trash"></i></button>
+                                            <a href="#" class="text-blue-500 hover:text-blue-700 underline">View
+                                                Details</a>
+                                        </td>
                                     </tr>
                                     <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
-                                      <td class="p-3">#ORD1001</td>
-                                      <td class="p-3">Joseph Yemi</td>
-                                      <td class="p-3">John Doe</td>
-                                      <td class="p-3">Third mainland avenue, Ikeja, Lagos</td>
-                                      <td class="p-3 text-green-500 font-semibold">Delivered</td>
-                                      <td class="p-3">25/01/24 04:20 PM</td>
-                                      <td class="p-3 flex space-x-2">
-                                        <button class="text-red-500 hover:text-red-700"><i class="fa fa-trash"></i></button>
-                                        <a href="#" class="text-blue-500 hover:text-blue-700 underline">View Details</a>
-                                      </td>
+                                        <td class="p-3">#ORD1001</td>
+                                        <td class="p-3">Priscilla Madu</td>
+                                        <td class="p-3">Priscilla Madu</td>
+                                        <td class="p-3">Third mainland avenue, Ikeja, Lagos</td>
+                                        <td class="p-3 text-green-500 font-semibold">Delivered</td>
+                                        <td class="p-3">25/01/24 04:20 PM</td>
+                                        <td class="p-3 flex space-x-2">
+                                            <button class="text-red-500 hover:text-red-700"><i
+                                                    class="fa fa-trash"></i></button>
+                                            <a href="#" class="text-blue-500 hover:text-blue-700 underline">View
+                                                Details</a>
+                                        </td>
                                     </tr>
                                     <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
-                                      <td class="p-3">#ORD1001</td>
-                                      <td class="p-3">Joseph Yemi</td>
-                                      <td class="p-3">John Doe</td>
-                                      <td class="p-3">Third mainland avenue, Ikeja, Lagos</td>
-                                      <td class="p-3 text-yellow-500 font-semibold">Out for delivery</td>
-                                      <td class="p-3">25/01/24 04:20 PM</td>
-                                      <td class="p-3 flex space-x-2">
-                                        <button class="text-red-500 hover:text-red-700"><i class="fa fa-trash"></i></button>
-                                        <a href="#" class="text-blue-500 hover:text-blue-700 underline">View Details</a>
-                                      </td>
+                                        <td class="p-3">#ORD1001</td>
+                                        <td class="p-3">Joseph Yemi</td>
+                                        <td class="p-3">John Doe</td>
+                                        <td class="p-3">Third mainland avenue, Ikeja, Lagos</td>
+                                        <td class="p-3 text-green-500 font-semibold">Delivered</td>
+                                        <td class="p-3">25/01/24 04:20 PM</td>
+                                        <td class="p-3 flex space-x-2">
+                                            <button class="text-red-500 hover:text-red-700"><i
+                                                    class="fa fa-trash"></i></button>
+                                            <a href="#" class="text-blue-500 hover:text-blue-700 underline">View
+                                                Details</a>
+                                        </td>
                                     </tr>
-                                  </tbody>
-                                  
+                                    <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
+                                        <td class="p-3">#ORD1001</td>
+                                        <td class="p-3">Joseph Yemi</td>
+                                        <td class="p-3">John Doe</td>
+                                        <td class="p-3">Third mainland avenue, Ikeja, Lagos</td>
+                                        <td class="p-3 text-yellow-500 font-semibold">Out for delivery</td>
+                                        <td class="p-3">25/01/24 04:20 PM</td>
+                                        <td class="p-3 flex space-x-2">
+                                            <button class="text-red-500 hover:text-red-700"><i
+                                                    class="fa fa-trash"></i></button>
+                                            <a href="#" class="text-blue-500 hover:text-blue-700 underline">View
+                                                Details</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+
                             </table>
                         </div>
-                        
+
                         <div class="flex justify-between items-center mt-4 p-4 border-t">
                             <div class="flex items-center space-x-4">
-                                <span class="text-sm text-gray-600">Total entries: <span class="font-bold">20</span></span>
+                                <span class="text-sm text-gray-600">Total entries: <span
+                                        class="font-bold">20</span></span>
                                 <button class="px-3 py-1 text-gray-400 flex items-center space-x-1 text-sm" disabled>
                                     <i class="fa fa-chevron-left text-xs"></i> <span>Previous</span>
                                 </button>
                             </div>
                             <div class="flex items-center space-x-1">
-                                 <button class="px-3 py-1 bg-yellow-500 text-white font-bold rounded-full text-sm">1</button>
-                                 <span class="px-3 py-1 text-gray-700 text-sm">2</span>
-                                 <span class="px-3 py-1 text-gray-700 text-sm">3</span>
-                                 <span class="px-3 py-1 text-gray-500 text-sm">..</span>
-                                 <span class="px-3 py-1 text-gray-700 text-sm">5</span>
+                                <button
+                                    class="px-3 py-1 bg-yellow-500 text-white font-bold rounded-full text-sm">1</button>
+                                <span class="px-3 py-1 text-gray-700 text-sm">2</span>
+                                <span class="px-3 py-1 text-gray-700 text-sm">3</span>
+                                <span class="px-3 py-1 text-gray-500 text-sm">..</span>
+                                <span class="px-3 py-1 text-gray-700 text-sm">5</span>
                             </div>
-                            <button class="px-3 py-1 text-gray-500 flex items-center space-x-1 hover:text-gray-700 text-sm">
-                                 <span>Next</span> <i class="fa fa-chevron-right text-xs"></i>
+                            <button
+                                class="px-3 py-1 text-gray-500 flex items-center space-x-1 hover:text-gray-700 text-sm">
+                                <span>Next</span> <i class="fa fa-chevron-right text-xs"></i>
                             </button>
                         </div>
                     </div>
                 </div>
-            </div> 
+            </div>
         </main>
     </div>
     <!-- Alpine.js (Add this script if not already included in your project) -->
@@ -1099,11 +1196,11 @@
             // It now has 'inline-flex', 'flex-wrap', 'gap-2', 'bg-white' etc.
             // This selector targets that specific combination.
             const tabContainer = document.querySelector('.inline-flex.flex-wrap.gap-2.bg-white');
-    
+
             if (tabContainer) {
                 // Find buttons ONLY within this specific container
                 const tabs = tabContainer.querySelectorAll('.tab-button');
-    
+
                 tabs.forEach(tab => {
                     tab.addEventListener('click', () => {
                         // Remove active styles from all tabs within this specific container
@@ -1111,11 +1208,11 @@
                             t.classList.remove('bg-yellow-400', 'text-black');
                             t.classList.add('text-gray-600', 'hover:bg-gray-100', 'hover:text-gray-800');
                         });
-    
+
                         // Add active styles to the clicked tab
                         tab.classList.add('bg-yellow-400', 'text-black');
                         tab.classList.remove('text-gray-600', 'hover:bg-gray-100', 'hover:text-gray-800');
-    
+
                         // Your logic for handling tab content
                         console.log(`Selected tab: ${tab.textContent.trim()}`);
                         // Example: displayPanel(tab.textContent.trim());

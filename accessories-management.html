@@ -102,15 +102,21 @@
                     </div>
 
                     <ul class="max-h-60 overflow-auto">
-                        <li class="p-2 hover:bg-gray-100 cursor-pointer">
-                            <span class="text-sm text-gray-700">🔔 You have a new message</span>
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer flex items-center">
+                            <i class="fas fa-bell text-gray-500 text-sm mr-2"></i>
+                            <span class="text-sm text-gray-700">You have a new message</span>
                         </li>
-                        <li class="p-2 hover:bg-gray-100 cursor-pointer">
-                            <span class="text-sm text-gray-700">✅ Task Completed Successfully</span>
+
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer flex items-center">
+                            <i class="fas fa-check-circle text-green-500 text-sm mr-2"></i>
+                            <span class="text-sm text-gray-700">Task Completed Successfully</span>
                         </li>
-                        <li class="p-2 hover:bg-gray-100 cursor-pointer">
-                            <span class="text-sm text-gray-700">⚠️ System Alert: Update Required</span>
+
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer flex items-center">
+                            <i class="fas fa-exclamation-triangle text-yellow-500 text-sm mr-2"></i>
+                            <span class="text-sm text-gray-700">System Alert: Update Required</span>
                         </li>
+
                     </ul>
 
                     <div class="p-3 border-t text-center">
@@ -145,10 +151,19 @@
                 <div x-show="open" @click.away="open = false" x-transition x-cloak
                     class="absolute right-0 mt-2 w-48 bg-white border rounded-md shadow-lg z-50">
                     <ul class="py-2">
-                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer"><a href="profiles-settings.html">👤
-                                Profile</a> </li>
-                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">⚙️ Settings</li>
-                        <li class="px-4 py-2 text-red-500 hover:bg-gray-100 cursor-pointer">🚪 Logout</li>
+                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                            <a href="profiles-settings.html" class="flex items-center text-gray-700">
+                                <i class="fas fa-user mr-2"></i>
+                                Profile
+                            </a>
+                        </li>
+
+                        <li class="px-4 py-2 text-red-500 hover:bg-gray-100 cursor-pointer">
+                            <a href="login.html" class="flex items-center">
+                                <i class="fas fa-sign-out-alt mr-2"></i>
+                                Logout
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -159,16 +174,17 @@
     <div class="flex">
         <!-- Sidebar -->
 
-        <aside id="sidebar" class="mobile-sidebar fixed md:relative w-64 bg-white min-h-screen shadow-sm z-20 md:transform-none border border-gray-300S">
+        <aside id="sidebar"
+            class="mobile-sidebar fixed md:relative w-64 bg-white min-h-screen shadow-sm z-20 md:transform-none border border-gray-300S">
             <nav class="p-4">
                 <ul>
                     <li class="mb-4">
-                        <a href="quicrefill-dashboard.html" class="flex items-center text-gray-600 hover:text-amber-500 ">
+                        <a href="quicrefill-dashboard.html" class="flex items-center text-amber-500 font-medium">
                             <i class="fas fa-th-large mr-3"></i>
                             <span>Summary</span>
                         </a>
                     </li>
-                  
+
                     <li class="mb-4">
                         <a href="order-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-clipboard-list mr-3"></i>
@@ -188,7 +204,8 @@
                         </a>
                     </li>
                     <li class="mb-4">
-                        <a href="accessories-management.html" class="flex items-center text-amber-500 font-medium">
+                        <a href="accessories-management.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-bag-shopping mr-3"></i>
                             <span>Accessories Management</span>
                         </a>
@@ -206,25 +223,54 @@
                         </a>
                     </li>
                     <li class="mb-4">
-                        <a href="delivery-rep-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                        <a href="delivery-rep-management.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-truck-droplet mr-2"></i>
                             <span>Delivery Rep Management</span>
                         </a>
                     </li>
                     <li class="mb-4">
-                        <a href="verification-and-compliance.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                        <a href="verification-and-compliance.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-check-square mr-3"></i>
                             <span>Verification & Compliance</span>
                         </a>
                     </li>
-                    <li class="mb-4">
-                        <a href="revenue-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
-                            <i class="fas fa-wallet mr-3"></i>
+                    <li x-data="{ open: false }" class="mb-4">
+                        <a href="#" @click.prevent="open = !open"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-sack-dollar mr-3"></i>
                             <span>Revenue Management</span>
+                            <i :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas ml-auto text-xs"></i>
                         </a>
+
+                        <!-- Dropdown Menu -->
+                        <ul x-show="open" x-cloak class="mt-2 ml-6 space-y-2 text-gray-800">
+
+                            <!-- Revenue Breakdown -->
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-chart-pie mr-3 text-gray-500"></i>
+                                <a href="revenue-breakdown.html">Revenue Breakdown</a>
+                            </li>
+
+                            <!-- Payout Management -->
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-hand-holding-usd mr-3 text-gray-500"></i>
+                                <a href="payout-management.html">Payout Management</a>
+                            </li>
+
+                            <!-- Revenue Analytics -->
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-chart-line mr-3 text-gray-500"></i>
+                                <a href="revenue-analytics.html">Revenue Analytics & Insights</a>
+                            </li>
+
+                        </ul>
                     </li>
+
                     <li class="mb-4">
-                        <a href="withdrawal-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                        <a href="withdrawal-management.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-money-bill-transfer mr-3"></i>
                             <span>Withdrawal Management</span>
                         </a>
@@ -254,7 +300,8 @@
                         </a>
                     </li>
                     <li class="mb-4">
-                        <a href="reports-and-analytics.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                        <a href="reports-and-analytics.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-chart-bar mr-3"></i>
                             <span>Reports and Analytics</span>
                         </a>
@@ -266,12 +313,13 @@
                         </a>
                     </li>
                     <li x-data="{ open: false }" class="mb-4">
-                        <a href="#" @click.prevent="open = !open" class="flex items-center text-gray-600 hover:text-amber-500">
+                        <a href="#" @click.prevent="open = !open"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-shield-alt mr-3"></i>
                             <span>Audit Logs & Security</span>
                             <i :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas ml-auto text-xs"></i>
                         </a>
-                    
+
                         <!-- Dropdown Menu -->
                         <ul x-show="open" x-cloak class="mt-2 ml-6 space-y-2 text-gray-500">
                             <li class="flex items-center hover:text-amber-500">
@@ -284,23 +332,44 @@
                             </li>
                         </ul>
                     </li>
-                    
+
                     <li class="mb-4">
                         <a href="staff-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-user-shield mr-3"></i>
                             <span>Staff Management</span>
                         </a>
                     </li>
-                    <li class="mb-4">
-                        <a href="system-setting.html" class="flex items-center text-gray-600 hover:text-amber-500">
+
+                    <li x-data="{ open: false }" class="mb-4">
+                        <a href="#" @click.prevent="open = !open"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
                             <i class="fas fa-cog mr-3"></i>
                             <span>System Settings</span>
+                            <i :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas ml-auto text-xs"></i>
                         </a>
+
+                        <!-- Dropdown Menu -->
+                        <ul x-show="open" x-cloak class="mt-2 ml-6 space-y-2 text-gray-500">
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-envelope-open-text mr-3"></i>
+                                <a href="system-message-settings.html">Message Settings</a>
+                            </li>
+
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-bell mr-3"></i>
+                                <a href="system-push-notification-settings.html">Push Notification Settings</a>
+                            </li>
+
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-ticket-alt mr-3"></i>
+                                <a href="system-coupon-settings.html">Coupon Settings</a>
+                            </li>
+
+                        </ul>
                     </li>
                 </ul>
             </nav>
         </aside>
-
         <!-- Overlay for sidebar on mobile -->
         <div id="sidebar-overlay" class="fixed inset-0 bg-black opacity-50 z-10 hidden"></div>
 
@@ -309,7 +378,8 @@
             <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-6">
                 <h1 class="text-xl md:text-xl font-bold text-gray-800 mb-4 md:mb-0">Accessories Management</h1>
                 <div class="flex flex-wrap md:flex-nowrap items-center gap-2 md:gap-4">
-                    <a href="add-accessories-management.html" class="cursor-pointer bg-yellow-400 hover:bg-yellow-500  py-2 px-4 rounded text-sm flex items-center">
+                    <a href="add-accessories-management.html"
+                        class="cursor-pointer bg-yellow-400 hover:bg-yellow-500  py-2 px-4 rounded text-sm flex items-center">
                         <i class="fa fa-plus mr-2"></i>
                         Add Accessories
                     </a>
@@ -459,211 +529,225 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
                 <!-- Card -->
                 <div class="border rounded-lg p-4 bg-white shadow-sm">
-                  <div class="flex items-center gap-2 mb-1">
-                    <span class="w-3 h-3 bg-blue-500 rounded-full"></span>
-                    <h2 class="text-sm font-semibold text-gray-700">Total Orders</h2>
-                  </div>
-                  <p class="text-xs text-gray-500 mb-2">All orders placed for accessories</p>
-                  <p class="text-2xl font-bold text-gray-900">5,246</p>
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="w-3 h-3 bg-blue-500 rounded-full"></span>
+                        <h2 class="text-sm font-semibold text-gray-700">Total Orders</h2>
+                    </div>
+                    <p class="text-xs text-gray-500 mb-2">All orders placed for accessories</p>
+                    <p class="text-2xl font-bold text-gray-900">5,246</p>
                 </div>
-              
+
                 <div class="border rounded-lg p-4 bg-white shadow-sm">
-                  <div class="flex items-center gap-2 mb-1">
-                    <span class="w-3 h-3 bg-green-500 rounded-full"></span>
-                    <h2 class="text-sm font-semibold text-gray-700">Completed Orders</h2>
-                  </div>
-                  <p class="text-xs text-gray-500 mb-2">Successfully fulfilled accessories orders</p>
-                  <p class="text-2xl font-bold text-gray-900">1,812</p>
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                        <h2 class="text-sm font-semibold text-gray-700">Completed Orders</h2>
+                    </div>
+                    <p class="text-xs text-gray-500 mb-2">Successfully fulfilled accessories orders</p>
+                    <p class="text-2xl font-bold text-gray-900">1,812</p>
                 </div>
-              
+
                 <div class="border rounded-lg p-4 bg-white shadow-sm">
-                  <div class="flex items-center gap-2 mb-1">
-                    <span class="w-3 h-3 bg-yellow-500 rounded-full"></span>
-                    <h2 class="text-sm font-semibold text-gray-700">Out for Delivery</h2>
-                  </div>
-                  <p class="text-xs text-gray-500 mb-2">Accessories orders currently being delivered</p>
-                  <p class="text-2xl font-bold text-gray-900">1,262</p>
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="w-3 h-3 bg-yellow-500 rounded-full"></span>
+                        <h2 class="text-sm font-semibold text-gray-700">Out for Delivery</h2>
+                    </div>
+                    <p class="text-xs text-gray-500 mb-2">Accessories orders currently being delivered</p>
+                    <p class="text-2xl font-bold text-gray-900">1,262</p>
                 </div>
-              
+
                 <div class="border rounded-lg p-4 bg-white shadow-sm">
-                  <div class="flex items-center gap-2 mb-1">
-                    <span class="w-3 h-3 bg-red-400 rounded-full"></span>
-                    <h2 class="text-sm font-semibold text-gray-700">Canceled Orders</h2>
-                  </div>
-                  <p class="text-xs text-gray-500 mb-2">Cancelled accessories orders</p>
-                  <p class="text-2xl font-bold text-gray-900">942</p>
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="w-3 h-3 bg-red-400 rounded-full"></span>
+                        <h2 class="text-sm font-semibold text-gray-700">Canceled Orders</h2>
+                    </div>
+                    <p class="text-xs text-gray-500 mb-2">Cancelled accessories orders</p>
+                    <p class="text-2xl font-bold text-gray-900">942</p>
                 </div>
-              
+
                 <div class="border rounded-lg p-4 bg-white shadow-sm">
-                  <div class="flex items-center gap-2 mb-1">
-                    <span class="w-3 h-3 bg-yellow-400 rounded-full"></span>
-                    <h2 class="text-sm font-semibold text-gray-700">Suspicious Orders</h2>
-                  </div>
-                  <p class="text-xs text-gray-500 mb-2">Orders currently being flagged for irregular activities</p>
-                  <p class="text-2xl font-bold text-gray-900">1,230</p>
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="w-3 h-3 bg-yellow-400 rounded-full"></span>
+                        <h2 class="text-sm font-semibold text-gray-700">Suspicious Orders</h2>
+                    </div>
+                    <p class="text-xs text-gray-500 mb-2">Orders currently being flagged for irregular activities</p>
+                    <p class="text-2xl font-bold text-gray-900">1,230</p>
                 </div>
-              
+
                 <div class="border rounded-lg p-4 bg-white shadow-sm">
-                  <div class="flex items-center gap-2 mb-1">
-                    <span class="w-3 h-3 bg-orange-600 rounded-full"></span>
-                    <h2 class="text-sm font-semibold text-gray-700">Out of Stock</h2>
-                  </div>
-                  <p class="text-xs text-gray-500 mb-2">Orders currently unavailable</p>
-                  <p class="text-2xl font-bold text-gray-900">1,230</p>
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="w-3 h-3 bg-orange-600 rounded-full"></span>
+                        <h2 class="text-sm font-semibold text-gray-700">Out of Stock</h2>
+                    </div>
+                    <p class="text-xs text-gray-500 mb-2">Orders currently unavailable</p>
+                    <p class="text-2xl font-bold text-gray-900">1,230</p>
                 </div>
-              
+
                 <div class="border rounded-lg p-4 bg-white shadow-sm">
-                  <div class="flex items-center gap-2 mb-1">
-                    <span class="w-3 h-3 bg-sky-600 rounded-full"></span>
-                    <h2 class="text-sm font-semibold text-gray-700">Payment Received</h2>
-                  </div>
-                  <p class="text-xs text-gray-500 mb-2">Total amount received from accessories sale</p>
-                  <p class="text-2xl font-bold text-gray-900">1,230</p>
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="w-3 h-3 bg-sky-600 rounded-full"></span>
+                        <h2 class="text-sm font-semibold text-gray-700">Payment Received</h2>
+                    </div>
+                    <p class="text-xs text-gray-500 mb-2">Total amount received from accessories sale</p>
+                    <p class="text-2xl font-bold text-gray-900">1,230</p>
                 </div>
-              </div>
-              
+            </div>
+
 
 
             <!--Order Details-->
             <div class="bg-white rounded-md border border-gray-300 rounded-md shadow-md p-4 mb-6">
 
                 <div class="flex items-center mb-4">
-                    
+
                     <span class="text-gray-600 font-medium">Order Details</span>
                 </div>
-                
+
                 <div class="container mx-auto">
                     <div class="overflow-x-auto">
                         <table class="w-full border-collapse bg-white shadow-md rounded-lg overflow-hidden">
                             <thead>
                                 <tr class="bg-gray-200 text-left text-gray-600 text-sm">
-                                  <th class="p-3">Order ID</th>
-                                  <th class="p-3">Customer Name</th>
-                                  <th class="p-3">Vendor Name</th>
-                                  <th class="p-3">Rider Name</th>
-                                  <th class="p-3">Accessories</th>
-                                  <th class="p-3">Status</th>
-                                  <th class="p-3">Payment</th>
-                                  <th class="p-3">Amount</th>
-                                  <th class="p-3">Date</th>
-                                  <th class="p-3">Actions</th>
+                                    <th class="p-3">Order ID</th>
+                                    <th class="p-3">Customer Name</th>
+                                    <th class="p-3">Vendor Name</th>
+                                    <th class="p-3">Rider Name</th>
+                                    <th class="p-3">Accessories</th>
+                                    <th class="p-3">Status</th>
+                                    <th class="p-3">Payment</th>
+                                    <th class="p-3">Amount</th>
+                                    <th class="p-3">Date</th>
+                                    <th class="p-3">Actions</th>
                                 </tr>
-                              </thead>
-                              <tbody>
+                            </thead>
+                            <tbody>
                                 <tr class="border-t text-gray-700 hover:bg-gray-100">
-                                  <td class="p-3">#ORD1001</td>
-                                  <td class="p-3">John Doe</td>
-                                  <td class="p-3">Elite Gas Hub</td>
-                                  <td class="p-3">James Okoro</td>
-                                  <td class="p-3">Fire extinguisher</td>
-                                  <td class="p-3 text-yellow-500 font-semibold">In Progress</td>
-                                  <td class="p-3">On delivery</td>
-                                  <td class="p-3">₦12,500</td>
-                                  <td class="p-3">25/01/27 10:15 AM</td>
-                                  <td class="p-3 flex space-x-2">
-                                    <a href="add-accessories-management.html" class="text-gray-500"><i class="fa fa-edit"></i></a>
-                                    <button class="text-gray-500"><i class="fa fa-trash"></i></button>
-                                    <a href="view-accessories-management.html" class="text-gray-500"><i class="fa fa-ellipsis-v"></i></a>
-                                  </td>
-                                </tr>
-                                <tr class="border-t text-gray-700 hover:bg-gray-100">
-                                  <td class="p-3">#ORD1002</td>
-                                  <td class="p-3">Mary Johnson</td>
-                                  <td class="p-3">FixIt Plumbers</td>
-                                  <td class="p-3">Ahmed Bello</td>
-                                  <td class="p-3">Gas masks</td>
-                                  <td class="p-3 text-green-500 font-semibold">Completed</td>
-                                  <td class="p-3">Wallet</td>
-                                  <td class="p-3">₦75,000</td>
-                                  <td class="p-3">25/01/27 02:45 PM</td>
-                                  <td class="p-3 flex space-x-2">
-                                    <a href="add-accessories-management.html" class="text-gray-500"><i class="fa fa-edit"></i></a>
-                                    <button class="text-gray-500"><i class="fa fa-trash"></i></button>
-                                    <a href="view-accessories-management.html" class="text-gray-500"><i class="fa fa-ellipsis-v"></i></a>
-                                  </td>
+                                    <td class="p-3">#ORD1001</td>
+                                    <td class="p-3">John Doe</td>
+                                    <td class="p-3">Elite Gas Hub</td>
+                                    <td class="p-3">James Okoro</td>
+                                    <td class="p-3">Fire extinguisher</td>
+                                    <td class="p-3 text-yellow-500 font-semibold">In Progress</td>
+                                    <td class="p-3">On delivery</td>
+                                    <td class="p-3">₦12,500</td>
+                                    <td class="p-3">25/01/27 10:15 AM</td>
+                                    <td class="p-3 flex space-x-2">
+                                        <a href="add-accessories-management.html" class="text-gray-500"><i
+                                                class="fa fa-edit"></i></a>
+                                        <button class="text-gray-500"><i class="fa fa-trash"></i></button>
+                                        <a href="view-accessories-management.html" class="text-gray-500"><i
+                                                class="fa fa-ellipsis-v"></i></a>
+                                    </td>
                                 </tr>
                                 <tr class="border-t text-gray-700 hover:bg-gray-100">
-                                  <td class="p-3">#ORD1003</td>
-                                  <td class="p-3">Charles Uche</td>
-                                  <td class="p-3">PowerPlus Ltd.</td>
-                                  <td class="p-3">-</td>
-                                  <td class="p-3">Gas hoses</td>
-                                  <td class="p-3 text-yellow-500 font-semibold">In Progress</td>
-                                  <td class="p-3">Flatterwave</td>
-                                  <td class="p-3">₦8,500</td>
-                                  <td class="p-3">25/01/27 09:30 AM</td>
-                                  <td class="p-3 flex space-x-2">
-                                    <a href="add-accessories-management.html" class="text-gray-500"><i class="fa fa-edit"></i></a>
-                                    <button class="text-gray-500"><i class="fa fa-trash"></i></button>
-                                    <a href="view-accessories-management.html" class="text-gray-500"><i class="fa fa-ellipsis-v"></i></a>
-                                  </td>
+                                    <td class="p-3">#ORD1002</td>
+                                    <td class="p-3">Mary Johnson</td>
+                                    <td class="p-3">FixIt Plumbers</td>
+                                    <td class="p-3">Ahmed Bello</td>
+                                    <td class="p-3">Gas masks</td>
+                                    <td class="p-3 text-green-500 font-semibold">Completed</td>
+                                    <td class="p-3">Wallet</td>
+                                    <td class="p-3">₦75,000</td>
+                                    <td class="p-3">25/01/27 02:45 PM</td>
+                                    <td class="p-3 flex space-x-2">
+                                        <a href="add-accessories-management.html" class="text-gray-500"><i
+                                                class="fa fa-edit"></i></a>
+                                        <button class="text-gray-500"><i class="fa fa-trash"></i></button>
+                                        <a href="view-accessories-management.html" class="text-gray-500"><i
+                                                class="fa fa-ellipsis-v"></i></a>
+                                    </td>
                                 </tr>
                                 <tr class="border-t text-gray-700 hover:bg-gray-100">
-                                  <td class="p-3">#ORD1004</td>
-                                  <td class="p-3">Charles Uche</td>
-                                  <td class="p-3">PowerPlus Ltd.</td>
-                                  <td class="p-3">David M.</td>
-                                  <td class="p-3">Safety goggles</td>
-                                  <td class="p-3 text-red-500 font-semibold">Canceled</td>
-                                  <td class="p-3">Flatterwave</td>
-                                  <td class="p-3">₦10,000</td>
-                                  <td class="p-3">25/01/26 11:10 AM</td>
-                                  <td class="p-3 flex space-x-2">
-                                    <a href="add-accessories-management.html" class="text-gray-500"><i class="fa fa-edit"></i></a>
-                                    <button class="text-gray-500"><i class="fa fa-trash"></i></button>
-                                    <a href="view-accessories-management.html" class="text-gray-500"><i class="fa fa-ellipsis-v"></i></a>
-                                  </td>
+                                    <td class="p-3">#ORD1003</td>
+                                    <td class="p-3">Charles Uche</td>
+                                    <td class="p-3">PowerPlus Ltd.</td>
+                                    <td class="p-3">-</td>
+                                    <td class="p-3">Gas hoses</td>
+                                    <td class="p-3 text-yellow-500 font-semibold">In Progress</td>
+                                    <td class="p-3">Flatterwave</td>
+                                    <td class="p-3">₦8,500</td>
+                                    <td class="p-3">25/01/27 09:30 AM</td>
+                                    <td class="p-3 flex space-x-2">
+                                        <a href="add-accessories-management.html" class="text-gray-500"><i
+                                                class="fa fa-edit"></i></a>
+                                        <button class="text-gray-500"><i class="fa fa-trash"></i></button>
+                                        <a href="view-accessories-management.html" class="text-gray-500"><i
+                                                class="fa fa-ellipsis-v"></i></a>
+                                    </td>
                                 </tr>
                                 <tr class="border-t text-gray-700 hover:bg-gray-100">
-                                  <td class="p-3">#ORD1005</td>
-                                  <td class="p-3">David Hassan</td>
-                                  <td class="p-3">TechGears Ltd.</td>
-                                  <td class="p-3">-</td>
-                                  <td class="p-3">Gas masks</td>
-                                  <td class="p-3 text-green-500 font-semibold">Completed</td>
-                                  <td class="p-3">Wallet</td>
-                                  <td class="p-3">₦6,900</td>
-                                  <td class="p-3">25/01/24 04:20 PM</td>
-                                  <td class="p-3 flex space-x-2">
-                                    <a href="add-accessories-management.html" class="text-gray-500"><i class="fa fa-edit"></i></a>
-                                    <button class="text-gray-500"><i class="fa fa-trash"></i></button>
-                                    <a href="view-accessories-management.html" class="text-gray-500"><i class="fa fa-ellipsis-v"></i></a>
-                                  </td>
+                                    <td class="p-3">#ORD1004</td>
+                                    <td class="p-3">Charles Uche</td>
+                                    <td class="p-3">PowerPlus Ltd.</td>
+                                    <td class="p-3">David M.</td>
+                                    <td class="p-3">Safety goggles</td>
+                                    <td class="p-3 text-red-500 font-semibold">Canceled</td>
+                                    <td class="p-3">Flatterwave</td>
+                                    <td class="p-3">₦10,000</td>
+                                    <td class="p-3">25/01/26 11:10 AM</td>
+                                    <td class="p-3 flex space-x-2">
+                                        <a href="add-accessories-management.html" class="text-gray-500"><i
+                                                class="fa fa-edit"></i></a>
+                                        <button class="text-gray-500"><i class="fa fa-trash"></i></button>
+                                        <a href="view-accessories-management.html" class="text-gray-500"><i
+                                                class="fa fa-ellipsis-v"></i></a>
+                                    </td>
                                 </tr>
                                 <tr class="border-t text-gray-700 hover:bg-gray-100">
-                                  <td class="p-3">#ORD1006</td>
-                                  <td class="p-3">Esther John</td>
-                                  <td class="p-3">GreenGas Ltd.</td>
-                                  <td class="p-3">Sola A.</td>
-                                  <td class="p-3">Gas masks</td>
-                                  <td class="p-3 text-green-500 font-semibold">Completed</td>
-                                  <td class="p-3">On delivery</td>
-                                  <td class="p-3">₦30,000</td>
-                                  <td class="p-3">25/01/26 11:20 AM</td>
-                                  <td class="p-3 flex space-x-2">
-                                    <a href="add-accessories-management.html" class="text-gray-500"><i class="fa fa-edit"></i></a>
-                                    <button class="text-gray-500"><i class="fa fa-trash"></i></button>
-                                    <a href="view-accessories-management.html" class="text-gray-500"><i class="fa fa-ellipsis-v"></i></a>
-                                  </td>
+                                    <td class="p-3">#ORD1005</td>
+                                    <td class="p-3">David Hassan</td>
+                                    <td class="p-3">TechGears Ltd.</td>
+                                    <td class="p-3">-</td>
+                                    <td class="p-3">Gas masks</td>
+                                    <td class="p-3 text-green-500 font-semibold">Completed</td>
+                                    <td class="p-3">Wallet</td>
+                                    <td class="p-3">₦6,900</td>
+                                    <td class="p-3">25/01/24 04:20 PM</td>
+                                    <td class="p-3 flex space-x-2">
+                                        <a href="add-accessories-management.html" class="text-gray-500"><i
+                                                class="fa fa-edit"></i></a>
+                                        <button class="text-gray-500"><i class="fa fa-trash"></i></button>
+                                        <a href="view-accessories-management.html" class="text-gray-500"><i
+                                                class="fa fa-ellipsis-v"></i></a>
+                                    </td>
                                 </tr>
                                 <tr class="border-t text-gray-700 hover:bg-gray-100">
-                                  <td class="p-3">#ORD1007</td>
-                                  <td class="p-3">Emmanuel Obi</td>
-                                  <td class="p-3">PetroHub Ltd.</td>
-                                  <td class="p-3">Tunde A.</td>
-                                  <td class="p-3">Safety goggles</td>
-                                  <td class="p-3 text-yellow-500 font-semibold">In Progress</td>
-                                  <td class="p-3">Transfer</td>
-                                  <td class="p-3">₦50,000</td>
-                                  <td class="p-3">25/01/27 12:50 PM</td>
-                                  <td class="p-3 flex space-x-2">
-                                    <a href="add-accessories-management.html" class="text-gray-500"><i class="fa fa-edit"></i></a>
-                                    <button class="text-gray-500"><i class="fa fa-trash"></i></button>
-                                    <a href="view-accessories-management.html" class="text-gray-500"><i class="fa fa-ellipsis-v"></i></a>
-                                  </td>
+                                    <td class="p-3">#ORD1006</td>
+                                    <td class="p-3">Esther John</td>
+                                    <td class="p-3">GreenGas Ltd.</td>
+                                    <td class="p-3">Sola A.</td>
+                                    <td class="p-3">Gas masks</td>
+                                    <td class="p-3 text-green-500 font-semibold">Completed</td>
+                                    <td class="p-3">On delivery</td>
+                                    <td class="p-3">₦30,000</td>
+                                    <td class="p-3">25/01/26 11:20 AM</td>
+                                    <td class="p-3 flex space-x-2">
+                                        <a href="add-accessories-management.html" class="text-gray-500"><i
+                                                class="fa fa-edit"></i></a>
+                                        <button class="text-gray-500"><i class="fa fa-trash"></i></button>
+                                        <a href="view-accessories-management.html" class="text-gray-500"><i
+                                                class="fa fa-ellipsis-v"></i></a>
+                                    </td>
                                 </tr>
-                              </tbody>
-                              
+                                <tr class="border-t text-gray-700 hover:bg-gray-100">
+                                    <td class="p-3">#ORD1007</td>
+                                    <td class="p-3">Emmanuel Obi</td>
+                                    <td class="p-3">PetroHub Ltd.</td>
+                                    <td class="p-3">Tunde A.</td>
+                                    <td class="p-3">Safety goggles</td>
+                                    <td class="p-3 text-yellow-500 font-semibold">In Progress</td>
+                                    <td class="p-3">Transfer</td>
+                                    <td class="p-3">₦50,000</td>
+                                    <td class="p-3">25/01/27 12:50 PM</td>
+                                    <td class="p-3 flex space-x-2">
+                                        <a href="add-accessories-management.html" class="text-gray-500"><i
+                                                class="fa fa-edit"></i></a>
+                                        <button class="text-gray-500"><i class="fa fa-trash"></i></button>
+                                        <a href="view-accessories-management.html" class="text-gray-500"><i
+                                                class="fa fa-ellipsis-v"></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+
                         </table>
                     </div>
                     <div class="flex justify-between items-center mt-4 p-4 border-t">
