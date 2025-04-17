@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quicrefill Admin</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Chart.js from cdnjs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"
+        integrity="sha512-ElRFoEQdI5Ht6kZvyzXhYG9NqjtkmlkfYk0wr6wHxU9JEHakS7UJZNeml5ALk+8IKlU6jDgMabC3vkumRokgJA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- Load Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.js"></script>
+</head>
+
+<style>
+    [x-cloak] {
+        display: none !important;
+    }
+
+    @media (max-width: 768px) {
+        .mobile-sidebar {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .mobile-sidebar.open {
+            transform: translateX(0);
+        }
+
+        .dropdown-menu {
+            @apply left-1/2 -translate-x-1/2 w-80 max-w-[95%];
+        }
+
+
+    }
+
+    .flatpickr-day.selected,
+    .flatpickr-day.startRange,
+    .flatpickr-day.endRange {
+        background: #FFB600 !important;
+        color: white !important;
+        border-color: #FFB600 !important;
+    }
+
+    /* Change the color of dates between the range */
+    .flatpickr-day.inRange {
+        background: #FFE08A !important;
+        /* Light yellow */
+        color: black !important;
+    }
+</style>
+</head>
+
+<body class="bg-gray-100">
+    <!-- Header -->
+
+    <header class="bg-white shadow-md flex items-center justify-between p-4 sticky top-0 z-30">
+        <div class="flex items-center">
+            <button id="sidebar-toggle" class=" md:hidden mr-4">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="flex items-center mr-4 md:mr-8">
+                <img src="images/logo.png" class="w-[150px] md:w-[250px]">
+            </div>
+            <button id="hide-sidebar-button" class="border border-gray-200 rounded-md px-2 py-1 z-15 hidden md:block">
+                <i class="fas fa-angle-left"></i>
+            </button>
+        </div>
+
+        <div class="hidden md:block relative w-1/3">
+            <input type="text" placeholder="Search"
+                class="w-full px-4 py-2 border border-gray-300 rounded-md bg-gray-100 focus:outline-none pl-10">
+            <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+            <button
+                class="absolute right-0 top-0 h-full px-4 bg-gradient-to-b from-[#FFC533] to-[#FFB600] text-black rounded-r-md border border-gray-300 shadow flex items-center justify-center">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+        </div>
+
+
+        <div class="flex items-center">
+            <div x-data="{ open: false }" class="relative mr-4">
+                <!-- Notification Icon -->
+                <button @click="open = !open" class="relative p-2">
+                    <i class="fas fa-bell text-gray-600 text-lg"></i>
+                    <!-- Notification Badge -->
+                    <span
+                        class="absolute -top-1 -right-1 bg-yellow-400 text-black text-xs font-bold px-1.5 py-0.5 rounded-full">8</span>
+                </button>
+
+                <!-- Dropdown Menu -->
+                <div x-show="open" @click.away="open = false" x-transition x-cloak
+                    class="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-64 bg-white border rounded-md shadow-lg z-50">
+                    <div class="p-3 border-b">
+                        <span class="font-semibold text-gray-700">Notifications</span>
+                    </div>
+
+                    <ul class="max-h-60 overflow-auto">
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer flex items-center">
+                            <i class="fas fa-bell text-gray-500 text-sm mr-2"></i>
+                            <span class="text-sm text-gray-700">You have a new message</span>
+                        </li>
+
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer flex items-center">
+                            <i class="fas fa-check-circle text-green-500 text-sm mr-2"></i>
+                            <span class="text-sm text-gray-700">Task Completed Successfully</span>
+                        </li>
+
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer flex items-center">
+                            <i class="fas fa-exclamation-triangle text-yellow-500 text-sm mr-2"></i>
+                            <span class="text-sm text-gray-700">System Alert: Update Required</span>
+                        </li>
+
+                    </ul>
+
+                    <div class="p-3 border-t text-center">
+                        <a href="notifications-center.html" class="text-sm text-blue-500 hover:underline">View all</a>
+                    </div>
+                </div>
+            </div>
+
+            <div x-data="{ open: false }" class="relative">
+                <!-- Profile Button -->
+                <button @click="open = !open"
+                    class="flex items-center rounded-full px-2 py-1 md:px-4 md:py-2 border border-gray-300 shadow-md focus:outline-none">
+                    <!-- Avatar -->
+                    <div class="relative w-10 h-10 md:w-10 md:h-10 rounded-full bg-gray-300 mr-2">
+                        <!-- Avatar Image -->
+                        <img src="images/Avatar/avatar.png" alt="User Avatar"
+                            class="w-full h-full object-cover rounded-full">
+
+                        <!-- Green Dot (Move Outside) -->
+                        <div class="absolute top-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"
+                            style="transform: translate(30%, -30%);"></div>
+                    </div>
+
+                    <!-- User Info -->
+                    <div class="hidden md:block text-left">
+                        <div class="text-sm font-medium">Timothy Jonson</div>
+                        <div class="text-xs text-gray-500">timoj@Quicrefil.ng</div>
+                    </div>
+                </button>
+
+                <!-- Dropdown Menu -->
+                <div x-show="open" @click.away="open = false" x-transition x-cloak
+                    class="absolute right-0 mt-2 w-48 bg-white border rounded-md shadow-lg z-50">
+                    <ul class="py-2">
+                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                            <a href="profiles-settings.html" class="flex items-center text-gray-700">
+                                <i class="fas fa-user mr-2"></i>
+                                Profile
+                            </a>
+                        </li>
+
+                        <li class="px-4 py-2 text-red-500 hover:bg-gray-100 cursor-pointer">
+                            <a href="login.html" class="flex items-center">
+                                <i class="fas fa-sign-out-alt mr-2"></i>
+                                Logout
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="flex">
+        <!-- Sidebar -->
+
+        <aside id="sidebar"
+            class="mobile-sidebar fixed md:relative w-64 bg-white min-h-screen shadow-sm z-20 md:transform-none border border-gray-300S">
+            <nav class="p-4">
+                <ul>
+                    <li class="mb-4">
+                        <a href="quicrefill-dashboard.html" class="flex items-center text-amber-500 font-medium">
+                            <i class="fas fa-th-large mr-3"></i>
+                            <span>Summary</span>
+                        </a>
+                    </li>
+
+                    <li class="mb-4">
+                        <a href="order-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-clipboard-list mr-3"></i>
+                            <span>Order Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="delivery-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-cube mr-3"></i>
+                            <span>Delivery Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="service-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-briefcase mr-3"></i>
+                            <span>Service Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="accessories-management.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-bag-shopping mr-3"></i>
+                            <span>Accessories Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="user-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-user mr-3"></i>
+                            <span>User Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="vendor-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-store mr-3"></i>
+                            <span>Vendor Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="delivery-rep-management.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-truck-droplet mr-2"></i>
+                            <span>Delivery Rep Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="verification-and-compliance.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-check-square mr-3"></i>
+                            <span>Verification & Compliance</span>
+                        </a>
+                    </li>
+                    <li x-data="{ open: false }" class="mb-4">
+                        <a href="#" @click.prevent="open = !open"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-sack-dollar mr-3"></i>
+                            <span>Revenue Management</span>
+                            <i :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas ml-auto text-xs"></i>
+                        </a>
+
+                        <!-- Dropdown Menu -->
+                        <ul x-show="open" x-cloak class="mt-2 ml-6 space-y-2 text-gray-800">
+
+                            <!-- Revenue Breakdown -->
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-chart-pie mr-3 text-gray-500"></i>
+                                <a href="revenue-breakdown.html">Revenue Breakdown</a>
+                            </li>
+
+                            <!-- Payout Management -->
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-hand-holding-usd mr-3 text-gray-500"></i>
+                                <a href="payout-management.html">Payout Management</a>
+                            </li>
+
+                            <!-- Revenue Analytics -->
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-chart-line mr-3 text-gray-500"></i>
+                                <a href="revenue-analytics.html">Revenue Analytics & Insights</a>
+                            </li>
+
+                        </ul>
+                    </li>
+
+                    <li class="mb-4">
+                        <a href="withdrawal-management.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-money-bill-transfer mr-3"></i>
+                            <span>Withdrawal Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="account-deletion.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-user-xmark mr-3"></i>
+                            <span>Account Deletion</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="account-deletion.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fa fa-map-marker mr-3"></i>
+                            <span>Operating Locations</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="feedback.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-comments mr-3"></i>
+                            <span>Feedback</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="fraud-watch.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fa fa-binoculars mr-3"></i>
+                            <span>Fraud Watch</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="reports-and-analytics.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-chart-bar mr-3"></i>
+                            <span>Reports and Analytics</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="crash-analytics.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fa fa-line-chart mr-3"></i>
+                            <span>Crash Analytics</span>
+                        </a>
+                    </li>
+                    <li x-data="{ open: false }" class="mb-4">
+                        <a href="#" @click.prevent="open = !open"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-shield-alt mr-3"></i>
+                            <span>Audit Logs & Security</span>
+                            <i :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas ml-auto text-xs"></i>
+                        </a>
+
+                        <!-- Dropdown Menu -->
+                        <ul x-show="open" x-cloak class="mt-2 ml-6 space-y-2 text-gray-500">
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-file-alt mr-3"></i>
+                                <a href="security-logs.html">Security Logs</a>
+                            </li>
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-user-lock mr-3"></i>
+                                <a href="access-control.html">Access Control</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="mb-4">
+                        <a href="staff-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-user-shield mr-3"></i>
+                            <span>Staff Management</span>
+                        </a>
+                    </li>
+
+                    <li x-data="{ open: false }" class="mb-4">
+                        <a href="#" @click.prevent="open = !open"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-cog mr-3"></i>
+                            <span>System Settings</span>
+                            <i :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas ml-auto text-xs"></i>
+                        </a>
+
+                        <!-- Dropdown Menu -->
+                        <ul x-show="open" x-cloak class="mt-2 ml-6 space-y-2 text-gray-500">
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-envelope-open-text mr-3"></i>
+                                <a href="system-message-settings.html">Message Settings</a>
+                            </li>
+
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-bell mr-3"></i>
+                                <a href="system-push-notification-settings.html">Push Notification Settings</a>
+                            </li>
+
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-ticket-alt mr-3"></i>
+                                <a href="system-coupon-settings.html">Coupon Settings</a>
+                            </li>
+
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Overlay for sidebar on mobile -->
+        <div id="sidebar-overlay" class="fixed inset-0 bg-black opacity-50 z-10 hidden"></div>
+
+        <!-- Content Area -->
+        <main class="flex-1 p-4 m-4 w-full overflow-x-hidden">
+            <div class="flex flex-col space-y-4 md:space-y-0 md:flex-row md:justify-between md:items-center mb-6">
+                <!-- Left Section (Title & Breadcrumb) -->
+                <div class="w-full md:w-auto">
+                    <h1 class="text-xl md:text-xl font-bold text-gray-800">Pending Delivery Rep Management</h1>
+                    <div class="flex flex-wrap items-center space-x-2 text-gray-600 text-xs mt-1">
+                        <a href="#" class="breadcrumb-item hover:text-yellow-500">Dashboard</a>
+                        <span>></span>
+                        <a href="#" class="breadcrumb-item hover:text-yellow-500">Delivery Rep Management</a>
+                        <span>></span>
+                        <span class="text-gray-800 font-semibold" id="serviceId">Pending Delivery Rep</span>
+                    </div>
+                </div>
+
+                <!-- Right Section (Controls) -->
+                <div class="grid grid-cols-2 md:flex md:flex-wrap items-center gap-2 md:gap-4 w-full md:w-auto">
+                    <!-- Search Box -->
+                    <div class="relative w-36">
+                        <input type="text" placeholder="Search"
+                            class="bg-white w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 focus:outline-none pr-10 text-sm">
+                        <i
+                            class="fas fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer"></i>
+                    </div>
+
+
+                    <div class="mb-2 md:mb-0">
+                        <div class="flex gap-0">
+                            <!-- Date Picker -->
+                            <div class="relative w-52">
+                                <input type="text" id="datePicker"
+                                    class="pl-10 pr-3 py-2 border rounded-md w-full focus:outline-none cursor-pointer text-gray-700"
+                                    readonly>
+                                <span class="absolute left-3 top-2 text-gray-500">
+                                    <i class="fa-solid fa-calendar"></i>
+                                </span>
+                            </div>
+
+                            <!-- Dropdown -->
+                            <div class="relative z-20">
+                                <button id="dropdownBtn"
+                                    class="px-4 py-2 border rounded-md bg-white text-gray-700 focus:outline-none">
+                                    Monthly <i class="fa-solid fa-chevron-down ml-1"></i>
+                                </button>
+                                <div id="dropdownMenu"
+                                    class="absolute w-36 mt-2 bg-white border rounded-md shadow-md hidden">
+                                    <button class="block w-full text-left px-4 py-2 hover:bg-gray-200"
+                                        onclick="setDateMode('today')">Today</button>
+                                    <button class="block w-full text-left px-4 py-2 hover:bg-gray-200"
+                                        onclick="setDateMode('Specific Date')">Specific Date</button>
+                                    <button class="block w-full text-left px-4 py-2 hover:bg-gray-200"
+                                        onclick="setDateMode('monthly')">Monthly</button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-2 md:mb-0">
+                        <div class="relative inline-block" x-data="{ 
+                                open: false, 
+                                selected: '', 
+                                orderDropdown: false, 
+                                paymentDropdown: false, 
+                                serviceDropdown: false, 
+                                selectedStatuses: [], 
+                                selectedPayments: [], 
+                                selectedServices: [] 
+                            }">
+                            <!-- Filter Button -->
+                            <button @click="open = !open"
+                                class="flex items-center gap-2 px-4 py-2 bg-white border rounded-lg">
+                                <i class="fa fa-filter"></i> Filter
+                            </button>
+
+                            <!-- Dropdown -->
+                            <div x-show="open" @click.outside="open = false" x-cloak
+                                class="dropdown-menu absolute left-auto right-0 top-full mt-2 w-96 bg-white border rounded-lg shadow-lg p-4 z-30">
+
+
+                                <h3 class="text-gray-700 font-medium mb-3">Select Filter</h3>
+
+                                <!-- Main Options -->
+                                <div class="grid grid-cols-3 gap-2">
+                                    <button
+                                        @click="selected = 'Order Status'; orderDropdown = true; paymentDropdown = false; serviceDropdown = false"
+                                        :class="selected === 'Order Status' ? 'bg-yellow-400 ' : 'border'"
+                                        class="px-3 py-2 rounded-lg text-sm">
+                                        Order Status
+                                    </button>
+                                    <button
+                                        @click="selected = 'Payment Type'; paymentDropdown = true; orderDropdown = false; serviceDropdown = false"
+                                        :class="selected === 'Payment Type' ? 'bg-yellow-400 ' : 'border'"
+                                        class="px-3 py-2 rounded-lg text-sm">
+                                        Payment Type
+                                    </button>
+                                    <button
+                                        @click="selected = 'Service Type'; serviceDropdown = true; orderDropdown = false; paymentDropdown = false"
+                                        :class="selected === 'Service Type' ? 'bg-yellow-400 ' : 'border'"
+                                        class="px-3 py-2 rounded-lg text-sm">
+                                        Service Type
+                                    </button>
+                                </div>
+
+                                <!-- Order Status Dropdown -->
+                                <div x-show="orderDropdown" x-cloak class="mt-3">
+                                    <h3 class="text-gray-700 font-medium mb-2">Select Order Status</h3>
+                                    <div class="grid grid-cols-3 gap-2">
+                                        <template
+                                            x-for="status in ['Completed', 'In Progress', 'Cancelled', 'Disputed', 'In Transit']">
+                                            <button
+                                                @click="selectedStatuses.includes(status) ? selectedStatuses = selectedStatuses.filter(s => s !== status) : selectedStatuses.push(status)"
+                                                :class="selectedStatuses.includes(status) ? 'bg-yellow-400 ' : 'border'"
+                                                class="px-3 py-2 rounded-lg text-sm">
+                                                <span x-text="status"></span>
+                                            </button>
+                                        </template>
+                                    </div>
+                                </div>
+
+                                <!-- Payment Type Dropdown -->
+                                <div x-show="paymentDropdown" x-cloak class="mt-3">
+                                    <h3 class="text-gray-700 font-medium mb-2">Select Payment Type</h3>
+                                    <div class="grid grid-cols-3 gap-2">
+                                        <template x-for="payment in ['On delivery', 'Wallet', 'Flutterwave']">
+                                            <button
+                                                @click="selectedPayments.includes(payment) ? selectedPayments = selectedPayments.filter(p => p !== payment) : selectedPayments.push(payment)"
+                                                :class="selectedPayments.includes(payment) ? 'bg-yellow-400 ' : 'border'"
+                                                class="px-3 py-2 rounded-lg text-sm">
+                                                <span x-text="payment"></span>
+                                            </button>
+                                        </template>
+                                    </div>
+                                </div>
+
+                                <!-- Service Type Dropdown -->
+                                <div x-show="serviceDropdown" x-cloak class="mt-3">
+                                    <h3 class="text-gray-700 font-medium mb-2">Select Service Type</h3>
+                                    <div class="grid grid-cols-3 gap-2">
+                                        <template
+                                            x-for="service in ['Gas Refill', 'Peroleum', 'Diesel', 'Accessories', 'Electricity']">
+                                            <button
+                                                @click="selectedServices.includes(service) ? selectedServices = selectedServices.filter(s => s !== service) : selectedServices.push(service)"
+                                                :class="selectedServices.includes(service) ? 'bg-yellow-400 ' : 'border'"
+                                                class="px-3 py-2 rounded-lg text-sm">
+                                                <span x-text="service"></span>
+                                            </button>
+                                        </template>
+                                    </div>
+                                </div>
+
+                                <!-- Apply Button -->
+                                <div class="mt-4 text-center">
+                                    <button @click="open = false"
+                                        class="px-4 py-2 bg-yellow-400  rounded-lg">Apply</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+            </div>
+
+
+
+            <div class="flex  mb-6">
+                <select class="border border-gray-300 px-4 py-2 rounded-md bg-white">
+                    <option value="" selected>Region Selector</option>
+                    <option value="AF">Afghanistan</option>
+                    <option value="AL">Albania</option>
+                    <option value="DZ">Algeria</option>
+                    <option value="AS">American Samoa</option>
+                    <option value="AD">Andorra</option>
+                    <option value="AO">Angola</option>
+                    <option value="AI">Anguilla</option>
+                    <option value="AQ">Antarctica</option>
+                    <option value="AG">Antigua and Barbuda</option>
+                    <option value="AR">Argentina</option>
+                    <option value="AM">Armenia</option>
+                    <option value="AW">Aruba</option>
+                    <option value="AU">Australia</option>
+                    <option value="AT">Austria</option>
+                    <option value="AZ">Azerbaijan</option>
+                    <option value="BS">Bahamas</option>
+                    <option value="BH">Bahrain</option>
+                    <option value="BD">Bangladesh</option>
+                    <option value="BB">Barbados</option>
+                    <option value="BY">Belarus</option>
+                    <option value="BE">Belgium</option>
+                    <option value="BZ">Belize</option>
+                    <option value="BJ">Benin</option>
+                    <option value="BM">Bermuda</option>
+                    <option value="BT">Bhutan</option>
+                    <option value="BO">Bolivia</option>
+                    <option value="BA">Bosnia and Herzegovina</option>
+                    <option value="BW">Botswana</option>
+                    <option value="BR">Brazil</option>
+                    <option value="IO">British Indian Ocean Territory</option>
+                    <option value="BN">Brunei Darussalam</option>
+                    <option value="BG">Bulgaria</option>
+                    <option value="BF">Burkina Faso</option>
+                    <option value="BI">Burundi</option>
+                    <option value="KH">Cambodia</option>
+                    <option value="CM">Cameroon</option>
+                    <option value="CA">Canada</option>
+                    <option value="CV">Cape Verde</option>
+                    <option value="KY">Cayman Islands</option>
+                    <option value="CF">Central African Republic</option>
+                    <option value="TD">Chad</option>
+                    <option value="CL">Chile</option>
+                    <option value="CN">China</option>
+                    <option value="CO">Colombia</option>
+                    <option value="KM">Comoros</option>
+                    <option value="CG">Congo</option>
+                    <option value="CD">Congo, Democratic Republic of the</option>
+                    <option value="CR">Costa Rica</option>
+                    <option value="CI">Côte d'Ivoire</option>
+                    <option value="HR">Croatia</option>
+                    <option value="CU">Cuba</option>
+                    <option value="CY">Cyprus</option>
+                    <option value="CZ">Czech Republic</option>
+                    <option value="DK">Denmark</option>
+                    <option value="DJ">Djibouti</option>
+                    <option value="DM">Dominica</option>
+                    <option value="DO">Dominican Republic</option>
+                    <option value="EC">Ecuador</option>
+                    <option value="EG">Egypt</option>
+                    <option value="SV">El Salvador</option>
+                    <option value="GQ">Equatorial Guinea</option>
+                    <option value="ER">Eritrea</option>
+                    <option value="EE">Estonia</option>
+                    <option value="SZ">Eswatini</option>
+                    <option value="ET">Ethiopia</option>
+                    <option value="FJ">Fiji</option>
+                    <option value="FI">Finland</option>
+                    <option value="FR">France</option>
+                    <option value="GF">French Guiana</option>
+                    <option value="PF">French Polynesia</option>
+                    <option value="GA">Gabon</option>
+                    <option value="GM">Gambia</option>
+                    <option value="GE">Georgia</option>
+                    <option value="DE">Germany</option>
+                    <option value="GH">Ghana</option>
+                    <option value="GI">Gibraltar</option>
+                    <option value="GR">Greece</option>
+                    <option value="GL">Greenland</option>
+                    <option value="GD">Grenada</option>
+                    <option value="GP">Guadeloupe</option>
+                    <option value="GU">Guam</option>
+                    <option value="GT">Guatemala</option>
+                    <option value="GG">Guernsey</option>
+                    <option value="GN">Guinea</option>
+                    <option value="GW">Guinea-Bissau</option>
+                    <option value="GY">Guyana</option>
+                    <option value="HT">Haiti</option>
+                    <option value="HN">Honduras</option>
+                    <option value="HK">Hong Kong</option>
+                    <option value="HU">Hungary</option>
+                    <option value="IS">Iceland</option>
+                    <option value="IN">India</option>
+                    <option value="ID">Indonesia</option>
+                    <option value="IR">Iran</option>
+                    <option value="IQ">Iraq</option>
+                    <option value="IE">Ireland</option>
+                    <option value="IL">Israel</option>
+                    <option value="IT">Italy</option>
+                    <option value="JM">Jamaica</option>
+                    <option value="JP">Japan</option>
+                    <option value="JE">Jersey</option>
+                    <option value="JO">Jordan</option>
+                    <option value="KZ">Kazakhstan</option>
+                    <option value="KE">Kenya</option>
+                    <option value="KI">Kiribati</option>
+                    <option value="KW">Kuwait</option>
+                    <option value="KG">Kyrgyzstan</option>
+                    <option value="LA">Laos</option>
+                    <option value="LV">Latvia</option>
+                    <option value="LB">Lebanon</option>
+                    <option value="LS">Lesotho</option>
+                    <option value="LR">Liberia</option>
+                    <option value="LY">Libya</option>
+                    <option value="LI">Liechtenstein</option>
+                    <option value="LT">Lithuania</option>
+                    <option value="LU">Luxembourg</option>
+                    <option value="MO">Macau</option>
+                    <option value="MK">Macedonia</option>
+                    <option value="MG">Madagascar</option>
+                    <option value="MW">Malawi</option>
+                    <option value="MY">Malaysia</option>
+                    <option value="MV">Maldives</option>
+                    <option value="ML">Mali</option>
+                    <option value="MT">Malta</option>
+                    <option value="MH">Marshall Islands</option>
+                    <option value="MQ">Martinique</option>
+                    <option value="MR">Mauritania</option>
+                    <option value="MU">Mauritius</option>
+                    <option value="YT">Mayotte</option>
+                    <option value="MX">Mexico</option>
+                    <option value="FM">Micronesia (Federated States of)</option>
+                    <option value="MD">Moldova</option>
+                    <option value="MC">Monaco</option>
+                    <option value="MN">Mongolia</option>
+                    <option value="ME">Montenegro</option>
+                    <option value="MS">Montserrat</option>
+                    <option value="MA">Morocco</option>
+                    <option value="MZ">Mozambique</option>
+                    <option value="MM">Myanmar</option>
+                    <option value="NA">Namibia</option>
+                    <option value="NR">Nauru</option>
+                    <option value="NP">Nepal</option>
+                    <option value="NL">Netherlands</option>
+                    <option value="NC">New Caledonia</option>
+                    <option value="NZ">New Zealand</option>
+                    <option value="NI">Nicaragua</option>
+                    <option value="NE">Niger</option>
+                    <option value="NG">Nigeria</option>
+                    <option value="NU">Niue</option>
+                    <option value="NF">Norfolk Island</option>
+                    <option value="KP">North Korea</option>
+                    <option value="MP">Northern Mariana Islands</option>
+                    <option value="NO">Norway</option>
+                    <option value="OM">Oman</option>
+                    <option value="PK">Pakistan</option>
+                    <option value="PW">Palau</option>
+                    <option value="PS">Palestinian Territory</option>
+                    <option value="PA">Panama</option>
+                    <option value="PG">Papua New Guinea</option>
+                    <option value="PY">Paraguay</option>
+                    <option value="PE">Peru</option>
+                    <option value="PH">Philippines</option>
+                    <option value="PN">Pitcairn Islands</option>
+                    <option value="PL">Poland</option>
+                    <option value="PT">Portugal</option>
+                    <option value="PR">Puerto Rico</option>
+                    <option value="QA">Qatar</option>
+                    <option value="RO">Romania</option>
+                    <option value="RU">Russia</option>
+                    <option value="RW">Rwanda</option>
+                    <option value="RE">Réunion</option>
+                    <option value="BL">Saint Barthélemy</option>
+                    <option value="SH">Saint Helena</option>
+                    <option value="KN">Saint Kitts and Nevis</option>
+                    <option value="LC">Saint Lucia</option>
+                    <option value="MF">Saint Martin</option>
+                    <option value="PM">Saint Pierre and Miquelon</option>
+                    <option value="VC">Saint Vincent and the Grenadines</option>
+                    <option value="WS">Samoa</option>
+                    <option value="SM">San Marino</option>
+                    <option value="ST">Sao Tome and Principe</option>
+                    <option value="SA">Saudi Arabia</option>
+                    <option value="SN">Senegal</option>
+                    <option value="RS">Serbia</option>
+                    <option value="SC">Seychelles</option>
+                    <option value="SL">Sierra Leone</option>
+                    <option value="SG">Singapore</option>
+                    <option value="SX">Sint Maarten</option>
+                    <option value="SK">Slovakia</option>
+                    <option value="SI">Slovenia</option>
+                    <option value="SB">Solomon Islands</option>
+                    <option value="SO">Somalia</option>
+                    <option value="ZA">South Africa</option>
+                    <option value="GS">South Georgia and the South Sandwich Islands</option>
+                    <option value="KR">South Korea</option>
+                    <option value="SS">South Sudan</option>
+                    <option value="ES">Spain</option>
+                    <option value="LK">Sri Lanka</option>
+                    <option value="SD">Sudan</option>
+                    <option value="SR">Suriname</option>
+                    <option value="SJ">Svalbard and Jan Mayen</option>
+                    <option value="SE">Sweden</option>
+                    <option value="CH">Switzerland</option>
+                    <option value="SY">Syria</option>
+                    <option value="TW">Taiwan</option>
+                    <option value="TJ">Tajikistan</option>
+                    <option value="TZ">Tanzania</option>
+                    <option value="TH">Thailand</option>
+                    <option value="TL">Timor-Leste</option>
+                    <option value="TG">Togo</option>
+                    <option value="TK">Tokelau</option>
+                    <option value="TO">Tonga</option>
+                    <option value="TT">Trinidad and Tobago</option>
+                    <option value="TN">Tunisia</option>
+                    <option value="TR">Turkey</option>
+                    <option value="TM">Turkmenistan</option>
+                    <option value="TC">Turks and Caicos Islands</option>
+                    <option value="TV">Tuvalu</option>
+                    <option value="UG">Uganda</option>
+                    <option value="UA">Ukraine</option>
+                    <option value="AE">United Arab Emirates</option>
+                    <option value="GB">United Kingdom</option>
+                    <option value="US">United States</option>
+                    <option value="UY">Uruguay</option>
+                    <option value="UZ">Uzbekistan</option>
+                    <option value="VU">Vanuatu</option>
+                    <option value="VE">Venezuela</option>
+                    <option value="VN">Vietnam</option>
+                    <option value="VG">Virgin Islands</option>
+                    <option value="WF">Wallis and Futuna</option>
+                    <option value="EH">Western Sahara</option>
+                    <option value="YE">Yemen</option>
+                    <option value="ZM">Zambia</option>
+                    <option value="ZW">Zimbabwe</option>
+                </select>
+                <select class="border border-gray-300 px-4 py-2 rounded-md bg-white">
+                    <option>All</option>
+                </select>
+
+            </div>
+            <div class="bg-white p-4 mb-4 rounded-lg shadow-md border border-gray-200 flex flex-wrap justify-between gap-4">
+  
+                <!-- Total Pending Applications -->
+                <div class="flex items-center gap-4 border border-gray-100 rounded-md p-3 shadow-sm w-full sm:w-[48%] md:w-[23%]">
+                  <div class="w-8 h-8 rounded-md" style="background: linear-gradient(to bottom, #86efac, #22c55e);"></div>
+                  <div>
+                    <p class="text-lg font-semibold text-black leading-tight">22</p>
+                    <p class="text-sm text-gray-500 leading-snug">Total Pending Applications</p>
+                  </div>
+                </div>
+              
+                <!-- Pending Background Checks -->
+                <div class="flex items-center gap-4 border border-gray-100 rounded-md p-3 shadow-sm w-full sm:w-[48%] md:w-[23%]">
+                  <div class="w-8 h-8 rounded-md" style="background: linear-gradient(to bottom, #fcd34d, #ea580c);"></div>
+                  <div>
+                    <p class="text-lg font-semibold text-black leading-tight">8</p>
+                    <p class="text-sm text-gray-500 leading-snug">Pending Background Checks</p>
+                  </div>
+                </div>
+              
+                <!-- Pending Document Verification -->
+                <div class="flex items-center gap-4 border border-gray-100 rounded-md p-3 shadow-sm w-full sm:w-[48%] md:w-[23%]">
+                  <div class="w-8 h-8 rounded-md" style="background: linear-gradient(to bottom, #60a5fa, #2563eb);"></div>
+                  <div>
+                    <p class="text-lg font-semibold text-black leading-tight">6</p>
+                    <p class="text-sm text-gray-500 leading-snug">Pending Document Verification</p>
+                  </div>
+                </div>
+              
+                <!-- Rejected Applications -->
+                <div class="flex items-center gap-4 border border-gray-100 rounded-md p-3 shadow-sm w-full sm:w-[48%] md:w-[23%]">
+                  <div class="w-8 h-8 rounded-md" style="background: linear-gradient(to bottom, #fca5a5, #dc2626);"></div>
+                  <div>
+                    <p class="text-lg font-semibold text-black leading-tight">4</p>
+                    <p class="text-sm text-gray-500 leading-snug">Rejected Applications (Last 30 Days)</p>
+                  </div>
+                </div>
+              
+              </div>
+              
+
+            <!--Pending Venodr -->
+            <div class="bg-white rounded-md border border-gray-300 shadow-md p-4 mb-6">
+                <div class="container mx-auto">
+                    <div class="overflow-x-auto">
+
+                        <table class="w-full border-collapse bg-white shadow-md rounded-lg overflow-hidden">
+                            <thead class="bg-gray-200 text-left text-gray-600 text-sm">
+                                <tr>
+                                    <th class="p-3">ID</th>
+                                    <th class="p-3">Name</th>
+                                    <th class="p-3">Phone Number</th>
+                                    <th class="p-3">Email</th>
+                                    <th class="p-3">Region</th>
+                                    <th class="p-3">Vehicle Type</th>
+                                    <th class="p-3">License Status</th>
+                                    <th class="p-3">Submitted Date</th>
+                                    <th class="p-3">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-gray-700 text-sm">
+                                <tr class="border-t hover:bg-gray-100">
+                                    <td class="p-3">DRP-001</td>
+                                    <td class="p-3">John Doe</td>
+                                    <td class="p-3">+234 801 234 5678</td>
+                                    <td class="p-3">john.doe@email.com</td>
+                                    <td class="p-3">Lagos</td>
+                                    <td class="p-3">Motorcycle</td>
+                                    <td class="p-3 text-green-600"><i class="fa fa-check-circle"></i> Verified</td>
+                                    <td class="p-3">2025-03-15</td>
+                                    <td class="p-3 text-blue-600"><a href="#" class="hover:underline">View Details</a></td>
+                                </tr>
+                                <tr class="border-t hover:bg-gray-100">
+                                    <td class="p-3">DRP-002</td>
+                                    <td class="p-3">Jane Smith</td>
+                                    <td class="p-3">+234 802 567 8910</td>
+                                    <td class="p-3">jane.smith@email.com</td>
+                                    <td class="p-3">Lagos</td>
+                                    <td class="p-3">Tricycle</td>
+                                    <td class="p-3 text-red-600"><i class="fa fa-times-circle"></i> Unverified</td>
+                                    <td class="p-3">2025-03-14</td>
+                                    <td class="p-3 text-blue-600"><a href="#" class="hover:underline">View Details</a></td>
+                                </tr>
+                                <tr class="border-t hover:bg-gray-100">
+                                    <td class="p-3">DRP-003</td>
+                                    <td class="p-3">Emmanuel O.</td>
+                                    <td class="p-3">+234 809 333 2222</td>
+                                    <td class="p-3">emma.oko@email.com</td>
+                                    <td class="p-3">Port Harcourt</td>
+                                    <td class="p-3">Car</td>
+                                    <td class="p-3 text-green-600"><i class="fa fa-check-circle"></i> Verified</td>
+                                    <td class="p-3">2025-03-13</td>
+                                    <td class="p-3 text-blue-600"><a href="#" class="hover:underline">View Details</a></td>
+                                </tr>
+                                <tr class="border-t hover:bg-gray-100">
+                                    <td class="p-3">DRP-004</td>
+                                    <td class="p-3">Sarah J.</td>
+                                    <td class="p-3">+234 811 444 5555</td>
+                                    <td class="p-3">sarah.john@email.com</td>
+                                    <td class="p-3">Kano</td>
+                                    <td class="p-3">Motorcycle</td>
+                                    <td class="p-3 text-green-600"><i class="fa fa-check-circle"></i> Verified</td>
+                                    <td class="p-3">2025-03-12</td>
+                                    <td class="p-3 text-blue-600"><a href="#" class="hover:underline">View Details</a></td>
+                                </tr>
+                                <tr class="border-t hover:bg-gray-100">
+                                    <td class="p-3">DRP-005</td>
+                                    <td class="p-3">Michael Ade.</td>
+                                    <td class="p-3">+234 815 999 8888</td>
+                                    <td class="p-3">michael.ade@email.com</td>
+                                    <td class="p-3">Lagos</td>
+                                    <td class="p-3">Motorcycle</td>
+                                    <td class="p-3 text-red-600"><i class="fa fa-times-circle"></i> Unverified</td>
+                                    <td class="p-3">2025-03-11</td>
+                                    <td class="p-3 text-blue-600"><a href="#" class="hover:underline">View Details</a></td>
+                                </tr>
+                                <tr class="border-t hover:bg-gray-100">
+                                    <td class="p-3">DRP-006</td>
+                                    <td class="p-3">Amina Bello</td>
+                                    <td class="p-3">+234 816 222 3333</td>
+                                    <td class="p-3">amina.bello@email.com</td>
+                                    <td class="p-3">Abuja</td>
+                                    <td class="p-3">Car</td>
+                                    <td class="p-3 text-green-600"><i class="fa fa-check-circle"></i> Verified</td>
+                                    <td class="p-3">2025-03-10</td>
+                                    <td class="p-3 text-blue-600"><a href="#" class="hover:underline">View Details</a></td>
+                                </tr>
+                                <tr class="border-t hover:bg-gray-100">
+                                    <td class="p-3">DRP-007</td>
+                                    <td class="p-3">David Okeke</td>
+                                    <td class="p-3">+234 817 444 6666</td>
+                                    <td class="p-3">david.okeke@email.com</td>
+                                    <td class="p-3">Abuja</td>
+                                    <td class="p-3">Motorcycle</td>
+                                    <td class="p-3 text-green-600"><i class="fa fa-check-circle"></i> Verified</td>
+                                    <td class="p-3">2025-03-09</td>
+                                    <td class="p-3 text-blue-600"><a href="#" class="hover:underline">View Details</a></td>
+                                </tr>
+                                <tr class="border-t hover:bg-gray-100">
+                                    <td class="p-3">DRP-008</td>
+                                    <td class="p-3">Sandra Ugo</td>
+                                    <td class="p-3">+234 818 555 7777</td>
+                                    <td class="p-3">sandra.ugo@email.com</td>
+                                    <td class="p-3">Kano</td>
+                                    <td class="p-3">Motorcycle</td>
+                                    <td class="p-3 text-red-600"><i class="fa fa-times-circle"></i> Unverified</td>
+                                    <td class="p-3">2025-03-08</td>
+                                    <td class="p-3 text-blue-600"><a href="#" class="hover:underline">View Details</a></td>
+                                </tr>
+                                <tr class="border-t hover:bg-gray-100">
+                                    <td class="p-3">DRP-009</td>
+                                    <td class="p-3">Peter Obi</td>
+                                    <td class="p-3">+234 819 888 9999</td>
+                                    <td class="p-3">peter.obi@email.com</td>
+                                    <td class="p-3">Abuja</td>
+                                    <td class="p-3">Motorcycle</td>
+                                    <td class="p-3 text-green-600"><i class="fa fa-check-circle"></i> Verified</td>
+                                    <td class="p-3">2025-03-07</td>
+                                    <td class="p-3 text-blue-600"><a href="#" class="hover:underline">View Details</a></td>
+                                </tr>
+                                <tr class="border-t hover:bg-gray-100">
+                                    <td class="p-3">DRP-010</td>
+                                    <td class="p-3">Chika Anozie</td>
+                                    <td class="p-3">+234 802 222 0000</td>
+                                    <td class="p-3">chika.anozie@email.com</td>
+                                    <td class="p-3">Lagos</td>
+                                    <td class="p-3">Car</td>
+                                    <td class="p-3 text-green-600"><i class="fa fa-check-circle"></i> Verified</td>
+                                    <td class="p-3">2025-03-06</td>
+                                    <td class="p-3 text-blue-600"><a href="#" class="hover:underline">View Details</a></td>
+                                </tr>
+                                <tr class="border-t hover:bg-gray-100">
+                                    <td class="p-3">DRP-011</td>
+                                    <td class="p-3">Samuel A.</td>
+                                    <td class="p-3">+234 803 333 1111</td>
+                                    <td class="p-3">samuel.a@email.com</td>
+                                    <td class="p-3">Lagos</td>
+                                    <td class="p-3">Motorcycle</td>
+                                    <td class="p-3 text-red-600"><i class="fa fa-times-circle"></i> Unverified</td>
+                                    <td class="p-3">2025-03-05</td>
+                                    <td class="p-3 text-blue-600"><a href="#" class="hover:underline">View Details</a></td>
+                                </tr>
+                                <tr class="border-t hover:bg-gray-100">
+                                    <td class="p-3">DRP-012</td>
+                                    <td class="p-3">Funmi Eze</td>
+                                    <td class="p-3">+234 804 666 4444</td>
+                                    <td class="p-3">funmi.eze@email.com</td>
+                                    <td class="p-3">Kano</td>
+                                    <td class="p-3">Tricycle</td>
+                                    <td class="p-3 text-green-600"><i class="fa fa-check-circle"></i> Verified</td>
+                                    <td class="p-3">2025-03-04</td>
+                                    <td class="p-3 text-blue-600"><a href="#" class="hover:underline">View Details</a></td>
+                                </tr>
+                                <tr class="border-t hover:bg-gray-100">
+                                    <td class="p-3">DRP-013</td>
+                                    <td class="p-3">Ahmed S.</td>
+                                    <td class="p-3">+234 805 777 5555</td>
+                                    <td class="p-3">ahmed.sule@email.com</td>
+                                    <td class="p-3">Abuja</td>
+                                    <td class="p-3">Car</td>
+                                    <td class="p-3 text-red-600"><i class="fa fa-times-circle"></i> Unverified</td>
+                                    <td class="p-3">2025-03-03</td>
+                                    <td class="p-3 text-blue-600"><a href="#" class="hover:underline">View Details</a></td>
+                                </tr>
+                                <tr class="border-t hover:bg-gray-100">
+                                    <td class="p-3">DRP-014</td>
+                                    <td class="p-3">Yusuf Lawal</td>
+                                    <td class="p-3">+234 806 999 8888</td>
+                                    <td class="p-3">yusuf.lawal@email.com</td>
+                                    <td class="p-3">Abuja</td>
+                                    <td class="p-3">Tricycle</td>
+                                    <td class="p-3 text-green-600"><i class="fa fa-check-circle"></i> Verified</td>
+                                    <td class="p-3">2025-03-02</td>
+                                    <td class="p-3 text-blue-600"><a href="#" class="hover:underline">View Details</a></td>
+                                </tr>
+                                <tr class="border-t hover:bg-gray-100">
+                                    <td class="p-3">DRP-015</td>
+                                    <td class="p-3">Ifeoma O.</td>
+                                    <td class="p-3">+234 807 222 1111</td>
+                                    <td class="p-3">ifeoma.okafor@email.com</td>
+                                    <td class="p-3">Lagos</td>
+                                    <td class="p-3">Motorcycle</td>
+                                    <td class="p-3 text-green-600"><i class="fa fa-check-circle"></i> Verified</td>
+                                    <td class="p-3">2025-03-01</td>
+                                    <td class="p-3 text-blue-600"><a href="#" class="hover:underline">View Details</a></td>
+                                </tr>
+                                <tr class="border-t hover:bg-gray-100">
+                                    <td class="p-3">DRP-016</td>
+                                    <td class="p-3">Blessing E.</td>
+                                    <td class="p-3">+234 808 555 7777</td>
+                                    <td class="p-3">blessing.eke@email.com</td>
+                                    <td class="p-3">Lagos</td>
+                                    <td class="p-3">Motorcycle</td>
+                                    <td class="p-3 text-red-600"><i class="fa fa-times-circle"></i> Unverified</td>
+                                    <td class="p-3">2025-02-29</td>
+                                    <td class="p-3 text-blue-600"><a href="#" class="hover:underline">View Details</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="flex justify-between items-center mt-4 p-4 border-t">
+                        <div class="flex items-center space-x-4">
+                            <span class="text-gray-600">Total entries: <span class="font-bold">50</span></span>
+                            <button class="px-3 py-1 text-gray-400 flex items-center space-x-1" disabled>
+                                <i class="fa fa-chevron-left"></i> <span>Previous</span>
+                            </button>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button class="px-3 py-1 bg-yellow-500 text-white font-bold rounded-full">1</button>
+                            <span class="text-gray-700">2</span>
+                            <span class="text-gray-700">3</span>
+                            <span class="text-gray-500">..</span>
+                            <span class="text-gray-700">7</span>
+                        </div>
+                        <button class="px-3 py-1 text-gray-500 flex items-center space-x-1 hover:text-gray-700">
+                            <span>Next</span> <i class="fa fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+
+        </main>
+    </div>
+    <!-- Alpine.js (Add this script if not already included in your project) -->
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script>
+
+
+
+
+        // Mobile sidebar toggle functionality
+        document.addEventListener('DOMContentLoaded', function () {
+            const sidebarToggle = document.querySelector('#sidebar-toggle');
+            const sidebar = document.getElementById('sidebar');
+            const sidebarOverlay = document.getElementById('sidebar-overlay');
+
+            const hideSidebarButton = document.getElementById('hide-sidebar-button');
+
+            sidebarToggle.addEventListener('click', function () {
+                sidebar.classList.toggle('open');
+                sidebar.classList.remove('hidden');
+                sidebarOverlay.classList.toggle('hidden');
+            });
+
+            sidebarOverlay.addEventListener('click', function () {
+                sidebar.classList.remove('open');
+                sidebar.classList.add('hidden');
+                sidebarOverlay.classList.add('hidden');
+            });
+
+            hideSidebarButton.addEventListener('click', function () {
+                sidebar.classList.toggle("hidden");
+            });
+
+
+
+        });
+
+
+    </script>
+    <script>
+        let datePicker = document.getElementById("datePicker");
+        let dropdownBtn = document.getElementById("dropdownBtn");
+        let dropdownMenu = document.getElementById("dropdownMenu");
+
+        let mode = "monthly"; // Default mode
+
+        function setDateMode(selectedMode) {
+            mode = selectedMode;
+            dropdownBtn.innerHTML = selectedMode.charAt(0).toUpperCase() + selectedMode.slice(1) + ' <i class="fa-solid fa-chevron-down ml-1"></i>';
+            dropdownMenu.classList.add("hidden");
+
+            if (mode === "today") {
+                let today = new Date();
+                let formattedDate = today.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+                datePicker.value = formattedDate;
+            }
+            else if (mode === "Specific Date") {
+                flatpickr(datePicker, {
+                    dateFormat: "d M, Y",
+                    onChange: function (selectedDates, dateStr) {
+                        datePicker.value = dateStr;
+                    }
+                }).open();
+            }
+            else if (mode === "monthly") {
+                flatpickr(datePicker, {
+                    mode: "range",
+                    dateFormat: "d M",
+                    onChange: function (selectedDates, dateStr) {
+                        if (selectedDates.length === 2) {
+                            let start = selectedDates[0].toLocaleDateString("en-GB", { day: "2-digit", month: "short" });
+                            let end = selectedDates[1].toLocaleDateString("en-GB", { day: "2-digit", month: "short" });
+                            datePicker.value = `${start} - ${end}`;
+                        }
+                    }
+                }).open();
+            }
+
+        }
+
+        // Toggle dropdown
+        dropdownBtn.addEventListener("click", () => {
+            dropdownMenu.classList.toggle("hidden");
+        });
+
+        // Close dropdown on outside click
+        document.addEventListener("click", (event) => {
+            if (!dropdownBtn.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                dropdownMenu.classList.add("hidden");
+            }
+        });
+
+        // Set default
+        setDateMode("today");
+    </script>
+</body>
+
+</html>
