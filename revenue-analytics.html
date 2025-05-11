@@ -377,313 +377,100 @@
 
         <!-- Content Area -->
         <main class="flex-1 p-4 md:p-6">
-            <div class=" p-4 mb-6">
-                <!-- Header with back button -->
-                <div class="mb-4 flex items-center justify-between">
-                    <div class="flex items-center">
-                        <a class="mr-2 text-gray-600" href="#">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                            </svg>
-                        </a>
-                        <div>
-                            <h1 class="text-lg font-medium text-gray-800">Delivery Rep Detail Page</h1>
-                            <div class="flex items-center space-x-2 text-gray-600 text-sm">
-                                <a href="#" class="breadcrumb-item hover:text-yellow-500">Dashboard</a>
-                                <span>></span>
-                                <a href="#" class="breadcrumb-item hover:text-yellow-500">Delivery Rep Management</a>
-                                <span>></span>
-                                <span class="text-gray-800 font-semibold" id="riderId">R1001</span>
-                            </div>
-                        </div>
-                    </div>
+            
+            <!-- Header with back button -->
+            <div class="mb-6 p-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4 md:gap-0">
+                <div class="flex items-center">
+                    <a href="#" class="mr-4 rounded-md border border-gray-300 p-1 hover:bg-gray-100">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M7 16l-4-4m0 0l4-4m-4 4h18" />
+                        </svg>
+                    </a>
                     <div>
-                        <button
-                            class="bg-gradient-to-b from-gray-100 to-gray-300 hover:from-gray-200 hover:to-gray-400 text-gray-700 py-2 px-4 rounded text-sm flex items-center">
-                            <i class="fa fa-user-lock mr-2"></i>
-                            Suspend / Penalize Rider
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Main content -->
-                <div class="flex flex-col md:flex-row gap-6">
-                    <!-- Left section - Service details -->
-                    <div class="bg-white rounded-lg shadow-sm p-4 md:w-7/12">
-                        <div class="flex justify-between items-center mb-4">
-                            <h2 class="text-lg font-bold text-gray-800">R1001</h2>
-                            <button class="text-gray-500">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                                    stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                                </svg>
-                            </button>
-                        </div>
-
-                        <div class="overflow-x-auto bg-white shadow-md rounded-lg p-4">
-                            <table class="w-full border-collapse text-sm">
-                                <thead>
-                                    <tr class="bg-gray-100">
-                                        <th class="text-left px-4 py-2 font-medium text-gray-600">Field</th>
-                                        <th class="text-left px-4 py-2 font-medium text-gray-600">Details</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y">
-                                    <tr>
-                                        <td class="px-4 py-2 text-gray-500">Rep ID</td>
-                                        <td class="px-4 py-2 font-medium text-gray-800">R1001</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-4 py-2 text-gray-500">Full Name</td>
-                                        <td class="px-4 py-2 font-medium text-gray-800">John Smith</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-4 py-2 text-gray-500">Phone Number</td>
-                                        <td class="px-4 py-2 font-medium text-gray-800">+234 9012345678</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-4 py-2 text-gray-500">Email Address</td>
-                                        <td class="px-4 py-2 font-medium text-gray-800">john.smith@email.com</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-4 py-2 text-gray-500">Status</td>
-                                        <td class="px-4 py-2 font-medium text-green-600">Active</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-4 py-2 text-gray-500">Location</td>
-                                        <td class="px-4 py-2 font-medium text-gray-800">Ikeja, Lagos</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-4 py-2 text-gray-500">Registered Date</td>
-                                        <td class="px-4 py-2 font-medium text-gray-800">2025-02-10</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-4 py-2 text-gray-500">Last Active</td>
-                                        <td class="px-4 py-2 font-medium text-gray-800">2025-03-16 (2 hours ago)</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-4 py-2 text-gray-500">Services Offered</td>
-                                        <td class="px-4 py-2 font-medium text-gray-800">Gas Refill, Food Delivery,
-                                            Parcel Pickup</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-4 py-2 text-gray-500">Vehicle Type</td>
-                                        <td class="px-4 py-2 font-medium text-gray-800">Motorcycle</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-4 py-2 text-gray-500">License Number</td>
-                                        <td class="px-4 py-2 font-medium text-gray-800">DLN-1234567890</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-4 py-2 text-gray-500">Vehicle Plate No.</td>
-                                        <td class="px-4 py-2 font-medium text-gray-800">KJA 678XY</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-4 py-2 text-gray-500">Average Delivery Time</td>
-                                        <td class="px-4 py-2 font-medium text-gray-800">38 mins</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-4 py-2 text-gray-500">Wallet Balance</td>
-                                        <td class="px-4 py-2 font-medium text-gray-800">₦10,500</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-4 py-2 text-gray-500">Earnings (Total Revenue)</td>
-                                        <td class="px-4 py-2 font-medium text-gray-800">₦3,250,000</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-4 py-2 text-gray-500">Payout Account</td>
-                                        <td class="px-4 py-2 font-medium text-gray-800">GTBank - 0023456789</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div class="mt-6 flex flex-wrap gap-2">
-                            <button
-                                class="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded text-sm flex items-center">
-                                <i class="fa fa-pencil mr-2"></i> Edit Details
-                            </button>
-                            <button
-                                class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded text-sm flex items-center">
-                                <i class="fa fa-trash mr-2"></i> Delete Profile
-                            </button>
-                            <button
-                                class="bg-gradient-to-b from-gray-100 to-gray-300 hover:from-gray-200 hover:to-gray-400 text-gray-700 py-2 px-4 rounded text-sm flex items-center">
-                                <i class="fa fa-key mr-2"></i> Reset Password
-                            </button>
-                            <button
-                                class="bg-gradient-to-b from-gray-100 to-gray-300 hover:from-gray-200 hover:to-gray-400 text-gray-700 py-2 px-4 rounded text-sm mt-2 md:mt-0 flex items-center">
-                                <i class="fa fa-money mr-2"></i> Update Wallet Balance
-                            </button>
-                            <button
-                                class="bg-gradient-to-b from-gray-100 to-gray-300 hover:from-gray-200 hover:to-gray-400 text-gray-700 py-2 px-4 rounded text-sm mt-2 md:mt-0 flex items-center">
-                                <i class="fa fa-phone mr-2"></i> Contact Rider
-                            </button>
-                            <button
-                                class="bg-gradient-to-b from-gray-100 to-gray-300 hover:from-gray-200 hover:to-gray-400 text-gray-700 py-2 px-4 rounded text-sm mt-2 md:mt-0 flex items-center">
-                                <i class="fa fa-plus mr-2"></i> Assign New Orders
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Right section - Stats cards -->
-                    <div class="md:w-5/12 space-y-4">
-                        <div class="bg-white rounded-lg shadow-sm p-4">
-                            <div class="flex justify-between items-center mb-2">
-                                <h3 class="text-sm text-gray-500">Total Orders Completed</h3>
-                                <button class="text-gray-400">
-                                    <i class="fa fa-info-circle"></i>
-                                </button>
-                            </div>
-                            <div class="text-3xl font-bold text-gray-800">435</div>
-                        </div>
-
-                        <div class="bg-white rounded-lg shadow-sm p-4">
-                            <div class="flex justify-between items-center mb-2">
-                                <h3 class="text-sm text-gray-500">Pending Deliveries</h3>
-                                <button class="text-gray-400">
-                                    <i class="fa fa-info-circle"></i>
-                                </button>
-                            </div>
-                            <div class="text-3xl font-bold text-gray-800">8</div>
-                        </div>
-
-                        <div class="bg-white rounded-lg shadow-sm p-4">
-                            <div class="flex justify-between items-center mb-2">
-                                <h3 class="text-sm text-gray-500">Cancelled Deliveries</h3>
-                                <button class="text-gray-400">
-                                    <i class="fa fa-info-circle"></i>
-                                </button>
-                            </div>
-                            <div class="text-3xl font-bold text-gray-800">12</div>
-                        </div>
-
-                        <div class="bg-white rounded-lg shadow-sm p-4">
-                            <div class="flex justify-between items-center mb-2">
-                                <h3 class="text-sm text-gray-500">Customer Rating</h3>
-                                <button class="text-gray-400">
-                                    <i class="fa fa-info-circle"></i>
-                                </button>
-                            </div>
-                            <div class="flex items-center">
-                                <div class="flex">
-                                    <i class="fa fa-star text-yellow-500"></i>
-                                    <i class="fa fa-star text-yellow-500"></i>
-                                    <i class="fa fa-star text-yellow-500"></i>
-                                    <i class="fa fa-star text-yellow-500"></i>
-                                    <i class="fa fa-star-half-o text-yellow-500"></i>
-                                </div>
-                                <span class="ml-2 text-gray-800 font-medium">(4.6)</span>
-                            </div>
-                        </div>
-
-                        <div class="bg-white rounded-lg shadow-sm p-4">
-                            <div class="flex justify-between items-center mb-2">
-                                <h3 class="text-sm text-gray-500">Total Distance Covered</h3>
-                                <button class="text-gray-400">
-                                    <i class="fa fa-info-circle"></i>
-                                </button>
-                            </div>
-                            <div class="text-3xl font-bold text-gray-800">12,800 km</div>
-                        </div>
-
-                        <div class="bg-white rounded-lg shadow-sm p-4">
-                            <div class="flex justify-between items-center mb-2">
-                                <h3 class="text-sm text-gray-500">Last 30 Days Earnings</h3>
-                                <button class="text-gray-400">
-                                    <i class="fa fa-info-circle"></i>
-                                </button>
-                            </div>
-                            <div class="text-3xl font-bold text-gray-800">₦350,000</div>
+                        <h2 class="text-xl font-semibold text-gray-800">Revenue Analytics & Insights</h2>
+                        <div class="text-sm text-gray-500">
+                            <span class="mr-1">Dashboard</span>
+                            <span class="mr-1">&gt;</span>
+                            <span class="mr-1">Revenue Management </span>
+                            <span class="mr-1">&gt;</span>
+                            <span class="font-normal">Revenue Analytics & Insights</span>
                         </div>
                     </div>
                 </div>
+                <div class="flex flex-col md:flex-row gap-2">
+                    <button class="bg-gradient-to-b from-gray-100 to-gray-300 hover:from-gray-200 hover:to-gray-400 text-gray-700 py-2 px-4 rounded-md text-sm flex items-center gap-2 border border-gray-300">
+                        <i class="fas fa-download"></i>
 
+                        Export As PDF
+                    </button>
+                    <button class="bg-gradient-to-b from-gray-100 to-gray-300 hover:from-gray-200 hover:to-gray-400 text-gray-700 py-2 px-4 rounded-md text-sm flex items-center gap-2 border border-gray-300">
+                        <i class="fa fa-print text-gray-600 mr-2" aria-hidden="true"></i>
+                        Print Reports
+                    </button>
+                </div>
             </div>
+            
+              <div class="max-w-full mx-auto bg-white rounded-lg shadow-md p-8 mb-6 space-y-10">
 
+                <div class="bg-white p-6 rounded shadow relative">
+                    <div class="flex justify-between items-center mb-4">
+                      <h2 class="text-lg font-medium text-gray-700">Revenue Trends Over Time</h2>
+                      <div class="flex items-center space-x-3">
+                        <div class="relative">
+                          <i class="fa fa-calendar absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
+                          <select id="timeRange" class="appearance-none pl-9 pr-6 py-1.5 border border-gray-300 text-gray-700 text-sm rounded focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent">
+                            <option>Daily</option>
+                            <option>Weekly</option>
+                            <option selected>Monthly</option>
+                            <option>Yearly</option>
+                          </select>
+                          <i class="fa fa-chevron-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-xs pointer-events-none"></i>
+                        </div>
+                      
+                        <button id="toggleInsights" class="text-yellow-600 bg-yellow-100 hover:bg-yellow-200 text-sm px-3 py-1.5 rounded font-medium flex items-center space-x-1">
+                          <i class="fas fa-lightbulb"></i><span>Insights</span>
+                        </button>
+                      </div>
+                      
+                    </div>
+              
+                    <!-- Chart -->
+                    <canvas id="revenueChart" height="150"></canvas>
+              
+                    <!-- Legend -->
+                    <div class="flex space-x-6 text-sm mt-4">
+                      <div class="flex items-center space-x-1"><span class="w-3 h-3 rounded-full bg-blue-500"></span><span>Service Charge</span></div>
+                      <div class="flex items-center space-x-1"><span class="w-3 h-3 rounded-full bg-red-500"></span><span>VAT</span></div>
+                      <div class="flex items-center space-x-1"><span class="w-3 h-3 rounded-full bg-yellow-500"></span><span>Top-ups</span></div>
+                      <div class="flex items-center space-x-1"><span class="w-3 h-3 rounded-full bg-green-500"></span><span>Vendor Fees</span></div>
+                    </div>
+              
+                    <!-- Insights Popup -->
+                    <div id="insightPopup" class="absolute top-20 right-6 w-[28rem] bg-white shadow-lg border border-gray-200 rounded-lg p-4 hidden z-10">
+                      <div class="flex justify-between mb-2">
+                        <h3 class="font-semibold text-gray-800 text-sm">
+                          <i class="fas fa-lightbulb text-yellow-400 mr-1"></i> Insights from the Chart
+                        </h3>
+                        <button id="closeInsights" class="text-gray-500 hover:text-gray-800">&times;</button>
+                      </div>
+                      <ul class="text-sm text-gray-700 list-disc pl-5 space-y-1">
+                        <li>Gradual growth across all revenue sources over time.</li>
+                        <li>Notable spikes in May, October, and December (possibly due to seasonal demand).</li>
+                        <li>VAT increases proportionally with revenue, indicating compliance.</li>
+                        <li>Top-ups and vendor fees contribute significantly to total revenue.</li>
+                      </ul>
+                    </div>
+                  </div>
+              </div>
+            
 
-
+            
+        
             <!-- Recent Orders -->
             <div class="bg-white rounded-md border border-gray-300 rounded-md shadow-md p-4 mb-6">
                 <div class="container mx-auto">
-                    <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-6 mt-6">
-                        <h2 class="text-lg  font-semibold text-gray-800 mb-4 md:mb-0">Assigned Services</h2>
-
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full border-collapse bg-white shadow-md rounded-lg overflow-hidden">
-                            <thead>
-                                <tr class="bg-gray-200 text-left text-gray-600 text-sm">
-                                    <th class="p-3">Service ID</th>
-                                    <th class="p-3">Service Name</th>
-                                    <th class="p-3">Category</th>
-                                    <th class="p-3">Status</th>
-                                    <th class="p-3">Number of Orders</th>
-                                    <th class="p-3">Date Listed</th>
-                                    <th class="p-3">Last Updated</th>
-                                    <th class="p-3">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="border-t text-gray-700 hover:bg-gray-100">
-                                    <td class="p-3">SVC-001</td>
-                                    <td class="p-3">12.5kg Gas Refill</td>
-                                    <td class="p-3">Gas Refill</td>
-                                    <td class="p-3 text-green-500 font-semibold">Active</td>
-                                    <td class="p-3">120</td>
-                                    <td class="p-3">2025-02-10</td>
-                                    <td class="p-3">2025-03-15</td>
-                                    <td class="p-3"><a href="#" class="text-blue-500">View</a> / <a href="#"
-                                            class="text-red-500">Deactivate</a></td>
-                                </tr>
-                                <tr class="border-t text-gray-700 hover:bg-gray-100">
-                                    <td class="p-3">SVC-002</td>
-                                    <td class="p-3">Diesel Supply</td>
-                                    <td class="p-3">Diesel</td>
-                                    <td class="p-3 text-orange-500 font-semibold">Inactive</td>
-                                    <td class="p-3">45</td>
-                                    <td class="p-3">2025-01-20</td>
-                                    <td class="p-3">2025-02-28</td>
-                                    <td class="p-3"><a href="#" class="text-blue-500">View</a> / <a href="#"
-                                            class="text-red-500">Deactivate</a></td>
-                                </tr>
-                                <tr class="border-t text-gray-700 hover:bg-gray-100">
-                                    <td class="p-3">SVC-003</td>
-                                    <td class="p-3">LPG Cylinder (50kg)</td>
-                                    <td class="p-3">Accessories</td>
-                                    <td class="p-3 text-red-500 font-semibold">Discontinued</td>
-                                    <td class="p-3">30</td>
-                                    <td class="p-3">2024-12-05</td>
-                                    <td class="p-3">2025-01-15</td>
-                                    <td class="p-3"><a href="#" class="text-blue-500">View</a> / <a href="#"
-                                            class="text-red-500">Deactivate</a></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-
-                </div>
-            </div>
-            <div class="bg-white rounded-none shadow p-4 w-full mb-6">
-                <h2 class="text-lg font-semibold mb-4">Delivery Rep Location On Map</h2>
-
-                <!-- Full Width Map Container -->
-                <div class="relative w-full h-[500px]">
-                    <!-- Google Maps Embed -->
-                    <iframe class="absolute top-0 left-0 w-full h-full"
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3939.772262690828!2d7.470960275105768!3d9.070285488104895!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x104e0a573893c25f%3A0x708d31d778cf9b25!2sWuse%20II%2C%20Abuja!5e0!3m2!1sen!2sng!4v1683121459637!5m2!1sen!2sng"
-                        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-
-                </div>
-            </div>
-            <div class="bg-white rounded-md border border-gray-300 rounded-md shadow-md p-6 mb-6 mt-4">
-                <div class="container mx-auto">
                     <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-6">
-                        <h1 class="text-xl  font-semibold text-gray-800 mb-4 md:mb-0">Order History</h1>
+                        <h1 class="text-xl md:text-2xl font-bold text-gray-800 mb-4 md:mb-0">Revenue Trends Over Time Table</h1>
                         <div class="flex flex-wrap items-center gap-2 md:gap-4">
                             <div class="mb-2 md:mb-0">
                                 <div class="flex gap-0">
@@ -730,7 +517,7 @@
                                     <!-- Filter Button -->
                                     <button @click="open = !open"
                                         class="flex items-center gap-2 px-4 py-2 bg-white border rounded-lg">
-                                        <i class="fa fa-filter"></i> Filter
+                                        <i class="fa fa-filter"></i> Admin ID
                                     </button>
 
                                     <!-- Dropdown -->
@@ -821,241 +608,398 @@
                         </div>
                     </div>
                     <div class="overflow-x-auto">
-                        <table class="w-full border-collapse bg-white shadow-md rounded-lg overflow-hidden">
+                        <table class="w-full border-collapse text-sm">
                             <thead>
-                                <tr class="bg-gray-200 text-left text-gray-600 text-sm">
-                                    <th class="p-3">Order ID</th>
-                                    <th class="p-3">Customer Name</th>
-                                    <th class="p-3">Service</th>
-                                    <th class="p-3">Delivery Time</th>
-                                    <th class="p-3">Earnings (₦)</th>
-                                    <th class="p-3">Status</th>
-                                    <th class="p-3">Actions</th>
+                                <tr class="bg-gray-100 text-left text-gray-600">
+                                    <th class="p-3 font-medium">Month</th>
+                                    <th class="p-3 font-medium">Service Charge (₦)</th>
+                                    <th class="p-3 font-medium">VAT (₦)</th>
+                                    <th class="p-3 font-medium">Top-ups (₦)</th>
+                                    <th class="p-3 font-medium">Vendor Fees (₦)</th>
+                                    <th class="p-3 font-medium">Total Revenue (₦)</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr class="border-t text-gray-700 hover:bg-gray-100">
-                                    <td class="p-3">ORD-04521</td>
-                                    <td class="p-3">John Doe</td>
-                                    <td class="p-3">Gas Refill</td>
-                                    <td class="p-3">42 mins</td>
-                                    <td class="p-3">₦2,500</td>
-                                    <td class="p-3 text-green-500 font-semibold">Completed</td>
-                                    <td class="p-3"><a href="#" class="text-blue-500">View Order</a></td>
+                            <tbody class="divide-y divide-gray-200">
+                                <tr>
+                                    <td class="p-3 text-gray-700">January</td>
+                                    <td class="p-3 text-gray-700">1,200,000</td>
+                                    <td class="p-3 text-gray-700">250,000</td>
+                                    <td class="p-3 text-gray-700">800,000</td>
+                                    <td class="p-3 text-gray-700">500,000</td>
+                                    <td class="p-3 text-gray-700">2,750,000</td>
                                 </tr>
-                                <tr class="border-t text-gray-700 hover:bg-gray-100">
-                                    <td class="p-3">ORD-04518</td>
-                                    <td class="p-3">Jane Smith</td>
-                                    <td class="p-3">Gas Refill</td>
-                                    <td class="p-3">36 mins</td>
-                                    <td class="p-3">₦3,200</td>
-                                    <td class="p-3 text-yellow-500 font-semibold">In Progress</td>
-                                    <td class="p-3"><a href="#" class="text-blue-500">View Order</a></td>
+                                <tr>
+                                    <td class="p-3 text-gray-700">February</td>
+                                    <td class="p-3 text-gray-700">1,350,000</td>
+                                    <td class="p-3 text-gray-700">270,000</td>
+                                    <td class="p-3 text-gray-700">900,000</td>
+                                    <td class="p-3 text-gray-700">550,000</td>
+                                    <td class="p-3 text-gray-700">3,070,000</td>
                                 </tr>
-                                <tr class="border-t text-gray-700 hover:bg-gray-100">
-                                    <td class="p-3">ORD-04490</td>
-                                    <td class="p-3">Richard Obi</td>
-                                    <td class="p-3">Petroleum</td>
-                                    <td class="p-3">45 mins</td>
-                                    <td class="p-3">₦1,800</td>
-                                    <td class="p-3 text-red-500 font-semibold">Canceled</td>
-                                    <td class="p-3"><a href="#" class="text-blue-500">View Order</a></td>
+                                <tr>
+                                    <td class="p-3 text-gray-700">March</td>
+                                    <td class="p-3 text-gray-700">1,500,000</td>
+                                    <td class="p-3 text-gray-700">300,000</td>
+                                    <td class="p-3 text-gray-700">1,100,000</td>
+                                    <td class="p-3 text-gray-700">600,000</td>
+                                    <td class="p-3 text-gray-700">3,500,000</td>
                                 </tr>
-                                <tr class="border-t text-gray-700 hover:bg-gray-100">
-                                    <td class="p-3">ORD-04465</td>
-                                    <td class="p-3">Sarah Johnson</td>
-                                    <td class="p-3">Accessory</td>
-                                    <td class="p-3">50 mins</td>
-                                    <td class="p-3">₦2,700</td>
-                                    <td class="p-3 text-green-500 font-semibold">Completed</td>
-                                    <td class="p-3"><a href="#" class="text-blue-500">View Order</a></td>
+                                <tr>
+                                    <td class="p-3 text-gray-700">April</td>
+                                    <td class="p-3 text-gray-700">1,450,000</td>
+                                    <td class="p-3 text-gray-700">290,000</td>
+                                    <td class="p-3 text-gray-700">1,050,000</td>
+                                    <td class="p-3 text-gray-700">580,000</td>
+                                    <td class="p-3 text-gray-700">3,370,000</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 text-gray-700">May</td>
+                                    <td class="p-3 text-gray-700">1,600,000</td>
+                                    <td class="p-3 text-gray-700">320,000</td>
+                                    <td class="p-3 text-gray-700">1,200,000</td>
+                                    <td class="p-3 text-gray-700">650,000</td>
+                                    <td class="p-3 text-gray-700">3,770,000</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 text-gray-700">June</td>
+                                    <td class="p-3 text-gray-700">1,700,000</td>
+                                    <td class="p-3 text-gray-700">340,000</td>
+                                    <td class="p-3 text-gray-700">1,250,000</td>
+                                    <td class="p-3 text-gray-700">680,000</td>
+                                    <td class="p-3 text-gray-700">3,970,000</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 text-gray-700">July</td>
+                                    <td class="p-3 text-gray-700">1,750,000</td>
+                                    <td class="p-3 text-gray-700">350,000</td>
+                                    <td class="p-3 text-gray-700">1,300,000</td>
+                                    <td class="p-3 text-gray-700">700,000</td>
+                                    <td class="p-3 text-gray-700">4,100,000</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 text-gray-700">August</td>
+                                    <td class="p-3 text-gray-700">1,900,000</td>
+                                    <td class="p-3 text-gray-700">380,000</td>
+                                    <td class="p-3 text-gray-700">1,400,000</td>
+                                    <td class="p-3 text-gray-700">750,000</td>
+                                    <td class="p-3 text-gray-700">4,430,000</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 text-gray-700">September</td>
+                                    <td class="p-3 text-gray-700">1,850,000</td>
+                                    <td class="p-3 text-gray-700">370,000</td>
+                                    <td class="p-3 text-gray-700">1,350,000</td>
+                                    <td class="p-3 text-gray-700">730,000</td>
+                                    <td class="p-3 text-gray-700">4,300,000</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 text-gray-700">October</td>
+                                    <td class="p-3 text-gray-700">2,000,000</td>
+                                    <td class="p-3 text-gray-700">400,000</td>
+                                    <td class="p-3 text-gray-700">1,500,000</td>
+                                    <td class="p-3 text-gray-700">800,000</td>
+                                    <td class="p-3 text-gray-700">4,700,000</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 text-gray-700">November</td>
+                                    <td class="p-3 text-gray-700">2,100,000</td>
+                                    <td class="p-3 text-gray-700">420,000</td>
+                                    <td class="p-3 text-gray-700">1,500,000</td>
+                                    <td class="p-3 text-gray-700">850,000</td>
+                                    <td class="p-3 text-gray-700">4,970,000</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 text-gray-700">December</td>
+                                    <td class="p-3 text-gray-700">2,250,000</td>
+                                    <td class="p-3 text-gray-700">450,000</td>
+                                    <td class="p-3 text-gray-700">1,750,000</td>
+                                    <td class="p-3 text-gray-700">900,000</td>
+                                    <td class="p-3 text-gray-700">5,350,000</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                    <div class="flex justify-between items-center mt-4 p-4 border-t">
-                        <!-- Left Section: Total Entries & Previous Button -->
-                        <div class="flex items-center space-x-4">
-                            <span class="text-gray-600">Total entries: <span class="font-bold">20</span></span>
-                            <button class="px-3 py-1 text-gray-400 flex items-center space-x-1" disabled>
-                                <i class="fa fa-chevron-left"></i> <span>Previous</span>
-                            </button>
-                        </div>
-
-                        <!-- Centered Page Numbers -->
-                        <div class="flex items-center space-x-2">
-                            <button class="px-3 py-1 bg-yellow-500 text-white font-bold rounded-full">1</button>
-                            <span class="text-gray-700">2</span>
-                            <span class="text-gray-700">3</span>
-                            <span class="text-gray-500">..</span>
-                            <span class="text-gray-700">5</span>
-                        </div>
-
-                        <!-- Right Section: Next Button -->
-                        <button class="px-3 py-1 text-gray-500 flex items-center space-x-1 hover:text-gray-700">
-                            <span>Next</span> <i class="fa fa-chevron-right"></i>
-                        </button>
-                    </div>
+                    
 
                 </div>
             </div>
-            <!-- Payout History -->
-            <div class="bg-white rounded-md border border-gray-300 rounded-md shadow-md p-6 mb-6 mt-4">
-                <div class="container mx-auto">
-                    <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-6">
-                        <h1 class="text-xl  font-semibold text-gray-800 mb-4 md:mb-0">Payout History</h1>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full border-collapse bg-white shadow-md rounded-lg overflow-hidden">
-                            <thead>
-                                <tr class="bg-gray-200 text-left text-gray-600 text-sm">
-                                    <th class="p-3">Transaction ID</th>
-                                    <th class="p-3">Amount Withdrawn (₦)</th>
-                                    <th class="p-3">Date</th>
-                                    <th class="p-3">Status</th>
-                                    <th class="p-3">Bank</th>
-                                    <th class="p-3">Account Number</th>
-                                    <th class="p-3">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="border-t text-gray-700 hover:bg-gray-100">
-                                    <td class="p-3">TXN-00123</td>
-                                    <td class="p-3">₦50,000</td>
-                                    <td class="p-3">2025-03-10</td>
-                                    <td class="p-3 text-green-500 font-semibold">Completed</td>
-                                    <td class="p-3">GTBank</td>
-                                    <td class="p-3">0023456789</td>
-                                    <td class="p-3"><a href="#" class="text-blue-500">ViewOrder</a></td>
-                                </tr>
-                                <tr class="border-t text-gray-700 hover:bg-gray-100">
-                                    <td class="p-3">TXN-00105</td>
-                                    <td class="p-3">₦30,000</td>
-                                    <td class="p-3">2025-03-10</td>
-                                    <td class="p-3 text-green-500 font-semibold">Completed</td>
-                                    <td class="p-3">Zenith</td>
-                                    <td class="p-3">1012345678</td>
-                                    <td class="p-3"><a href="#" class="text-blue-500">ViewOrder</a></td>
-                                </tr>
-                                <tr class="border-t text-gray-700 hover:bg-gray-100">
-                                    <td class="p-3">TXN-00098</td>
-                                    <td class="p-3">₦40,000</td>
-                                    <td class="p-3">2025-02-10</td>
-                                    <td class="p-3 text-green-500 font-semibold">Completed</td>
-                                    <td class="p-3">AccessBank</td>
-                                    <td class="p-3">2045678912</td>
-                                    <td class="p-3"><a href="#" class="text-blue-500">ViewOrder</a></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+            
+            <div class="bg-white rounded-lg shadow p-4 md:p-6 w-full max-w-6xl mx-auto">
+                <h2 class="text-gray-700 text-sm font-medium mb-4">Top Vendors & Delivery Reps by Revenue</h2>
+                <div class="flex flex-col lg:flex-row gap-6">
+                  <!-- Chart -->
+                  <div class="w-full lg:w-1/2 flex items-center justify-center">
+                    <canvas id="donutChart" class="w-full max-w-md"></canvas>
+                    
+                  </div>
+          
+                  <!-- Table -->
+                  <div class="w-full lg:w-1/2 overflow-x-auto">
+                    <table class="w-full text-sm text-left text-gray-600">
+                      <thead class="bg-gray-100 text-gray-600 font-medium">
+                        <tr>
+                          <th class="py-2 px-4">Rank</th>
+                          <th class="py-2 px-4">Vendor / Delivery Rep Name</th>
+                          <th class="py-2 px-4">Revenue Earned (₦)</th>
+                          <th class="py-2 px-4">Percentage of Total (%)</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr class="border-b"><td class="py-2 px-4 text-red-500 border-l-4 border-red-500">1</td><td class="py-2 px-4">Supreme Gas Ltd</td><td class="py-2 px-4">2,400,000</td><td class="py-2 px-4">21%</td></tr>
+                        <tr class="border-b"><td class="py-2 px-4 text-purple-500 border-l-4 border-purple-500">2</td><td class="py-2 px-4">Fast Diesel Co.</td><td class="py-2 px-4">2,100,000</td><td class="py-2 px-4">18%</td></tr>
+                        <tr class="border-b"><td class="py-2 px-4 text-indigo-500 border-l-4 border-indigo-500">3</td><td class="py-2 px-4">Mega Gas Nigeria</td><td class="py-2 px-4">1,800,000</td><td class="py-2 px-4">16%</td></tr>
+                        <tr class="border-b"><td class="py-2 px-4 text-blue-500 border-l-4 border-blue-500">4</td><td class="py-2 px-4">PetroSwift</td><td class="py-2 px-4">1,500,000</td><td class="py-2 px-4">13%</td></tr>
+                        <tr class="border-b"><td class="py-2 px-4 text-sky-500 border-l-4 border-sky-500">5</td><td class="py-2 px-4">Elite Energy</td><td class="py-2 px-4">1,200,000</td><td class="py-2 px-4">10%</td></tr>
+                        <tr class="border-b"><td class="py-2 px-4 text-yellow-800 border-l-4 border-yellow-800">6</td><td class="py-2 px-4">EcoGas Limited</td><td class="py-2 px-4">900,000</td><td class="py-2 px-4">8%</td></tr>
+                        <tr class="border-b"><td class="py-2 px-4 text-teal-500 border-l-4 border-teal-500">7</td><td class="py-2 px-4">Energy Plus Ltd</td><td class="py-2 px-4">750,000</td><td class="py-2 px-4">7%</td></tr>
+                        <tr class="border-b"><td class="py-2 px-4 text-green-500 border-l-4 border-green-500">8</td><td class="py-2 px-4">SolarTech Nigeria</td><td class="py-2 px-4">500,000</td><td class="py-2 px-4">4%</td></tr>
+                        <tr class="border-b"><td class="py-2 px-4 text-yellow-500 border-l-4 border-yellow-500">9</td><td class="py-2 px-4">Superior Oil</td><td class="py-2 px-4">350,000</td><td class="py-2 px-4">2%</td></tr>
+                        <tr class="border-b"><td class="py-2 px-4 text-orange-400 border-l-4 border-orange-400">10</td><td class="py-2 px-4">Bright Gas</td><td class="py-2 px-4">250,000</td><td class="py-2 px-4">1%</td></tr>
+                        <tr><td class="py-2 px-4 font-medium">Total</td><td class="py-2 px-4">All Vendors & Reps</td><td class="py-2 px-4">11,750,000</td><td class="py-2 px-4">100%</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              
+            <div class="max-w-full mx-auto mt-6 p-4 bg-white rounded-2xl shadow-md relative">
+                <!-- Header & Button -->
+                <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-semibold text-gray-800">User Churn & Account Deletion Insights</h2>
+                <button id="toggleInsightsChurn" class="flex items-center gap-1 border px-3 py-1.5 rounded-md bg-gray-50 hover:bg-gray-100 text-sm font-medium">
+                    <span class="text-yellow-500 text-lg">💡</span> Insights
+                </button>
+                </div>
+
+                <!-- Chart Container with Fixed Height -->
+                <div class="relative w-full" style="height: 400px;">
+                    <canvas id="churnBarChart"></canvas>
+                </div>
+    
+
+                <!-- Insights Popup -->
+                <div id="insightPopupChurn" class="hidden absolute top-20 right-6 w-[420px] bg-white border border-gray-200 rounded-xl shadow-lg p-4 z-10">
+                <div class="flex justify-between items-start mb-2">
+                    <h3 class="text-base font-semibold text-gray-900">💡 Insights from the Chart</h3>
+                    <button onclick="document.getElementById('insightPopupChurn').classList.add('hidden')" class="text-gray-500 hover:text-gray-700">✕</button>
+                </div>
+                <ul class="list-disc text-sm text-gray-700 pl-5 space-y-2">
+                    <li>Poor Customer Support is the leading cause of churn, making up 35–40% of total deletions each month.</li>
+                    <li>High Service Fees and Payment Issues are also major contributors, accounting for 20–25% each.</li>
+                    <li>Churn spikes in November and December, possibly due to holiday season service demands.</li>
+                    <li>Service delays are more of a concern in the first half of the year, indicating possible operational issues that improve later.</li>
+                </ul>
                 </div>
             </div>
-            <!-- Incident Reports & Complaints -->
-            <div class="bg-white rounded-md border border-gray-300 rounded-md shadow-md p-6 mb-6 mt-4">
-                <div class="container mx-auto">
-                    <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-6">
-                        <h1 class="text-xl  font-semibold text-gray-800 mb-4 md:mb-0">Incident Reports & Complaints</h1>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full border-collapse bg-white shadow-md rounded-lg overflow-hidden">
-
-                            <thead>
-                                <tr class="bg-gray-200 text-left text-gray-600 text-sm">
-                                    <th class="p-3">Report ID</th>
-                                    <th class="p-3">Customer Name</th>
-                                    <th class="p-3">Issue Type</th>
-                                    <th class="p-3">Date</th>
-                                    <th class="p-3">Status</th>
-                                    <th class="p-3">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="border-t text-gray-700 hover:bg-gray-100">
-                                    <td class="p-3">REP-00921</td>
-                                    <td class="p-3">Michael E.</td>
-                                    <td class="p-3">Late Delivery</td>
-                                    <td class="p-3">2025-03-12</td>
-                                    <td class="p-3 text-green-500 font-semibold">Resolved</td>
-                                    <td class="p-3"><a href="#" class="text-blue-500">ViewOrder</a></td>
-                                </tr>
-                                <tr class="border-t text-gray-700 hover:bg-gray-100">
-                                    <td class="p-3">REP-00910</td>
-                                    <td class="p-3">Aisha K.</td>
-                                    <td class="p-3">Rude Behavior</td>
-                                    <td class="p-3">2025-03-10</td>
-                                    <td class="p-3 text-yellow-500 font-semibold">Pending</td>
-                                    <td class="p-3"><a href="#" class="text-blue-500">ViewOrder</a></td>
-                                </tr>
-                                <tr class="border-t text-gray-700 hover:bg-gray-100">
-                                    <td class="p-3">REP-00895</td>
-                                    <td class="p-3">Emeka O.</td>
-                                    <td class="p-3">Damaged Package</td>
-                                    <td class="p-3">2025-03-08</td>
-                                    <td class="p-3 text-orange-500 font-semibold">Investigating</td>
-                                    <td class="p-3"><a href="#" class="text-blue-500">ViewOrder</a></td>
-                                </tr>
-                            </tbody>
-
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <!-- Inftactions History -->
-            <div class="bg-white rounded-md border border-gray-300 rounded-md shadow-md p-6 mb-6 mt-4">
-                <div class="container mx-auto">
-                    <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-6">
-                        <h1 class="text-xl  font-semibold text-gray-800 mb-4 md:mb-0">Inftactions History</h1>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full border-collapse bg-white shadow-md rounded-lg overflow-hidden">
-                            <thead>
-                                <tr class="bg-gray-200 text-left text-gray-600 text-sm">
-                                    <th class="p-3">Infraction ID</th>
-                                    <th class="p-3">Type</th>
-                                    <th class="p-3">Reason</th>
-                                    <th class="p-3">Date</th>
-                                    <th class="p-3">Severity</th>
-                                    <th class="p-3">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="border-t text-gray-700 hover:bg-gray-100">
-                                    <td class="p-3">INF-00921</td>
-                                    <td class="p-3 text-yellow-500 font-semibold">Warning</td>
-                                    <td class="p-3">Late delivery (3rd offense)</td>
-                                    <td class="p-3">2025-03-12</td>
-                                    <td class="p-3 text-blue-500 font-semibold">Low</td>
-                                    <td class="p-3"><a href="#" class="text-blue-500">View Order</a></td>
-                                </tr>
-                                <tr class="border-t text-gray-700 hover:bg-gray-100">
-                                    <td class="p-3">INF-00921</td>
-                                    <td class="p-3 text-blue-500 font-semibold">Flagging</td>
-                                    <td class="p-3">Late delivery (3rd offense)</td>
-                                    <td class="p-3">2025-03-10</td>
-                                    <td class="p-3 text-orange-500 font-semibold">Medium</td>
-                                    <td class="p-3"><a href="#" class="text-blue-500">View Order</a></td>
-                                </tr>
-                                <tr class="border-t text-gray-700 hover:bg-gray-100">
-                                    <td class="p-3">INF-00921</td>
-                                    <td class="p-3 text-yellow-500 font-semibold">Warning</td>
-                                    <td class="p-3">Late delivery (3rd offense)</td>
-                                    <td class="p-3">2025-03-08</td>
-                                    <td class="p-3 text-blue-500 font-semibold">Low</td>
-                                    <td class="p-3"><a href="#" class="text-blue-500">View Order</a></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-
-
         </main>
     </div>
     <!-- Alpine.js (Add this script if not already included in your project) -->
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script>
+        const ctx = document.getElementById("churnBarChart").getContext("2d");
+        new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov"],
+            datasets: [
+              {
+                label: "Poor Customer Support",
+                data: [600000, 620000, 630000, 640000, 650000, 620000, 610000, 590000, 600000, 610000, 700000],
+                backgroundColor: "#EF4444",
+              },
+              {
+                label: "High Service Fees",
+                data: [1100000, 1150000, 1170000, 1200000, 1220000, 1200000, 1190000, 1180000, 1190000, 1170000, 1250000],
+                backgroundColor: "#3B82F6",
+              },
+              {
+                label: "Payment Issues",
+                data: [700000, 710000, 720000, 750000, 760000, 740000, 730000, 720000, 750000, 780000, 900000],
+                backgroundColor: "#10B981",
+              },
+              {
+                label: "Service Delays",
+                data: [250000, 270000, 260000, 240000, 230000, 220000, 200000, 190000, 210000, 230000, 300000],
+                backgroundColor: "#F59E0B",
+              },
+              {
+                label: "Other",
+                data: [900000, 920000, 940000, 950000, 940000, 930000, 910000, 905000, 900000, 910000, 920000],
+                backgroundColor: "#A855F7",
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: 'bottom',
+                labels: {
+                  boxWidth: 12,
+                  padding: 15,
+                  font: {
+                    size: 12
+                  }
+                }
+              },
+              tooltip: {
+                mode: "index",
+                intersect: false,
+                callbacks: {
+                  label: function(context) {
+                    return `${context.dataset.label}: ₦${(context.parsed.y).toLocaleString()}`;
+                  }
+                }
+              }
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: {
+                  callback: value => `₦${value / 1000000}M`
+                },
+                title: {
+                  display: true,
+                  text: 'Churn Value (₦)',
+                  font: { weight: 'bold' }
+                }
+              }
+            }
+          }
+        });
+    
+        // Toggle popup visibility
+        document.getElementById("toggleInsightsChurn").addEventListener("click", () => {
+          document.getElementById("insightPopupChurn").classList.toggle("hidden");
+        });
+      </script>
+    
+      
+      <script>
+        const data = {
+          labels: ['Supreme Gas Ltd', 'Fast Diesel Co.', 'Mega Gas Nigeria', 'PetroSwift', 'Elite Energy', 'EcoGas Limited', 'Energy Plus Ltd', 'SolarTech Nigeria', 'Superior Oil', 'Bright Gas'],
+          datasets: [{
+            label: 'Revenue Share',
+            data: [21, 18, 16, 13, 10, 8, 7, 4, 2, 1],
+            backgroundColor: [
+              '#F44336', '#9C27B0', '#673AB7', '#2196F3', '#03A9F4',
+              '#A1887F', '#009688', '#4CAF50', '#FFC107', '#FF9800'
+            ],
+            borderWidth: 0,
+            hoverOffset: 10
+          }]
+        };
+      
+        // Plugin to draw percentage in the center
+        const centerTextPlugin = {
+          id: 'centerText',
+          beforeDraw(chart) {
+            const {width, height, ctx} = chart;
+            ctx.save();
+      
+            const activeElements = chart.getActiveElements();
+            if (activeElements.length > 0) {
+              const datasetIndex = activeElements[0].datasetIndex;
+              const index = activeElements[0].index;
+              const dataset = chart.data.datasets[datasetIndex];
+              const value = dataset.data[index];
+              const total = dataset.data.reduce((sum, val) => sum + val, 0);
+              const percentage = ((value / total) * 100).toFixed(0) + '%';
+      
+              ctx.font = 'bold 24px sans-serif';
+              ctx.fillStyle = '#333';
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'middle';
+              ctx.fillText(percentage, width / 2, height / 2);
+            }
+            ctx.restore();
+          }
+        };
+      
+        const config = {
+          type: 'doughnut',
+          data: data,
+          options: {
+            responsive: true,
+            cutout: '65%',
+            plugins: {
+              legend: {
+                display: false
+              },
+              tooltip: {
+                enabled: true // still allow tooltips
+              }
+            },
+            hover: {
+              mode: 'nearest',
+              intersect: true
+            }
+          },
+          plugins: [centerTextPlugin]
+        };
+      
+        const myChart = new Chart(
+          document.getElementById('donutChart'),
+          config
+        );
+      </script>
+      
+    <script>
+        const revenueChart = new Chart(document.getElementById("revenueChart"), {
+          type: "bar",
+          data: {
+            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct"],
+            datasets: [
+              {
+                label: "Service Charge",
+                backgroundColor: "#3B82F6",
+                data: [300000, 500000, 200000, 450000, 600000, 550000, 700000, 680000, 650000, 600000],
+              },
+              {
+                label: "VAT",
+                backgroundColor: "#EF4444",
+                data: [100000, 200000, 90000, 150000, 220000, 200000, 240000, 230000, 210000, 190000],
+              },
+              {
+                label: "Top-ups",
+                backgroundColor: "#FACC15",
+                data: [250000, 600000, 150000, 700000, 850000, 800000, 880000, 860000, 840000, 810000],
+              },
+              {
+                label: "Vendor Fees",
+                backgroundColor: "#22C55E",
+                data: [270000, 900000, 270000, 900000, 1000000, 950000, 980000, 970000, 960000, 940000],
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: {
+                  callback: function (value) {
+                    return '₦' + (value / 1000) + 'k';
+                  },
+                },
+              },
+            },
+          },
+        });
+    
+        document.getElementById("toggleInsights").addEventListener("click", () => {
+          document.getElementById("insightPopup").classList.toggle("hidden");
+        });
+    
+        document.getElementById("closeInsights").addEventListener("click", () => {
+          document.getElementById("insightPopup").classList.add("hidden");
+        });
+    
+        document.getElementById("timeRange").addEventListener("change", function () {
+          const selected = this.value;
+                  });
+      </script>
     <script>
 
 

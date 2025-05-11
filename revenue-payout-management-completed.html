@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quicrefill Admin</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Chart.js from cdnjs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"
+        integrity="sha512-ElRFoEQdI5Ht6kZvyzXhYG9NqjtkmlkfYk0wr6wHxU9JEHakS7UJZNeml5ALk+8IKlU6jDgMabC3vkumRokgJA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- Load Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.js"></script>
+</head>
+
+<style>
+    [x-cloak] {
+        display: none !important;
+    }
+
+    @media (max-width: 768px) {
+        .mobile-sidebar {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .mobile-sidebar.open {
+            transform: translateX(0);
+        }
+
+        .dropdown-menu {
+            @apply left-1/2 -translate-x-1/2 w-80 max-w-[95%];
+        }
+
+
+    }
+
+    .flatpickr-day.selected,
+    .flatpickr-day.startRange,
+    .flatpickr-day.endRange {
+        background: #FFB600 !important;
+        color: white !important;
+        border-color: #FFB600 !important;
+    }
+
+    /* Change the color of dates between the range */
+    .flatpickr-day.inRange {
+        background: #FFE08A !important;
+        /* Light yellow */
+        color: black !important;
+    }
+</style>
+</head>
+
+<body class="bg-gray-100">
+    <!-- Header -->
+
+    <header class="bg-white shadow-md flex items-center justify-between p-4 sticky top-0 z-30">
+        <div class="flex items-center">
+            <button id="sidebar-toggle" class=" md:hidden mr-4">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="flex items-center mr-4 md:mr-8">
+                <img src="images/logo.png" class="w-[150px] md:w-[250px]">
+            </div>
+            <button id="hide-sidebar-button" class="border border-gray-200 rounded-md px-2 py-1 z-15 hidden md:block">
+                <i class="fas fa-angle-left"></i>
+            </button>
+        </div>
+
+        <div class="hidden md:block relative w-1/3">
+            <input type="text" placeholder="Search"
+                class="w-full px-4 py-2 border border-gray-300 rounded-md bg-gray-100 focus:outline-none pl-10">
+            <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+            <button
+                class="absolute right-0 top-0 h-full px-4 bg-gradient-to-b from-[#FFC533] to-[#FFB600] text-black rounded-r-md border border-gray-300 shadow flex items-center justify-center">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+        </div>
+
+
+        <div class="flex items-center">
+            <div x-data="{ open: false }" class="relative mr-4">
+                <!-- Notification Icon -->
+                <button @click="open = !open" class="relative p-2">
+                    <i class="fas fa-bell text-gray-600 text-lg"></i>
+                    <!-- Notification Badge -->
+                    <span
+                        class="absolute -top-1 -right-1 bg-yellow-400 text-black text-xs font-bold px-1.5 py-0.5 rounded-full">8</span>
+                </button>
+
+                <!-- Dropdown Menu -->
+                <div x-show="open" @click.away="open = false" x-transition x-cloak
+                    class="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-64 bg-white border rounded-md shadow-lg z-50">
+                    <div class="p-3 border-b">
+                        <span class="font-semibold text-gray-700">Notifications</span>
+                    </div>
+
+                    <ul class="max-h-60 overflow-auto">
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer flex items-center">
+                            <i class="fas fa-bell text-gray-500 text-sm mr-2"></i>
+                            <span class="text-sm text-gray-700">You have a new message</span>
+                        </li>
+
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer flex items-center">
+                            <i class="fas fa-check-circle text-green-500 text-sm mr-2"></i>
+                            <span class="text-sm text-gray-700">Task Completed Successfully</span>
+                        </li>
+
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer flex items-center">
+                            <i class="fas fa-exclamation-triangle text-yellow-500 text-sm mr-2"></i>
+                            <span class="text-sm text-gray-700">System Alert: Update Required</span>
+                        </li>
+
+                    </ul>
+
+                    <div class="p-3 border-t text-center">
+                        <a href="notifications-center.html" class="text-sm text-blue-500 hover:underline">View all</a>
+                    </div>
+                </div>
+            </div>
+
+            <div x-data="{ open: false }" class="relative">
+                <!-- Profile Button -->
+                <button @click="open = !open"
+                    class="flex items-center rounded-full px-2 py-1 md:px-4 md:py-2 border border-gray-300 shadow-md focus:outline-none">
+                    <!-- Avatar -->
+                    <div class="relative w-10 h-10 md:w-10 md:h-10 rounded-full bg-gray-300 mr-2">
+                        <!-- Avatar Image -->
+                        <img src="images/Avatar/avatar.png" alt="User Avatar"
+                            class="w-full h-full object-cover rounded-full">
+
+                        <!-- Green Dot (Move Outside) -->
+                        <div class="absolute top-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"
+                            style="transform: translate(30%, -30%);"></div>
+                    </div>
+
+                    <!-- User Info -->
+                    <div class="hidden md:block text-left">
+                        <div class="text-sm font-medium">Timothy Jonson</div>
+                        <div class="text-xs text-gray-500">timoj@Quicrefil.ng</div>
+                    </div>
+                </button>
+
+                <!-- Dropdown Menu -->
+                <div x-show="open" @click.away="open = false" x-transition x-cloak
+                    class="absolute right-0 mt-2 w-48 bg-white border rounded-md shadow-lg z-50">
+                    <ul class="py-2">
+                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                            <a href="profiles-settings.html" class="flex items-center text-gray-700">
+                                <i class="fas fa-user mr-2"></i>
+                                Profile
+                            </a>
+                        </li>
+
+                        <li class="px-4 py-2 text-red-500 hover:bg-gray-100 cursor-pointer">
+                            <a href="login.html" class="flex items-center">
+                                <i class="fas fa-sign-out-alt mr-2"></i>
+                                Logout
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="flex">
+        <!-- Sidebar -->
+
+        <aside id="sidebar"
+            class="mobile-sidebar fixed md:relative w-64 bg-white min-h-screen shadow-sm z-20 md:transform-none border border-gray-300S">
+            <nav class="p-4">
+                <ul>
+                    <li class="mb-4">
+                        <a href="quicrefill-dashboard.html" class="flex items-center text-amber-500 font-medium">
+                            <i class="fas fa-th-large mr-3"></i>
+                            <span>Summary</span>
+                        </a>
+                    </li>
+
+                    <li class="mb-4">
+                        <a href="order-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-clipboard-list mr-3"></i>
+                            <span>Order Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="delivery-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-cube mr-3"></i>
+                            <span>Delivery Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="service-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-briefcase mr-3"></i>
+                            <span>Service Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="accessories-management.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-bag-shopping mr-3"></i>
+                            <span>Accessories Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="user-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-user mr-3"></i>
+                            <span>User Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="vendor-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-store mr-3"></i>
+                            <span>Vendor Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="delivery-rep-management.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-truck-droplet mr-2"></i>
+                            <span>Delivery Rep Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="verification-and-compliance.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-check-square mr-3"></i>
+                            <span>Verification & Compliance</span>
+                        </a>
+                    </li>
+                    <li x-data="{ open: false }" class="mb-4">
+                        <a href="#" @click.prevent="open = !open"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-sack-dollar mr-3"></i>
+                            <span>Revenue Management</span>
+                            <i :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas ml-auto text-xs"></i>
+                        </a>
+
+                        <!-- Dropdown Menu -->
+                        <ul x-show="open" x-cloak class="mt-2 ml-6 space-y-2 text-gray-800">
+
+                            <!-- Revenue Breakdown -->
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-chart-pie mr-3 text-gray-500"></i>
+                                <a href="revenue-breakdown.html">Revenue Breakdown</a>
+                            </li>
+
+                            <!-- Payout Management -->
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-hand-holding-usd mr-3 text-gray-500"></i>
+                                <a href="payout-management.html">Payout Management</a>
+                            </li>
+
+                            <!-- Revenue Analytics -->
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-chart-line mr-3 text-gray-500"></i>
+                                <a href="revenue-analytics.html">Revenue Analytics & Insights</a>
+                            </li>
+
+                        </ul>
+                    </li>
+
+                    <li class="mb-4">
+                        <a href="withdrawal-management.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-money-bill-transfer mr-3"></i>
+                            <span>Withdrawal Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="account-deletion.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-user-xmark mr-3"></i>
+                            <span>Account Deletion</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="account-deletion.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fa fa-map-marker mr-3"></i>
+                            <span>Operating Locations</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="feedback.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-comments mr-3"></i>
+                            <span>Feedback</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="fraud-watch.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fa fa-binoculars mr-3"></i>
+                            <span>Fraud Watch</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="reports-and-analytics.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-chart-bar mr-3"></i>
+                            <span>Reports and Analytics</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="crash-analytics.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fa fa-line-chart mr-3"></i>
+                            <span>Crash Analytics</span>
+                        </a>
+                    </li>
+                    <li x-data="{ open: false }" class="mb-4">
+                        <a href="#" @click.prevent="open = !open"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-shield-alt mr-3"></i>
+                            <span>Audit Logs & Security</span>
+                            <i :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas ml-auto text-xs"></i>
+                        </a>
+
+                        <!-- Dropdown Menu -->
+                        <ul x-show="open" x-cloak class="mt-2 ml-6 space-y-2 text-gray-500">
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-file-alt mr-3"></i>
+                                <a href="security-logs.html">Security Logs</a>
+                            </li>
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-user-lock mr-3"></i>
+                                <a href="access-control.html">Access Control</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="mb-4">
+                        <a href="staff-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-user-shield mr-3"></i>
+                            <span>Staff Management</span>
+                        </a>
+                    </li>
+
+                    <li x-data="{ open: false }" class="mb-4">
+                        <a href="#" @click.prevent="open = !open"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-cog mr-3"></i>
+                            <span>System Settings</span>
+                            <i :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas ml-auto text-xs"></i>
+                        </a>
+
+                        <!-- Dropdown Menu -->
+                        <ul x-show="open" x-cloak class="mt-2 ml-6 space-y-2 text-gray-500">
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-envelope-open-text mr-3"></i>
+                                <a href="system-message-settings.html">Message Settings</a>
+                            </li>
+
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-bell mr-3"></i>
+                                <a href="system-push-notification-settings.html">Push Notification Settings</a>
+                            </li>
+
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-ticket-alt mr-3"></i>
+                                <a href="system-coupon-settings.html">Coupon Settings</a>
+                            </li>
+
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Overlay for sidebar on mobile -->
+        <div id="sidebar-overlay" class="fixed inset-0 bg-black opacity-50 z-10 hidden"></div>
+
+        <!-- Content Area -->
+        <main class="flex-1 p-4 m-4 w-full overflow-x-hidden">
+            <div class="flex flex-col space-y-4 md:space-y-0 md:flex-row md:justify-between md:items-center mb-6">
+                <!-- Left Section (Title & Breadcrumb) -->
+                <div class="w-full md:w-auto">
+                    <h1 class="text-xl md:text-xl font-bold text-gray-800">Payout Management</h1>
+                    <div class="flex flex-wrap items-center space-x-2 text-gray-600 text-xs mt-1">
+                        <a href="#" class="breadcrumb-item hover:text-yellow-500">Dashboard</a>
+                        <span>></span>
+                        <a href="#" class="breadcrumb-item hover:text-yellow-500">Revenue Management</a>
+                        <span>></span>
+                        <span class="text-gray-800 font-semibold" id="serviceId">Payout Management</span>
+                    </div>
+                </div>
+
+                <!-- Right Section (Controls) -->
+                <div class="grid grid-cols-2 md:flex md:flex-wrap items-center gap-2 md:gap-4 w-full md:w-auto">
+                    <!-- Search Box -->
+                    <div class="relative w-36">
+                        <input type="text" placeholder="Search"
+                            class="bg-white w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 focus:outline-none pr-10 text-sm">
+                        <i
+                            class="fas fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer"></i>
+                    </div>
+
+
+                    <div class="mb-2 md:mb-0">
+                        <div class="flex gap-0">
+                            <!-- Date Picker -->
+                            <div class="relative w-52">
+                                <input type="text" id="datePicker"
+                                    class="pl-10 pr-3 py-2 border rounded-md w-full focus:outline-none cursor-pointer text-gray-700"
+                                    readonly>
+                                <span class="absolute left-3 top-2 text-gray-500">
+                                    <i class="fa-solid fa-calendar"></i>
+                                </span>
+                            </div>
+
+                            <!-- Dropdown -->
+                            <div class="relative z-20">
+                                <button id="dropdownBtn"
+                                    class="px-4 py-2 border rounded-md bg-white text-gray-700 focus:outline-none">
+                                    Monthly <i class="fa-solid fa-chevron-down ml-1"></i>
+                                </button>
+                                <div id="dropdownMenu"
+                                    class="absolute w-36 mt-2 bg-white border rounded-md shadow-md hidden">
+                                    <button class="block w-full text-left px-4 py-2 hover:bg-gray-200"
+                                        onclick="setDateMode('today')">Today</button>
+                                    <button class="block w-full text-left px-4 py-2 hover:bg-gray-200"
+                                        onclick="setDateMode('Specific Date')">Specific Date</button>
+                                    <button class="block w-full text-left px-4 py-2 hover:bg-gray-200"
+                                        onclick="setDateMode('monthly')">Monthly</button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-2 md:mb-0">
+                        <div class="relative inline-block" x-data="{ open: false, selectedServices: [] }">
+                            <button @click="open = !open" class="flex items-center gap-2 px-4 py-2 bg-white border rounded-lg">
+                                <i class="fa fa-filter"></i> Service Type
+                            </button>
+                        
+                            <div x-show="open" @click.outside="open = false" x-cloak
+                                class="dropdown-menu absolute left-auto right-0 top-full mt-2 w-48 bg-white border rounded-lg shadow-lg p-4 z-30">
+                        
+                                <h3 class="text-gray-700 font-medium mb-3">Select Service Type</h3>
+                        
+                                <div class="grid grid-cols-2 gap-2">
+                                    <template x-for="service in ['Gas Refill', 'Petroleum', 'Diesel', 'Accessories', 'Electricity']">
+                                        <button
+                                            @click="selectedServices.includes(service) ? selectedServices = selectedServices.filter(s => s !== service) : selectedServices.push(service)"
+                                            :class="selectedServices.includes(service) ? 'bg-yellow-400 ' : 'border'"
+                                            class="px-3 py-2 rounded-lg text-sm">
+                                            <span x-text="service"></span>
+                                        </button>
+                                    </template>
+                                </div>
+                        
+                                <div class="mt-4 text-center">
+                                    <button @click="open = false; console.log('Selected Services:', selectedServices);"
+                                        class="px-4 py-2 bg-yellow-400 rounded-lg">Apply</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+            </div>
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-6">
+                <!-- Left -->
+                <div class="flex-1">
+                    
+                </div>
+
+                <div class="flex-shrink-0 flex space-x-2">
+                    <button
+                        class="w-full sm:w-auto bg-gradient-to-b from-gray-100 to-gray-300 hover:from-gray-200 hover:to-gray-400 text-black py-2 px-3 sm:px-4 rounded text-xs sm:text-sm">
+                        <i class="fa fa-refresh pr-2"></i>Refresh Data
+                    </button>
+                    <button
+                        class="w-full sm:w-auto bg-gradient-to-b from-gray-100 to-gray-300 hover:from-gray-200 hover:to-gray-400 text-black py-2 px-3 sm:px-4 rounded text-xs sm:text-sm">
+                        <i class="fa fa-download pr-2"></i>Export as PDF
+                    </button>
+                </div>
+            </div>
+
+
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 m-4">
+                <div class="border rounded-lg p-4 bg-white shadow-sm relative">
+                    <div class="mb-2">
+                        <div class="flex items-center justify-between mb-1 overflow-hidden">
+                            <div class="flex items-center gap-2 flex-nowrap">
+                                <i class="fa fa-money-bill-wave text-sm sm:text-base text-gray-500 flex-shrink-0"></i>
+                                <h2 class="text-xs sm:text-sm font-semibold text-gray-700 whitespace-normal break-words">
+                                    Total Pending Payouts</h2>
+                            </div>
+                            <i class="fa fa-info-circle text-sm sm:text-base cursor-pointer text-gray-400 flex-shrink-0"></i>
+                        </div>
+                    </div>
+                    <p class="text-xl sm:text-2xl font-bold text-gray-900">₦8,000,000</p>
+                </div>
+            
+                <div class="border rounded-lg p-4 bg-white shadow-sm relative">
+                    <div class="mb-2">
+                        <div class="flex items-center justify-between mb-1 overflow-hidden">
+                            <div class="flex items-center gap-2 flex-nowrap">
+                                <i class="fa fa-check-double text-sm sm:text-base text-green-500 flex-shrink-0"></i>
+                                <h2 class="text-xs sm:text-sm font-semibold text-gray-700 whitespace-normal break-words">
+                                    Total Processed Payouts</h2>
+                            </div>
+                            <i class="fa fa-info-circle text-sm sm:text-base cursor-pointer text-gray-400 flex-shrink-0"></i>
+                        </div>
+                    </div>
+                    <p class="text-xl sm:text-2xl font-bold text-gray-900">₦67,450,000</p>
+                </div>
+            
+                <div class="border rounded-lg p-4 bg-white shadow-sm relative">
+                    <div class="mb-2">
+                        <div class="flex items-center justify-between mb-1 overflow-hidden">
+                            <div class="flex items-center gap-2 flex-nowrap">
+                                <i class="fa fa-spinner text-sm sm:text-base text-yellow-500 flex-shrink-0"></i>
+                                <h2 class="text-xs sm:text-sm font-semibold text-gray-700 whitespace-normal break-words">
+                                    Payouts in Progress</h2>
+                            </div>
+                            <i class="fa fa-info-circle text-sm sm:text-base cursor-pointer text-gray-400 flex-shrink-0"></i>
+                        </div>
+                    </div>
+                    <p class="text-xl sm:text-2xl font-bold text-gray-900">₦3,045,000</p>
+                </div>
+            
+                <div class="border rounded-lg p-4 bg-white shadow-sm relative">
+                    <div class="mb-2">
+                        <div class="flex items-center justify-between mb-1 overflow-hidden">
+                            <div class="flex items-center gap-2 flex-nowrap">
+                                <i class="fa fa-calendar text-sm sm:text-base text-blue-500 flex-shrink-0"></i>
+                                <h2 class="text-xs sm:text-sm font-semibold text-gray-700 whitespace-normal break-words">
+                                    Last Payout Date</h2>
+                            </div>
+                            <i class="fa fa-info-circle text-sm sm:text-base cursor-pointer text-gray-400 flex-shrink-0"></i>
+                        </div>
+                    </div>
+                    <p class="text-xl sm:text-2xl font-bold text-gray-900">25/01/26 11:20 AM</p>
+                </div>
+            </div>
+            <div class="flex justify-center mb-8 mt-8">
+
+                <div class="inline-flex flex-wrap justify-center gap-2 bg-white rounded-lg shadow-md p-2">
+
+                    <button
+                    class="tab-button px-5 py-2 rounded-md text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-800 focus:outline-none transition duration-150 ease-in-out whitespace-nowrap">
+                        Pending
+                    </button>
+
+                    
+                    
+                    <button
+                    class="tab-button px-5 py-2 rounded-md text-sm font-medium bg-yellow-400 text-black focus:outline-none transition duration-150 ease-in-out whitespace-nowrap">
+                        
+                        Completed
+                    </button>
+
+
+                </div>
+            </div>
+            <!--Pending Payout -->
+            <div class="bg-white rounded-md border border-gray-300 shadow-md p-4 mb-6">
+                <h2 class="text-xl font-semibold mb-4">Pending Payouts</h2>
+                <div class="container mx-auto">
+                    <div class="overflow-x-auto">
+                        <table class="w-full border-collapse bg-white shadow-md rounded-lg overflow-hidden">
+                            <thead class="bg-gray-200 text-left text-gray-600 text-sm">
+                                <tr>
+                                    <th class="p-3">Payout ID</th>
+                                    <th class="p-3">Vendor/Rep Name</th>
+                                    <th class="p-3">Service Type</th>
+                                    <th class="p-3 text-right">Amount (₦)</th>
+                                    <th class="p-3">Payment Date</th>
+                                    <th class="p-3">Payment Method</th>
+                                    <th class="p-3">Status</th>
+                                    <th class="p-3">Reference ID</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-gray-700 text-sm">
+                                <tr class="border-t hover:bg-gray-100">
+                                    <td class="p-3">PAY-2001</td>
+                                    <td class="p-3">Vendor A</td>
+                                    <td class="p-3">Gas Refill</td>
+                                    <td class="p-3 text-right">50,000</td>
+                                    <td class="p-3">2025-03-01</td>
+                                    <td class="p-3">Bank Transfer</td>
+                                    <td class="p-3 text-green-600">Completed</td>
+                                    <td class="p-3 text-blue-600"><a href="#">REF-982301</a></td>
+                                </tr>
+                                <tr class="border-t hover:bg-gray-100">
+                                    <td class="p-3">PAY-2001</td>
+                                    <td class="p-3">Vendor B</td>
+                                    <td class="p-3">Diesel</td>
+                                    <td class="p-3 text-right">75,000</td>
+                                    <td class="p-3">2025-03-02</td>
+                                    <td class="p-3">Mobile Wallet</td>
+                                    <td class="p-3 text-green-600">Completed</td>
+                                    <td class="p-3 text-blue-600"><a href="#">REF-982302</a></td>
+                                </tr>
+                                <tr class="border-t hover:bg-gray-100">
+                                    <td class="p-3">PAY-2001</td>
+                                    <td class="p-3">Rep C</td>
+                                    <td class="p-3">Diesel</td>
+                                    <td class="p-3 text-right">40,000</td>
+                                    <td class="p-3">2025-03-02</td>
+                                    <td class="p-3">Bank Transfer</td>
+                                    <td class="p-3 text-green-600">Completed</td>
+                                    <td class="p-3 text-blue-600"><a href="#">REF-982303</a></td>
+                                </tr>
+                                <tr class="border-t hover:bg-gray-100">
+                                    <td class="p-3">PAY-2001</td>
+                                    <td class="p-3">Vendor D</td>
+                                    <td class="p-3">Petroleum</td>
+                                    <td class="p-3 text-right">60,000</td>
+                                    <td class="p-3">2025-03-03</td>
+                                    <td class="p-3">Mobile Wallet</td>
+                                    <td class="p-3 text-green-600">Completed</td>
+                                    <td class="p-3 text-blue-600"><a href="#">REF-982304</a></td>
+                                </tr>
+                                <tr class="border-t hover:bg-gray-100">
+                                    <td class="p-3">PAY-2001</td>
+                                    <td class="p-3">Rep E</td>
+                                    <td class="p-3">Diesel</td>
+                                    <td class="p-3 text-right">25,000</td>
+                                    <td class="p-3">2025-03-03</td>
+                                    <td class="p-3">Bank Transfer</td>
+                                    <td class="p-3 text-green-600">Completed</td>
+                                    <td class="p-3 text-blue-600"><a href="#">REF-982305</a></td>
+                                </tr>
+                                <tr class="border-t hover:bg-gray-100">
+                                    <td class="p-3">PAY-2001</td>
+                                    <td class="p-3">Vendor F</td>
+                                    <td class="p-3">Gas Refill</td>
+                                    <td class="p-3 text-right">35,000</td>
+                                    <td class="p-3">2025-03-04</td>
+                                    <td class="p-3">Bank Transfer</td>
+                                    <td class="p-3 text-green-600">Completed</td>
+                                    <td class="p-3 text-blue-600"><a href="#">REF-982306</a></td>
+                                </tr>
+                                <tr class="border-t hover:bg-gray-100">
+                                    <td class="p-3">PAY-2001</td>
+                                    <td class="p-3">Rep G</td>
+                                    <td class="p-3">Gas Refill</td>
+                                    <td class="p-3 text-right">90,000</td>
+                                    <td class="p-3">2025-03-04</td>
+                                    <td class="p-3">Mobile Wallet</td>
+                                    <td class="p-3 text-green-600">Completed</td>
+                                    <td class="p-3 text-blue-600"><a href="#">REF-982307</a></td>
+                                </tr>
+                                <tr class="border-t hover:bg-gray-100">
+                                    <td class="p-3">PAY-2001</td>
+                                    <td class="p-3">Vendor H</td>
+                                    <td class="p-3">Petroleum</td>
+                                    <td class="p-3 text-right">120,000</td>
+                                    <td class="p-3">2025-03-04</td>
+                                    <td class="p-3">Bank Transfer</td>
+                                    <td class="p-3 text-green-600">Completed</td>
+                                    <td class="p-3 text-blue-600"><a href="#">REF-982308</a></td>
+                                </tr>
+                                <tr class="border-t hover:bg-gray-100">
+                                    <td class="p-3">PAY-2001</td>
+                                    <td class="p-3">Rep I</td>
+                                    <td class="p-3">Petroleum</td>
+                                    <td class="p-3 text-right">55,000</td>
+                                    <td class="p-3">2025-03-05</td>
+                                    <td class="p-3">Mobile Wallet</td>
+                                    <td class="p-3 text-green-600">Completed</td>
+                                    <td class="p-3 text-blue-600"><a href="#">REF-982309</a></td>
+                                </tr>
+                                <tr class="border-t hover:bg-gray-100">
+                                    <td class="p-3">PAY-2001</td>
+                                    <td class="p-3">Vendor J</td>
+                                    <td class="p-3">Petroleum</td>
+                                    <td class="p-3 text-right">80,000</td>
+                                    <td class="p-3">2025-03-05</td>
+                                    <td class="p-3">Bank Transfer</td>
+                                    <td class="p-3 text-green-600">Completed</td>
+                                    <td class="p-3 text-blue-600"><a href="#">REF-982310</a></td>
+                                </tr>
+                                <tr class="border-t hover:bg-gray-100">
+                                    <td class="p-3">PAY-2001</td>
+                                    <td class="p-3">Rep K</td>
+                                    <td class="p-3">Diesel</td>
+                                    <td class="p-3 text-right">43,000</td>
+                                    <td class="p-3">2025-03-05</td>
+                                    <td class="p-3">Bank Transfer</td>
+                                    <td class="p-3 text-green-600">Completed</td>
+                                    <td class="p-3 text-blue-600"><a href="#">REF-982311</a></td>
+                                </tr>
+                                <tr class="border-t hover:bg-gray-100">
+                                    <td class="p-3">PAY-2001</td>
+                                    <td class="p-3">Vendor L</td>
+                                    <td class="p-3">Diesel</td>
+                                    <td class="p-3 text-right">53,000</td>
+                                    <td class="p-3">2025-03-06</td>
+                                    <td class="p-3">Mobile Wallet</td>
+                                    <td class="p-3 text-green-600">Completed</td>
+                                    <td class="p-3 text-blue-600"><a href="#">REF-982312</a></td>
+                                </tr>
+                                <tr class="border-t hover:bg-gray-100">
+                                    <td class="p-3">PAY-2001</td>
+                                    <td class="p-3">Rep M</td>
+                                    <td class="p-3">Gas Refill</td>
+                                    <td class="p-3 text-right">21,000</td>
+                                    <td class="p-3">2025-03-07</td>
+                                    <td class="p-3">Mobile Wallet</td>
+                                    <td class="p-3 text-green-600">Completed</td>
+                                    <td class="p-3 text-blue-600"><a href="#">REF-982313</a></td>
+                                </tr>
+                                <tr class="border-t hover:bg-gray-100">
+                                    <td class="p-3">PAY-2001</td>
+                                    <td class="p-3">Vendor N</td>
+                                    <td class="p-3">Gas Refill</td>
+                                    <td class="p-3 text-right">23,000</td>
+                                    <td class="p-3">2025-03-07</td>
+                                    <td class="p-3">Mobile Wallet</td>
+                                    <td class="p-3 text-green-600">Completed</td>
+                                    <td class="p-3 text-blue-600"><a href="#">REF-982314</a></td>
+                                </tr>
+                                <tr class="border-t hover:bg-gray-100">
+                                    <td class="p-3">PAY-2001</td>
+                                    <td class="p-3">Rep O</td>
+                                    <td class="p-3">Gas Refill</td>
+                                    <td class="p-3 text-right">87,000</td>
+                                    <td class="p-3">2025-03-08</td>
+                                    <td class="p-3">Bank Transfer</td>
+                                    <td class="p-3 text-green-600">Completed</td>
+                                    <td class="p-3 text-blue-600"><a href="#">REF-982315</a></td>
+                                </tr>
+                                <tr class="border-t hover:bg-gray-100">
+                                    <td class="p-3">PAY-2001</td>
+                                    <td class="p-3">Vendor P</td>
+                                    <td class="p-3">Petroleum</td>
+                                    <td class="p-3 text-right">96,000</td>
+                                    <td class="p-3">2025-03-08</td>
+                                    <td class="p-3">Bank Transfer</td>
+                                    <td class="p-3 text-green-600">Completed</td>
+                                    <td class="p-3 text-blue-600"><a href="#">REF-982316</a></td>
+                                </tr>
+                                <tr class="border-t hover:bg-gray-100">
+                                    <td class="p-3">PAY-2001</td>
+                                    <td class="p-3">Rep Q</td>
+                                    <td class="p-3">Petroleum</td>
+                                    <td class="p-3 text-right">122,000</td>
+                                    <td class="p-3">2025-03-09</td>
+                                    <td class="p-3">Mobile Wallet</td>
+                                    <td class="p-3 text-green-600">Completed</td>
+                                    <td class="p-3 text-blue-600"><a href="#">REF-982317</a></td>
+                                </tr>
+                                <tr class="border-t hover:bg-gray-100">
+                                    <td class="p-3">PAY-2001</td>
+                                    <td class="p-3">Vendor R</td>
+                                    <td class="p-3">Accessories</td>
+                                    <td class="p-3 text-right">234,000</td>
+                                    <td class="p-3">2025-03-09</td>
+                                    <td class="p-3">Bank Transfer</td>
+                                    <td class="p-3 text-green-600">Completed</td>
+                                    <td class="p-3 text-blue-600"><a href="#">REF-982318</a></td>
+                                </tr>
+                                <tr class="border-t hover:bg-gray-100">
+                                    <td class="p-3">PAY-2001</td>
+                                    <td class="p-3">Rep S</td>
+                                    <td class="p-3">Accessories</td>
+                                    <td class="p-3 text-right">455,000</td>
+                                    <td class="p-3">2025-03-10</td>
+                                    <td class="p-3">Bank Transfer</td>
+                                    <td class="p-3 text-green-600">Completed</td>
+                                    <td class="p-3 text-blue-600"><a href="#">REF-982319</a></td>
+                                </tr>
+                                <tr class="border-t hover:bg-gray-100">
+                                    <td class="p-3">PAY-2001</td>
+                                    <td class="p-3">Vendor T</td>
+                                    <td class="p-3">Accessories</td>
+                                    <td class="p-3 text-right">223,000</td>
+                                    <td class="p-3">2025-03-11</td>
+                                    <td class="p-3">Bank Transfer</td>
+                                    <td class="p-3 text-green-600">Completed</td>
+                                    <td class="p-3 text-blue-600"><a href="#">REF-982320</a></td>
+                                </tr>
+                                <tr class="border-t hover:bg-gray-100">
+                                    <td class="p-3">PAY-2001</td>
+                                    <td class="p-3">Rep U</td>
+                                    <td class="p-3">Petroleum</td>
+                                    <td class="p-3 text-right">434,000</td>
+                                    <td class="p-3">2025-03-11</td>
+                                    <td class="p-3">Bank Transfer</td>
+                                    <td class="p-3 text-green-600">Completed</td>
+                                    <td class="p-3 text-blue-600"><a href="#">REF-982321</a></td>
+                                </tr>
+                                <tr class="border-t hover:bg-gray-100">
+                                    <td class="p-3">PAY-2001</td>
+                                    <td class="p-3">Vendor V</td>
+                                    <td class="p-3">Diesel</td>
+                                    <td class="p-3 text-right">87,000</td>
+                                    <td class="p-3">2025-03-12</td>
+                                    <td class="p-3">Mobile Wallet</td>
+                                    <td class="p-3 text-green-600">Completed</td>
+                                    <td class="p-3 text-blue-600"><a href="#">REF-982322</a></td>
+                                </tr>
+                                <tr class="border-t hover:bg-gray-100">
+                                    <td class="p-3">PAY-2001</td>
+                                    <td class="p-3">Rep W</td>
+                                    <td class="p-3">Diesel</td>
+                                    <td class="p-3 text-right">543,000</td>
+                                    <td class="p-3">2025-03-12</td>
+                                    <td class="p-3">Mobile Wallet</td>
+                                    <td class="p-3 text-green-600">Completed</td>
+                                    <td class="p-3 text-blue-600"><a href="#">REF-982323</a></td>
+                                </tr>
+                                <tr class="border-t hover:bg-gray-100">
+                                    <td class="p-3">PAY-2001</td>
+                                    <td class="p-3">Vendor X</td>
+                                    <td class="p-3">Gas Refill</td>
+                                    <td class="p-3 text-right">50,000</td>
+                                    <td class="p-3">2025-03-13</td>
+                                    <td class="p-3">Bank Transfer</td>
+                                    <td class="p-3 text-green-600">Completed</td>
+                                    <td class="p-3 text-blue-600"><a href="#">REF-982324</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="flex justify-between items-center mt-4 p-4 border-t">
+                        <div class="flex items-center space-x-4">
+                            <span class="text-gray-600">Total entries: <span class="font-bold">112</span></span>
+                            <button class="px-3 py-1 text-gray-400 flex items-center space-x-1" disabled>
+                                <i class="fa fa-chevron-left"></i> <span>Previous</span>
+                            </button>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button class="px-3 py-1 bg-yellow-500 text-white font-bold rounded-full">1</button>
+                            <span class="text-gray-700">2</span>
+                            <span class="text-gray-700">3</span>
+                            <span class="text-gray-500">..</span>
+                            <span class="text-gray-700">5</span>
+                        </div>
+                        <button class="px-3 py-1 text-gray-500 flex items-center space-x-1 hover:text-gray-700">
+                            <span>Next</span> <i class="fa fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="mx-auto bg-white shadow-md rounded-lg p-6">
+                <h2 class="text-lg font-semibold text-gray-800 mb-4">Payment Method Tracking</h2>
+            
+                <div class="overflow-x-auto rounded-lg">
+                  <table class="min-w-full text-left text-gray-700 border-separate border-spacing-y-2">
+                    <thead>
+                      <tr class="text-sm text-gray-500 bg-gray-100">
+                        <th class="py-3 px-4 rounded-tl-lg">Payment Method</th>
+                        <th class="py-3 px-4">Total Transactions</th>
+                        <th class="py-3 px-4">Total Amount (₦)</th>
+                        <th class="py-3 px-4 rounded-tr-lg">% of Total Payouts</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr class="bg-white shadow-sm">
+                        <td class="py-3 px-4 text-gray-600 font-medium">Bank Transfer</td>
+                        <td class="py-3 px-4 text-gray-600">120</td>
+                        <td class="py-3 px-4 text-gray-600">6,000,000</td>
+                        <td class="py-3 px-4 text-gray-600">75%</td>
+                      </tr>
+                      <tr class="bg-white shadow-sm">
+                        <td class="py-3 px-4 text-gray-600 font-medium">Mobile Wallet</td>
+                        <td class="py-3 px-4 text-gray-600">40</td>
+                        <td class="py-3 px-4 text-gray-600">2,000,000</td>
+                        <td class="py-3 px-4 text-gray-600">25%</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+            
+                <div class="mt-6">
+                  <h3 class="text-md font-semibold text-gray-700 mb-2">Insights:</h3>
+                  <ul class="text-sm text-gray-600 space-y-1">
+                    <li>Majority of payouts are processed via <span class="font-semibold text-gray-800">Bank Transfers (75%)</span></li>
+                    <li><span class="font-semibold text-gray-800">Mobile Wallets</span> account for 25% of total payouts</li>
+                  </ul>
+                </div>
+              </div>
+
+        </main>
+    </div>
+    <!-- Alpine.js (Add this script if not already included in your project) -->
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script>
+
+
+
+
+        // Mobile sidebar toggle functionality
+        document.addEventListener('DOMContentLoaded', function () {
+            const sidebarToggle = document.querySelector('#sidebar-toggle');
+            const sidebar = document.getElementById('sidebar');
+            const sidebarOverlay = document.getElementById('sidebar-overlay');
+
+            const hideSidebarButton = document.getElementById('hide-sidebar-button');
+
+            sidebarToggle.addEventListener('click', function () {
+                sidebar.classList.toggle('open');
+                sidebar.classList.remove('hidden');
+                sidebarOverlay.classList.toggle('hidden');
+            });
+
+            sidebarOverlay.addEventListener('click', function () {
+                sidebar.classList.remove('open');
+                sidebar.classList.add('hidden');
+                sidebarOverlay.classList.add('hidden');
+            });
+
+            hideSidebarButton.addEventListener('click', function () {
+                sidebar.classList.toggle("hidden");
+            });
+
+
+
+        });
+
+
+    </script>
+    <script>
+        let datePicker = document.getElementById("datePicker");
+        let dropdownBtn = document.getElementById("dropdownBtn");
+        let dropdownMenu = document.getElementById("dropdownMenu");
+
+        let mode = "monthly"; // Default mode
+
+        function setDateMode(selectedMode) {
+            mode = selectedMode;
+            dropdownBtn.innerHTML = selectedMode.charAt(0).toUpperCase() + selectedMode.slice(1) + ' <i class="fa-solid fa-chevron-down ml-1"></i>';
+            dropdownMenu.classList.add("hidden");
+
+            if (mode === "today") {
+                let today = new Date();
+                let formattedDate = today.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+                datePicker.value = formattedDate;
+            }
+            else if (mode === "Specific Date") {
+                flatpickr(datePicker, {
+                    dateFormat: "d M, Y",
+                    onChange: function (selectedDates, dateStr) {
+                        datePicker.value = dateStr;
+                    }
+                }).open();
+            }
+            else if (mode === "monthly") {
+                flatpickr(datePicker, {
+                    mode: "range",
+                    dateFormat: "d M",
+                    onChange: function (selectedDates, dateStr) {
+                        if (selectedDates.length === 2) {
+                            let start = selectedDates[0].toLocaleDateString("en-GB", { day: "2-digit", month: "short" });
+                            let end = selectedDates[1].toLocaleDateString("en-GB", { day: "2-digit", month: "short" });
+                            datePicker.value = `${start} - ${end}`;
+                        }
+                    }
+                }).open();
+            }
+
+        }
+
+        // Toggle dropdown
+        dropdownBtn.addEventListener("click", () => {
+            dropdownMenu.classList.toggle("hidden");
+        });
+
+        // Close dropdown on outside click
+        document.addEventListener("click", (event) => {
+            if (!dropdownBtn.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                dropdownMenu.classList.add("hidden");
+            }
+        });
+
+        // Set default
+        setDateMode("today");
+    </script>
+</body>
+
+</html>
