@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quicrefill Admin</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Chart.js from cdnjs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js" integrity="sha512-ElRFoEQdI5Ht6kZvyzXhYG9NqjtkmlkfYk0wr6wHxU9JEHakS7UJZNeml5ALk+8IKlU6jDgMabC3vkumRokgJA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- Load Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.js"></script>
+</head>
+
+    <style>
+        [x-cloak] { display: none !important; }
+
+        @media (max-width: 768px) {
+            .mobile-sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease-in-out;
+            }
+            .mobile-sidebar.open {
+                transform: translateX(0);
+            }
+
+            .dropdown-menu {
+                @apply left-1/2 -translate-x-1/2 w-80 max-w-[95%];
+            }
+
+
+        }
+
+        .flatpickr-day.selected, 
+        .flatpickr-day.startRange, 
+        .flatpickr-day.endRange {
+            background: #FFB600 !important;
+            color: white !important;
+            border-color: #FFB600 !important;
+        }
+
+        /* Change the color of dates between the range */
+        .flatpickr-day.inRange {
+            background: #FFE08A !important; /* Light yellow */
+            color: black !important;
+        }
+
+
+    </style>
+</head>
+<body class="bg-gray-100">
+    <!-- Header -->
+        
+    <header class="bg-white shadow-md flex items-center justify-between p-4 sticky top-0 z-30">
+        <div class="flex items-center">
+            <button  id="sidebar-toggle" class=" md:hidden mr-4">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="flex items-center mr-4 md:mr-8">
+                <img src="images/logo.png" class="w-[150px] md:w-[250px]">
+            </div>
+            <button id="hide-sidebar-button" class="border border-gray-200 rounded-md px-2 py-1 z-15 hidden md:block">
+                <i class="fas fa-angle-left"></i>
+            </button>
+        </div>
+        
+        <div class="hidden md:block relative w-1/3">
+            <input type="text" placeholder="Search"
+                class="w-full px-4 py-2 border border-gray-300 rounded-md bg-gray-100 focus:outline-none pl-10">
+            <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+            <button class="absolute right-0 top-0 h-full px-4 bg-gradient-to-b from-[#FFC533] to-[#FFB600] text-black rounded-r-md border border-gray-300 shadow flex items-center justify-center">
+        <i class="fas fa-arrow-left"></i>
+    </button>
+        </div>
+        
+        
+        <div class="flex items-center">
+            <div x-data="{ open: false }" class="relative mr-4">
+                <!-- Notification Icon -->
+                <button @click="open = !open"  class="relative p-2">
+                    <i class="fas fa-bell text-gray-600 text-lg"></i>
+                    <!-- Notification Badge -->
+                    <span class="absolute -top-1 -right-1 bg-yellow-400 text-black text-xs font-bold px-1.5 py-0.5 rounded-full">8</span>
+                </button>
+            
+                <!-- Dropdown Menu -->
+                <div 
+                    x-show="open" 
+                    @click.away="open = false"
+                    x-transition x-cloak
+                    class="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-64 bg-white border rounded-md shadow-lg z-50"
+                >
+                    <div class="p-3 border-b">
+                        <span class="font-semibold text-gray-700">Notifications</span>
+                    </div>
+                    
+                    <ul class="max-h-60 overflow-auto">
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer flex items-center">
+                            <i class="fas fa-bell text-gray-500 text-sm mr-2"></i>
+                            <span class="text-sm text-gray-700">You have a new message</span>
+                          </li>
+                          
+                          <li class="p-2 hover:bg-gray-100 cursor-pointer flex items-center">
+                            <i class="fas fa-check-circle text-green-500 text-sm mr-2"></i>
+                            <span class="text-sm text-gray-700">Task Completed Successfully</span>
+                          </li>
+                          
+                          <li class="p-2 hover:bg-gray-100 cursor-pointer flex items-center">
+                            <i class="fas fa-exclamation-triangle text-yellow-500 text-sm mr-2"></i>
+                            <span class="text-sm text-gray-700">System Alert: Update Required</span>
+                          </li>
+                          
+                    </ul>
+            
+                    <div class="p-3 border-t text-center">
+                        <a href="notifications-center.html" class="text-sm text-blue-500 hover:underline">View all</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div x-data="{ open: false }" class="relative">
+                <!-- Profile Button -->
+                <button @click="open = !open"  class="flex items-center rounded-full px-2 py-1 md:px-4 md:py-2 border border-gray-300 shadow-md focus:outline-none">
+                    <!-- Avatar -->
+                    <div class="relative w-10 h-10 md:w-10 md:h-10 rounded-full bg-gray-300 mr-2">
+                        <!-- Avatar Image -->
+                        <img src="images/Avatar/avatar.png" alt="User Avatar" class="w-full h-full object-cover rounded-full">
+                    
+                        <!-- Green Dot (Move Outside) -->
+                        <div class="absolute top-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"
+                             style="transform: translate(30%, -30%);"></div>
+                    </div>
+                    
+                    <!-- User Info -->
+                    <div class="hidden md:block text-left">
+                        <div class="text-sm font-medium">Timothy Jonson</div>
+                        <div class="text-xs text-gray-500">timoj@Quicrefil.ng</div>
+                    </div>
+                </button>
+            
+                <!-- Dropdown Menu -->
+                <div 
+                    x-show="open" 
+                    @click.away="open = false"
+                    x-transition x-cloak
+                    class="absolute right-0 mt-2 w-48 bg-white border rounded-md shadow-lg z-50"
+                >
+                    <ul class="py-2">
+                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                            <a href="profiles-settings.html" class="flex items-center text-gray-700">
+                              <i class="fas fa-user mr-2"></i>
+                              Profile
+                            </a>
+                          </li>
+                          
+                          <li class="px-4 py-2 text-red-500 hover:bg-gray-100 cursor-pointer">
+                            <a href="login.html" class="flex items-center">
+                              <i class="fas fa-sign-out-alt mr-2"></i>
+                              Logout
+                            </a>
+                          </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="flex">
+        <!-- Sidebar -->
+        
+        <aside id="sidebar" class="mobile-sidebar fixed md:relative w-64 bg-white min-h-screen shadow-sm z-20 md:transform-none border border-gray-300S">
+            <nav class="p-4">
+                <ul>
+                    <li class="mb-4">
+                        <a href="quicrefill-dashboard.html" class="flex items-center text-amber-500 font-medium">
+                            <i class="fas fa-th-large mr-3"></i>
+                            <span>Summary</span>
+                        </a>
+                    </li>
+                  
+                    <li class="mb-4">
+                        <a href="order-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-clipboard-list mr-3"></i>
+                            <span>Order Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="delivery-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-cube mr-3"></i>
+                            <span>Delivery Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="service-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-briefcase mr-3"></i>
+                            <span>Service Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="accessories-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-bag-shopping mr-3"></i>
+                            <span>Accessories Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="user-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-user mr-3"></i>
+                            <span>User Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="vendor-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-store mr-3"></i>
+                            <span>Vendor Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="delivery-rep-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-truck-droplet mr-2"></i>
+                            <span>Delivery Rep Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="verification-and-compliance.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-check-square mr-3"></i>
+                            <span>Verification & Compliance</span>
+                        </a>
+                    </li>
+                    <li x-data="{ open: false }" class="mb-4">
+                        <a href="#" @click.prevent="open = !open"
+                           class="flex items-center text-gray-600 hover:text-amber-500">
+                          <i class="fas fa-sack-dollar mr-3"></i>
+                          <span>Revenue Management</span>
+                          <i :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas ml-auto text-xs"></i>
+                        </a>
+                      
+                        <!-- Dropdown Menu -->
+                        <ul x-show="open" x-cloak class="mt-2 ml-6 space-y-2 text-gray-800">
+                          
+                          <!-- Revenue Breakdown -->
+                          <li class="flex items-center hover:text-amber-500">
+                            <i class="fas fa-chart-pie mr-3 text-gray-500"></i>
+                            <a href="revenue-breakdown.html">Revenue Breakdown</a>
+                          </li>
+                      
+                          <!-- Payout Management -->
+                          <li class="flex items-center hover:text-amber-500">
+                            <i class="fas fa-hand-holding-usd mr-3 text-gray-500"></i>
+                            <a href="payout-management.html">Payout Management</a>
+                          </li>
+                      
+                          <!-- Revenue Analytics -->
+                          <li class="flex items-center hover:text-amber-500">
+                            <i class="fas fa-chart-line mr-3 text-gray-500"></i>
+                            <a href="revenue-analytics.html">Revenue Analytics & Insights</a>
+                          </li>
+                      
+                        </ul>
+                      </li>
+                      
+                    <li class="mb-4">
+                        <a href="withdrawal-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-money-bill-transfer mr-3"></i>
+                            <span>Withdrawal Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="account-deletion.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-user-xmark mr-3"></i>
+                            <span>Account Deletion</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="account-deletion.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fa fa-map-marker mr-3"></i>
+                            <span>Operating Locations</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="feedback.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-comments mr-3"></i>
+                            <span>Feedback</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="fraud-watch.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fa fa-binoculars mr-3"></i>
+                            <span>Fraud Watch</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="reports-and-analytics.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-chart-bar mr-3"></i>
+                            <span>Reports and Analytics</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="crash-analytics.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fa fa-line-chart mr-3"></i>
+                            <span>Crash Analytics</span>
+                        </a>
+                    </li>
+                    <li x-data="{ open: false }" class="mb-4">
+                        <a href="#" @click.prevent="open = !open" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-shield-alt mr-3"></i>
+                            <span>Audit Logs & Security</span>
+                            <i :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas ml-auto text-xs"></i>
+                        </a>
+                    
+                        <!-- Dropdown Menu -->
+                        <ul x-show="open" x-cloak class="mt-2 ml-6 space-y-2 text-gray-500">
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-file-alt mr-3"></i>
+                                <a href="security-logs.html">Security Logs</a>
+                            </li>
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-user-lock mr-3"></i>
+                                <a href="access-control.html">Access Control</a>
+                            </li>
+                        </ul>
+                    </li>
+                    
+                    <li class="mb-4">
+                        <a href="staff-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-user-shield mr-3"></i>
+                            <span>Staff Management</span>
+                        </a>
+                    </li>
+                    
+                    <li x-data="{ open: false }" class="mb-4">
+                        <a href="#" @click.prevent="open = !open" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-cog mr-3"></i>
+                            <span>System Settings</span>
+                            <i :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas ml-auto text-xs"></i>
+                        </a>
+                    
+                        <!-- Dropdown Menu -->
+                        <ul x-show="open" x-cloak class="mt-2 ml-6 space-y-2 text-gray-500">
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-envelope-open-text mr-3"></i>
+                                <a href="system-message-settings.html">Message Settings</a>
+                              </li>
+                              
+                              <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-bell mr-3"></i>
+                                <a href="system-push-notification-settings.html">Push Notification Settings</a>
+                              </li>
+                              
+                              <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-ticket-alt mr-3"></i>
+                                <a href="system-coupon-settings.html">Coupon Settings</a>
+                              </li>
+                              
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Overlay for sidebar on mobile -->
+        <div id="sidebar-overlay" class="fixed inset-0 bg-black opacity-50 z-10 hidden"></div>
+
+        <!-- Content Area -->
+        <main class="flex-1 p-4 md:p-6">
+            <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-6">
+                <div class="text-left">
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-800 mb-1">Pending Account Deletion Requests</h1>
+                    <p class="text-sm text-gray-600">View all user-initiated account deletion requests. Ensure compliance with data retention policies before approval.</p>
+                </div>
+                <div class="flex flex-wrap items-center gap-2 md:gap-4">
+                    <div class="mb-2 md:mb-0 bg-white relative">
+                        <input type="text" placeholder="Search"
+                            class="bg-white w-40 px-4 py-2 border border-gray-300 rounded-md bg-gray-100 focus:outline-none pr-10">
+                        <i
+                            class="fas fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer"></i>
+                    </div>
+                    <div class="mb-2 md:mb-0">
+                        <div class="flex gap-0">
+                            <div class="relative w-52">
+                                <input type="text" id="datePicker" class="pl-10 pr-3 py-2 border rounded-md w-full focus:outline-none cursor-pointer text-gray-700" value="30 Jan, 2025" readonly>
+                                <span class="absolute left-3 top-2 text-gray-500">
+                                    <i class="fa-solid fa-calendar"></i>
+                                </span>
+                            </div>
+                    
+                            <div class="relative z-20">
+                                <button id="dropdownBtn" class="px-4 py-2 border rounded-md bg-white text-gray-700 focus:outline-none">
+                                    Today <i class="fa-solid fa-chevron-down ml-1"></i>
+                                </button>
+                                <div id="dropdownMenu" class="absolute w-36 mt-2 bg-white border rounded-md shadow-md hidden">
+                                    <button class="block w-full text-left px-4 py-2 hover:bg-gray-200" onclick="setDateMode('today')">Today</button>
+                                    <button class="block w-full text-left px-4 py-2 hover:bg-gray-200" onclick="setDateMode('Specific Date')">Specific Date</button>
+                                    <button class="block w-full text-left px-4 py-2 hover:bg-gray-200" onclick="setDateMode('monthly')">Monthly</button>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-2 md:mb-0">
+                        <div class="relative inline-block" x-data="{ 
+                            open: false, 
+                            selected: '', 
+                            orderDropdown: false, 
+                            paymentDropdown: false, 
+                            serviceDropdown: false, 
+                            selectedStatuses: [], 
+                            selectedPayments: [], 
+                            selectedServices: [] 
+                        }">
+                            <button @click="open = !open" class="flex items-center gap-2 px-4 py-2 bg-white border rounded-lg">
+                                <i class="fa fa-filter"></i> Filter
+                            </button>
+                    
+                            <div x-show="open" @click.outside="open = false"
+                                    x-cloak
+                                    class="dropdown-menu absolute left-0 -translate-x-1/2 top-full mt-2 w-96 bg-white border rounded-lg shadow-lg p-4 z-30">
+            
+                                <h3 class="text-gray-700 font-medium mb-3">Select Filter</h3>
+                    
+                                <div class="grid grid-cols-3 gap-2">
+                                    <button @click="selected = 'Order Status'; orderDropdown = true; paymentDropdown = false; serviceDropdown = false"
+                                        :class="selected === 'Order Status' ? 'bg-yellow-400 ' : 'border'"
+                                        class="px-3 py-2 rounded-lg text-sm">
+                                        Order Status
+                                    </button>
+                                    <button @click="selected = 'Payment Type'; paymentDropdown = true; orderDropdown = false; serviceDropdown = false"
+                                        :class="selected === 'Payment Type' ? 'bg-yellow-400 ' : 'border'"
+                                        class="px-3 py-2 rounded-lg text-sm">
+                                        Payment Type
+                                    </button>
+                                    <button @click="selected = 'Service Type'; serviceDropdown = true; orderDropdown = false; paymentDropdown = false"
+                                        :class="selected === 'Service Type' ? 'bg-yellow-400 ' : 'border'"
+                                        class="px-3 py-2 rounded-lg text-sm">
+                                        Service Type
+                                    </button>
+                                </div>
+                    
+                                <div x-show="orderDropdown" x-cloak class="mt-3">
+                                    <h3 class="text-gray-700 font-medium mb-2">Select Order Status</h3>
+                                    <div class="grid grid-cols-3 gap-2">
+                                        <template x-for="status in ['Completed', 'In Progress', 'Cancelled', 'Disputed', 'In Transit']">
+                                            <button 
+                                                @click="selectedStatuses.includes(status) ? selectedStatuses = selectedStatuses.filter(s => s !== status) : selectedStatuses.push(status)"
+                                                :class="selectedStatuses.includes(status) ? 'bg-yellow-400 ' : 'border'"
+                                                class="px-3 py-2 rounded-lg text-sm">
+                                                <span x-text="status"></span>
+                                            </button>
+                                        </template>
+                                    </div>
+                                </div>
+                    
+                                <div x-show="paymentDropdown" x-cloak class="mt-3">
+                                    <h3 class="text-gray-700 font-medium mb-2">Select Payment Type</h3>
+                                    <div class="grid grid-cols-3 gap-2">
+                                        <template x-for="payment in ['On delivery', 'Wallet', 'Flutterwave']">
+                                            <button 
+                                                @click="selectedPayments.includes(payment) ? selectedPayments = selectedPayments.filter(p => p !== payment) : selectedPayments.push(payment)"
+                                                :class="selectedPayments.includes(payment) ? 'bg-yellow-400 ' : 'border'"
+                                                class="px-3 py-2 rounded-lg text-sm">
+                                                <span x-text="payment"></span>
+                                            </button>
+                                        </template>
+                                    </div>
+                                </div>
+                    
+                                <div x-show="serviceDropdown" x-cloak class="mt-3">
+                                    <h3 class="text-gray-700 font-medium mb-2">Select Service Type</h3>
+                                    <div class="grid grid-cols-3 gap-2">
+                                        <template x-for="service in ['Gas Refill', 'Peroleum', 'Diesel', 'Accessories', 'Electricity']">
+                                            <button 
+                                                @click="selectedServices.includes(service) ? selectedServices = selectedServices.filter(s => s !== service) : selectedServices.push(service)"
+                                                :class="selectedServices.includes(service) ? 'bg-yellow-400 ' : 'border'"
+                                                class="px-3 py-2 rounded-lg text-sm">
+                                                <span x-text="service"></span>
+                                            </button>
+                                        </template>
+                                    </div>
+                                </div>
+                    
+                                <div class="mt-4 text-center">
+                                    <button @click="open = false" class="px-4 py-2 bg-yellow-400  rounded-lg">Apply</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <button class="bg-white border border-gray-300 rounded px-3 py-2 flex items-center text-sm">
+                            <i class="fas fa-download mr-2"></i>
+                            <span>Export</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap gap-4 mb-6">
+                <div class="bg-white rounded-lg shadow-md p-4 flex-1">
+                    <div class="flex items-center space-x-2 mb-2">
+                        <div class="w-4 h-4 rounded-sm bg-yellow-500"></div>
+                        <div class="flex items-center space-x-1">
+                            <span class="text-sm font-medium text-gray-700">Pending</span>
+                            <i class="fas fa-info-circle text-gray-400 text-xs"></i>
+                        </div>
+                    </div>
+                    <span class="text-2xl font-bold text-gray-800 block">50</span>
+                </div>
+            
+                <div class="bg-white rounded-lg shadow-md p-4 flex-1">
+                    <div class="flex items-center space-x-2 mb-2">
+                        <div class="w-4 h-4 rounded-sm bg-orange-500"></div>
+                        <div class="flex items-center space-x-1">
+                            <span class="text-sm font-medium text-gray-700">Under Review</span>
+                            <i class="fas fa-info-circle text-gray-400 text-xs"></i>
+                        </div>
+                    </div>
+                    <span class="text-2xl font-bold text-gray-800 block">23</span>
+                </div>
+            
+                <div class="bg-white rounded-lg shadow-md p-4 flex-1">
+                    <div class="flex items-center space-x-2 mb-2">
+                        <div class="w-4 h-4 rounded-sm bg-green-500"></div>
+                        <div class="flex items-center space-x-1">
+                            <span class="text-sm font-medium text-gray-700">Approved</span>
+                            <i class="fas fa-info-circle text-gray-400 text-xs"></i>
+                        </div>
+                    </div>
+                    <span class="text-2xl font-bold text-gray-800 block">25</span>
+                </div>
+            
+                <div class="bg-white rounded-lg shadow-md p-4 flex-1">
+                    <div class="flex items-center space-x-2 mb-2">
+                        <div class="w-4 h-4 rounded-sm bg-blue-500"></div>
+                        <div class="flex items-center space-x-1">
+                            <span class="text-sm font-medium text-gray-700">Submitted Today</span>
+                            <i class="fas fa-info-circle text-gray-400 text-xs"></i>
+                        </div>
+                    </div>
+                    <span class="text-2xl font-bold text-gray-800 block">10</span>
+                </div>
+            
+                <div class="bg-white rounded-lg shadow-md p-4 flex-1">
+                    <div class="flex items-center space-x-2 mb-2">
+                        <div class="w-4 h-4 rounded-sm bg-red-500"></div>
+                        <div class="flex items-center space-x-1">
+                            <span class="text-sm font-medium text-gray-700">Rejected</span>
+                            <i class="fas fa-info-circle text-gray-400 text-xs"></i>
+                        </div>
+                    </div>
+                    <span class="text-2xl font-bold text-gray-800 block">20</span>
+                </div>
+            </div>
+            
+            <!-- Recent Orders -->
+            
+            <div class="bg-white rounded-md border border-gray-300 shadow-md p-4 mb-6">
+                
+                <div class="container mx-auto">
+                    <div class="overflow-x-auto">
+                        <table class="w-full border-collapse bg-white shadow-md rounded-lg overflow-hidden">
+                            <thead>
+                              <tr class="bg-gray-200 text-left text-gray-600 text-sm">
+                                <th class="p-3">User ID</th>
+                                <th class="p-3">Name</th>
+                                <th class="p-3">Email / Phone</th>
+                                <th class="p-3">Request Date</th>
+                                <th class="p-3">Scheduled Deletion Date</th>
+                                <th class="p-3">Reason for Deletion</th>
+                                <th class="p-3">Status</th>
+                                <th class="p-3">Actions</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
+                                <td class="p-3">10001</td>
+                                <td class="p-3">John Doe</td>
+                                <td class="p-3">john.doe@example.com</td>
+                                <td class="p-3">01/03/2025</td>
+                                <td class="p-3">01/04/2025</td>
+                                <td class="p-3">"Switching to a competitor"</td>
+                                <td class="p-3"><span class="inline-block px-2 py-1 rounded-full bg-yellow-100 text-yellow-800 font-semibold text-xs">Pending</span></td>
+                                <td class="p-3"><a href="#" class="text-blue-500 hover:underline">View Details</a></td>
+                              </tr>
+                              <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
+                                <td class="p-3">10002</td>
+                                <td class="p-3">Jane Smith</td>
+                                <td class="p-3">jane.smith@example.com</td>
+                                <td class="p-3">01/03/2025</td>
+                                <td class="p-3">02/05/2025</td>
+                                <td class="p-3">"Privacy concerns"</td>
+                                <td class="p-3"><span class="inline-block px-2 py-1 rounded-full bg-green-100 text-green-800 font-semibold text-xs">Approved</span></td>
+                                <td class="p-3"><a href="#" class="text-blue-500 hover:underline">View Details</a></td>
+                              </tr>
+                              <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
+                                <td class="p-3">10003</td>
+                                <td class="p-3">Michael Brown</td>
+                                <td class="p-3">michael.b@example.com</td>
+                                <td class="p-3">01/03/2025</td>
+                                <td class="p-3">03/03/2025</td>
+                                <td class="p-3">"Service not useful"</td>
+                                <td class="p-3"><span class="inline-block px-2 py-1 rounded-full bg-red-100 text-red-800 font-semibold text-xs">Rejected</span></td>
+                                <td class="p-3"><a href="#" class="text-blue-500 hover:underline">View Details</a></td>
+                              </tr>
+                              <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
+                                <td class="p-3">10004</td>
+                                <td class="p-3">Sarah Johnson</td>
+                                <td class="p-3">sarah.j@example.com</td>
+                                <td class="p-3">01/03/2025</td>
+                                <td class="p-3">04/03/2025</td>
+                                <td class="p-3">"Duplicate account"</td>
+                                <td class="p-3"><span class="inline-block px-2 py-1 rounded-full bg-orange-100 text-orange-800 font-semibold text-xs">Under Review</span></td>
+                                <td class="p-3"><a href="#" class="text-blue-500 hover:underline">View Details</a></td>
+                              </tr>
+                              <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
+                                <td class="p-3">10005</td>
+                                <td class="p-3">Chris Evans</td>
+                                <td class="p-3">chris.e@example.com</td>
+                                <td class="p-3">01/03/2025</td>
+                                <td class="p-3">05/03/2025</td>
+                                <td class="p-3">"Not satisfied with the app"</td>
+                                <td class="p-3"><span class="inline-block px-2 py-1 rounded-full bg-red-100 text-red-800 font-semibold text-xs">Rejected</span></td>
+                                <td class="p-3"><a href="#" class="text-blue-500 hover:underline">View Details</a></td>
+                              </tr>
+                              <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
+                                <td class="p-3">10006</td>
+                                <td class="p-3">Olivia Taylor</td>
+                                <td class="p-3">olivia.t@example.com</td>
+                                <td class="p-3">01/03/2025</td>
+                                <td class="p-3">06/03/2025</td>
+                                <td class="p-3">"No longer needed"</td>
+                                <td class="p-3"><span class="inline-block px-2 py-1 rounded-full bg-red-100 text-red-800 font-semibold text-xs">Rejected</span></td>
+                                <td class="p-3"><a href="#" class="text-blue-500 hover:underline">View Details</a></td>
+                              </tr>
+                              <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
+                                <td class="p-3">10007</td>
+                                <td class="p-3">David Wilson</td>
+                                <td class="p-3">david.w@example.com</td>
+                                <td class="p-3">01/03/2025</td>
+                                <td class="p-3">07/03/2025</td>
+                                <td class="p-3">"Moving to another platform"</td>
+                                <td class="p-3"><span class="inline-block px-2 py-1 rounded-full bg-yellow-100 text-yellow-800 font-semibold text-xs">Pending</span></td>
+                                <td class="p-3"><a href="#" class="text-blue-500 hover:underline">View Details</a></td>
+                              </tr>
+                              <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
+                                <td class="p-3">10008</td>
+                                <td class="p-3">Emma Martinez</td>
+                                <td class="p-3">emma.m@example.com</td>
+                                <td class="p-3">01/03/2025</td>
+                                <td class="p-3">08/03/2025</td>
+                                <td class="p-3">"Security concerns"</td>
+                                <td class="p-3"><span class="inline-block px-2 py-1 rounded-full bg-orange-100 text-orange-800 font-semibold text-xs">Under Review</span></td>
+                                <td class="p-3"><a href="#" class="text-blue-500 hover:underline">View Details</a></td>
+                              </tr>
+                              <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
+                                <td class="p-3">10009</td>
+                                <td class="p-3">Daniel Anderson</td>
+                                <td class="p-3">daniel.a@example.com</td>
+                                <td class="p-3">01/03/2025</td>
+                                <td class="p-3">09/03/2025</td>
+                                <td class="p-3">"Switching to a competitor"</td>
+                                <td class="p-3"><span class="inline-block px-2 py-1 rounded-full bg-red-100 text-red-800 font-semibold text-xs">Rejected</span></td>
+                                <td class="p-3"><a href="#" class="text-blue-500 hover:underline">View Details</a></td>
+                              </tr>
+                              <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
+                                <td class="p-3">10010</td>
+                                <td class="p-3">Sophia Lee</td>
+                                <td class="p-3">sophia.l@example.com</td>
+                                <td class="p-3">01/03/2025</td>
+                                <td class="p-3">10/03/2025</td>
+                                <td class="p-3">"Found a better service"</td>
+                                <td class="p-3"><span class="inline-block px-2 py-1 rounded-full bg-orange-100 text-orange-800 font-semibold text-xs">Under Review</span></td>
+                                <td class="p-3"><a href="#" class="text-blue-500 hover:underline">View Details</a></td>
+                              </tr>
+                              <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
+                                <td class="p-3">10011</td>
+                                <td class="p-3">James White</td>
+                                <td class="p-3">james.w@example.com</td>
+                                <td class="p-3">01/03/2025</td>
+                                <td class="p-3">11/03/2025</td>
+                                <td class="p-3">"No longer needed"</td>
+                                <td class="p-3"><span class="inline-block px-2 py-1 rounded-full bg-orange-100 text-orange-800 font-semibold text-xs">Under Review</span></td>
+                                <td class="p-3"><a href="#" class="text-blue-500 hover:underline">View Details</a></td>
+                              </tr>
+                              <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
+                                <td class="p-3">10012</td>
+                                <td class="p-3">Ava Harris</td>
+                                <td class="p-3">ava.h@example.com</td>
+                                <td class="p-3">01/03/2025</td>
+                                <td class="p-3">12/03/2025</td>
+                                <td class="p-3">"Poor customer support"</td>
+                                <td class="p-3"><span class="inline-block px-2 py-1 rounded-full bg-green-100 text-green-800 font-semibold text-xs">Approved</span></td>
+                                <td class="p-3"><a href="#" class="text-blue-500 hover:underline">View Details</a></td>
+                              </tr>
+                              <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
+                                <td class="p-3">10013</td>
+                                <td class="p-3">Ethan Clark</td>
+                                <td class="p-3">ethan.c@example.com</td>
+                                <td class="p-3">01/03/2025</td>
+                                <td class="p-3">13/03/2025</td>
+                                <td class="p-3">"Switching to another platform"</td>
+                                <td class="p-3"><span class="inline-block px-2 py-1 rounded-full bg-yellow-100 text-yellow-800 font-semibold text-xs">Pending</span></td>
+                                <td class="p-3"><a href="#" class="text-blue-500 hover:underline">View Details</a></td>
+                              </tr>
+                              <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
+                                <td class="p-3">10014</td>
+                                <td class="p-3">Mia Rodriguez</td>
+                                <td class="p-3">mia.r@example.com</td>
+                                <td class="p-3">01/03/2025</td>
+                                <td class="p-3">14/03/2025</td>
+                                <td class="p-3">"Privacy concerns"</td>
+                                <td class="p-3"><span class="inline-block px-2 py-1 rounded-full bg-green-100 text-green-800 font-semibold text-xs">Approved</span></td>
+                                <td class="p-3"><a href="#" class="text-blue-500 hover:underline">View Details</a></td>
+                              </tr>
+                              <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
+                                <td class="p-3">10015</td>
+                                <td class="p-3">Benjamin Lewis</td>
+                                <td class="p-3">benjamin.l@example.com</td>
+                                <td class="p-3">01/03/2025</td>
+                                <td class="p-3">15/03/2025</td>
+                                <td class="p-3">"App performance issues"</td>
+                                <td class="p-3"><span class="inline-block px-2 py-1 rounded-full bg-orange-100 text-orange-800 font-semibold text-xs">Under Review</span></td>
+                                <td class="p-3"><a href="#" class="text-blue-500 hover:underline">View Details</a></td>
+                              </tr>
+                              <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
+                                <td class="p-3">10016</td>
+                                <td class="p-3">Charlotte Walker</td>
+                                <td class="p-3">charlotte.w@example.com</td>
+                                <td class="p-3">01/03/2025</td>
+                                <td class="p-3">16/03/2025</td>
+                                <td class="p-3">"Duplicate account"</td>
+                                <td class="p-3"><span class="inline-block px-2 py-1 rounded-full bg-red-100 text-red-800 font-semibold text-xs">Rejected</span></td>
+                                <td class="p-3"><a href="#" class="text-blue-500 hover:underline">View Details</a></td>
+                              </tr>
+                              <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
+                                <td class="p-3">10017</td>
+                                <td class="p-3">Henry Allen</td>
+                                <td class="p-3">henry.a@example.com</td>
+                                <td class="p-3">01/03/2025</td>
+                                <td class="p-3">17/03/2025</td>
+                                <td class="p-3">"Not satisfied with the app"</td>
+                                <td class="p-3"><span class="inline-block px-2 py-1 rounded-full bg-green-100 text-green-800 font-semibold text-xs">Approved</span></td>
+                                <td class="p-3"><a href="#" class="text-blue-500 hover:underline">View Details</a></td>
+                              </tr>
+                              <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
+                                <td class="p-3">10018</td>
+                                <td class="p-3">Ella Scott</td>
+                                <td class="p-3">ella.s@example.com</td>
+                                <td class="p-3">01/03/2025</td>
+                                <td class="p-3">18/03/2025</td>
+                                <td class="p-3">"Security concerns"</td>
+                                <td class="p-3"><span class="inline-block px-2 py-1 rounded-full bg-green-100 text-green-8HTML
+
+                                    00 font-semibold text-xs">Approved</span></td>
+                                          <td class="p-3"><a href="#" class="text-blue-500 hover:underline">View Details</a></td>
+                                        </tr>
+                                        <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
+                                          <td class="p-3">10019</td>
+                                          <td class="p-3">Lucas King</td>
+                                          <td class="p-3">lucas.k@example.com</td>
+                                          <td class="p-3">01/03/2025</td>
+                                          <td class="p-3">19/03/2025</td>
+                                          <td class="p-3">"Moving to another platform"</td>
+                                          <td class="p-3"><span class="inline-block px-2 py-1 rounded-full bg-yellow-100 text-yellow-800 font-semibold text-xs">Pending</span></td>
+                                          <td class="p-3"><a href="#" class="text-blue-500 hover:underline">View Details</a></td>
+                                        </tr>
+                                        <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
+                                          <td class="p-3">10020</td>
+                                          <td class="p-3">Amelia Young</td>
+                                          <td class="p-3">amelia.y@example.com</td>
+                                          <td class="p-3">01/03/2025</td>
+                                          <td class="p-3">20/03/2025</td>
+                                          <td class="p-3">"Service not useful"</td>
+                                          <td class="p-3"><span class="inline-block px-2 py-1 rounded-full bg-red-100 text-red-800 font-semibold text-xs">Rejected</span></td>
+                                          <td class="p-3"><a href="#" class="text-blue-500 hover:underline">View Details</a></td>
+                                        </tr>
+                                        <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
+                                          <td class="p-3">10021</td>
+                                          <td class="p-3">William Hall</td>
+                                          <td class="p-3">william.h@example.com</td>
+                                          <td class="p-3">01/03/2025</td>
+                                          <td class="p-3">21/03/2025</td>
+                                          <td class="p-3">"Switching to a competitor"</td>
+                                          <td class="p-3"><span class="inline-block px-2 py-1 rounded-full bg-yellow-100 text-yellow-800 font-semibold text-xs">Pending</span></td>
+                                          <td class="p-3"><a href="#" class="text-blue-500 hover:underline">View Details</a></td>
+                                        </tr>
+                                        <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
+                                          <td class="p-3">10022</td>
+                                          <td class="p-3">Grace Perez</td>
+                                          <td class="p-3">grace.p@example.com</td>
+                                          <td class="p-3">01/03/2025</td>
+                                          <td class="p-3">22/03/2025</td>
+                                          <td class="p-3">"Privacy concerns"</td>
+                                          <td class="p-3"><span class="inline-block px-2 py-1 rounded-full bg-green-100 text-green-800 font-semibold text-xs">Approved</span></td>
+                                          <td class="p-3"><a href="#" class="text-blue-500 hover:underline">View Details</a></td>
+                                        </tr>
+                                        <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
+                                          <td class="p-3">10023</td>
+                                          <td class="p-3">Matthew Turner</td>
+                                          <td class="p-3">matthew.t@example.com</td>
+                                          <td class="p-3">01/03/2025</td>
+                                          <td class="p-3">23/04/2025</td>
+                                          <td class="p-3">"Poor customer support"</td>
+                                          <td class="p-3"><span class="inline-block px-2 py-1 rounded-full bg-green-100 text-green-800 font-semibold text-xs">Approved</span></td>
+                                          <td class="p-3"><a href="#" class="text-blue-500 hover:underline">View Details</a></td>
+                                        </tr>
+                                        <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
+                                          <td class="p-3">10024</td>
+                                          <td class="p-3">Lily Collins</td>
+                                          <td class="p-3">lily.c@example.com</td>
+                                          <td class="p-3">01/03/2025</td>
+                                          <td class="p-3">24/04/2025</td>
+                                          <td class="p-3">"Duplicate account"</td>
+                                          <td class="p-3"><span class="inline-block px-2 py-1 rounded-full bg-red-100 text-red-800 font-semibold text-xs">Rejected</span></td>
+                                          <td class="p-3"><a href="#" class="text-blue-500 hover:underline">View Details</a></td>
+                                        </tr>
+                                        <tr class="border-t text-gray-700 hover:bg-gray-100 text-sm">
+                                          <td class="p-3">10025</td>
+                                          <td class="p-3">Noah Wright</td>
+                                          <td class="p-3">noah.w@example.com</td>
+                                          <td class="p-3">01/03/2025</td>
+                                          <td class="p-3">25/04/2025</td>
+                                          <td class="p-3">"Not satisfied with the app"</td>
+                                          <td class="p-3"><span class="inline-block px-2 py-1 rounded-full bg-red-100 text-red-800 font-semibold text-xs">Rejected</span></td>
+                                          <td class="p-3"><a href="#" class="text-blue-500 hover:underline">View Details</a></td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                    </div>
+
+                    <div class="flex justify-between items-center mt-4 p-4 border-t">
+                        <div class="flex items-center space-x-4">
+                            <span class="text-sm text-gray-600">Total entries: <span
+                                    class="font-bold">50</span></span>
+                            <button class="px-3 py-1 text-gray-400 flex items-center space-x-1 text-sm" disabled>
+                                <i class="fa fa-chevron-left text-xs"></i> <span>Previous</span>
+                            </button>
+                        </div>
+                        <div class="flex items-center space-x-1">
+                            <button
+                                class="px-3 py-1 bg-yellow-500 text-white font-bold rounded-full text-sm">1</button>
+                            <span class="px-3 py-1 text-gray-700 text-sm">2</span>
+                            <span class="px-3 py-1 text-gray-700 text-sm">3</span>
+                            <span class="px-3 py-1 text-gray-500 text-sm">..</span>
+                            <span class="px-3 py-1 text-gray-700 text-sm">8</span>
+                            <span class="px-3 py-1 text-gray-700 text-sm">9</span>
+                            <span class="px-3 py-1 text-gray-700 text-sm">10</span>
+                        </div>
+                        <button
+                            class="px-3 py-1 text-gray-500 flex items-center space-x-1 hover:text-gray-700 text-sm">
+                            <span>Next</span> <i class="fa fa-chevron-right text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+<!-- Alpine.js (Add this script if not already included in your project) -->
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script>
+        
+    
+
+
+        // Mobile sidebar toggle functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebarToggle = document.querySelector('#sidebar-toggle');
+            const sidebar = document.getElementById('sidebar');
+            const sidebarOverlay = document.getElementById('sidebar-overlay');
+            
+            const hideSidebarButton = document.getElementById('hide-sidebar-button');
+            
+            sidebarToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('open');
+                sidebar.classList.remove('hidden');
+                sidebarOverlay.classList.toggle('hidden');
+            });
+            
+            sidebarOverlay.addEventListener('click', function() {
+                sidebar.classList.remove('open');
+                sidebar.classList.add('hidden');
+                sidebarOverlay.classList.add('hidden');
+            });
+            
+            hideSidebarButton.addEventListener('click', function() {
+                sidebar.classList.toggle("hidden");
+            });
+    
+             // Initialize Pie Chart
+             const pieCtx = document.getElementById('pieChart').getContext('2d');
+            const pieChart = new Chart(pieCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['Petroleum', 'Cooking gas', 'Diesel', 'Electricity'],
+                    datasets: [{
+                        data: [40, 20, 25, 15],
+                        backgroundColor: [
+                            '#4FD1C5', // teal
+                            '#F6E05E', // yellow
+                            '#F56565', // red
+                            '#4299E1'  // blue
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+            // Initialize Bar Chart
+            const barCtx = document.getElementById('barChart').getContext('2d');
+            const barChart = new Chart(barCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['20', '22', '24', '26', '28', '30', '02', '04', '06', '08', '10', '12', '14', '16'],
+                    datasets: [{
+                        label: 'Daily Revenue',
+                        data: [250000, 350000, 200000, 280000, 220000, 180000, 500000, 320000, 450000, 280000, 220000, 380000, 200000, 350000],
+                        backgroundColor: function(context) {
+                            const index = context.dataIndex;
+                            return index === 6 ? '#4299E1' : '#4FD1C5'; // Blue for day 7, teal for others
+                        },
+                        borderWidth: 0,
+                        borderRadius: 4,
+                        maxBarThickness: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    if (value === 0) return '₦0';
+                                    if (value === 100000) return '₦100k';
+                                    if (value === 200000) return '₦200k';
+                                    if (value === 300000) return '₦300k';
+                                    if (value === 400000) return '₦400k';
+                                    if (value === 500000) return '₦500k';
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+        
+            
+        });
+        
+        
+    </script>
+     <script>
+        let datePicker = document.getElementById("datePicker");
+        let dropdownBtn = document.getElementById("dropdownBtn");
+        let dropdownMenu = document.getElementById("dropdownMenu");
+
+        let mode = "monthly"; // Default mode
+
+        function setDateMode(selectedMode) {
+            mode = selectedMode;
+            dropdownBtn.innerHTML = selectedMode.charAt(0).toUpperCase() + selectedMode.slice(1) + ' <i class="fa-solid fa-chevron-down ml-1"></i>';
+            dropdownMenu.classList.add("hidden");
+
+            if (mode === "today") {
+                let today = new Date();
+                let formattedDate = today.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+                datePicker.value = formattedDate;
+            } 
+            else if (mode === "Specific Date") {
+                flatpickr(datePicker, {
+                    dateFormat: "d M, Y",
+                    onChange: function(selectedDates, dateStr) {
+                        datePicker.value = dateStr;
+                    }
+                }).open();
+            } 
+            else if (mode === "monthly") {
+                flatpickr(datePicker, {
+                    mode: "range",
+                    dateFormat: "d M",
+                    onChange: function(selectedDates, dateStr) {
+                        if (selectedDates.length === 2) {
+                            let start = selectedDates[0].toLocaleDateString("en-GB", { day: "2-digit", month: "short" });
+                            let end = selectedDates[1].toLocaleDateString("en-GB", { day: "2-digit", month: "short" });
+                            datePicker.value = `${start} - ${end}`;
+                        }
+                    }
+                }).open();
+            }
+            
+        }
+
+        // Toggle dropdown
+        dropdownBtn.addEventListener("click", () => {
+            dropdownMenu.classList.toggle("hidden");
+        });
+
+        // Close dropdown on outside click
+        document.addEventListener("click", (event) => {
+            if (!dropdownBtn.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                dropdownMenu.classList.add("hidden");
+            }
+        });
+
+        // Set default
+        setDateMode("today");
+    </script>
+</body>
+</html>
