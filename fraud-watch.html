@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quicrefill Admin</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Chart.js from cdnjs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"
+        integrity="sha512-ElRFoEQdI5Ht6kZvyzXhYG9NqjtkmlkfYk0wr6wHxU9JEHakS7UJZNeml5ALk+8IKlU6jDgMabC3vkumRokgJA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- Load Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.js"></script>
+</head>
+<style>
+    .custom-tooltip {
+  position: absolute;
+  background: #facc15;
+  color: #000;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 14px;
+  pointer-events: none;
+  transition: all 0.1s ease;
+  opacity: 0;
+  white-space: nowrap;
+  z-index: 999;
+}
+
+        
+    [x-cloak] {
+        display: none !important;
+    }
+
+    @media (max-width: 768px) {
+        .mobile-sidebar {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .mobile-sidebar.open {
+            transform: translateX(0);
+        }
+
+        .dropdown-menu {
+            @apply left-1/2 -translate-x-1/2 w-80 max-w-[95%];
+        }
+
+
+    }
+
+    .flatpickr-day.selected,
+    .flatpickr-day.startRange,
+    .flatpickr-day.endRange {
+        background: #FFB600 !important;
+        color: white !important;
+        border-color: #FFB600 !important;
+    }
+
+    /* Change the color of dates between the range */
+    .flatpickr-day.inRange {
+        background: #FFE08A !important;
+        /* Light yellow */
+        color: black !important;
+    }
+</style>
+</head>
+
+<body class="bg-gray-100">
+    <!-- Header -->
+
+    <header class="bg-white shadow-md flex items-center justify-between p-4 sticky top-0 z-30">
+        <div class="flex items-center">
+            <button id="sidebar-toggle" class=" md:hidden mr-4">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="flex items-center mr-4 md:mr-8">
+                <img src="images/logo.png" class="w-[150px] md:w-[250px]">
+            </div>
+            <button id="hide-sidebar-button" class="border border-gray-200 rounded-md px-2 py-1 z-15 hidden md:block">
+                <i class="fas fa-angle-left"></i>
+            </button>
+        </div>
+
+        <div class="hidden md:block relative w-1/3">
+            <input type="text" placeholder="Search"
+                class="w-full px-4 py-2 border border-gray-300 rounded-md bg-gray-100 focus:outline-none pl-10">
+            <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+            <button
+                class="absolute right-0 top-0 h-full px-4 bg-gradient-to-b from-[#FFC533] to-[#FFB600] text-black rounded-r-md border border-gray-300 shadow flex items-center justify-center">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+        </div>
+
+
+        <div class="flex items-center">
+            <div x-data="{ open: false }" class="relative mr-4">
+                <!-- Notification Icon -->
+                <button @click="open = !open" class="relative p-2">
+                    <i class="fas fa-bell text-gray-600 text-lg"></i>
+                    <!-- Notification Badge -->
+                    <span
+                        class="absolute -top-1 -right-1 bg-yellow-400 text-black text-xs font-bold px-1.5 py-0.5 rounded-full">8</span>
+                </button>
+
+                <!-- Dropdown Menu -->
+                <div x-show="open" @click.away="open = false" x-transition x-cloak
+                    class="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-64 bg-white border rounded-md shadow-lg z-50">
+                    <div class="p-3 border-b">
+                        <span class="font-semibold text-gray-700">Notifications</span>
+                    </div>
+
+                    <ul class="max-h-60 overflow-auto">
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer flex items-center">
+                            <i class="fas fa-bell text-gray-500 text-sm mr-2"></i>
+                            <span class="text-sm text-gray-700">You have a new message</span>
+                        </li>
+
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer flex items-center">
+                            <i class="fas fa-check-circle text-green-500 text-sm mr-2"></i>
+                            <span class="text-sm text-gray-700">Task Completed Successfully</span>
+                        </li>
+
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer flex items-center">
+                            <i class="fas fa-exclamation-triangle text-yellow-500 text-sm mr-2"></i>
+                            <span class="text-sm text-gray-700">System Alert: Update Required</span>
+                        </li>
+
+                    </ul>
+
+                    <div class="p-3 border-t text-center">
+                        <a href="notifications-center.html" class="text-sm text-blue-500 hover:underline">View all</a>
+                    </div>
+                </div>
+            </div>
+
+            <div x-data="{ open: false }" class="relative">
+                <!-- Profile Button -->
+                <button @click="open = !open"
+                    class="flex items-center rounded-full px-2 py-1 md:px-4 md:py-2 border border-gray-300 shadow-md focus:outline-none">
+                    <!-- Avatar -->
+                    <div class="relative w-10 h-10 md:w-10 md:h-10 rounded-full bg-gray-300 mr-2">
+                        <!-- Avatar Image -->
+                        <img src="images/Avatar/avatar.png" alt="User Avatar"
+                            class="w-full h-full object-cover rounded-full">
+
+                        <!-- Green Dot (Move Outside) -->
+                        <div class="absolute top-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"
+                            style="transform: translate(30%, -30%);"></div>
+                    </div>
+
+                    <!-- User Info -->
+                    <div class="hidden md:block text-left">
+                        <div class="text-sm font-medium">Timothy Jonson</div>
+                        <div class="text-xs text-gray-500">timoj@Quicrefil.ng</div>
+                    </div>
+                </button>
+
+                <!-- Dropdown Menu -->
+                <div x-show="open" @click.away="open = false" x-transition x-cloak
+                    class="absolute right-0 mt-2 w-48 bg-white border rounded-md shadow-lg z-50">
+                    <ul class="py-2">
+                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                            <a href="profiles-settings.html" class="flex items-center text-gray-700">
+                                <i class="fas fa-user mr-2"></i>
+                                Profile
+                            </a>
+                        </li>
+
+                        <li class="px-4 py-2 text-red-500 hover:bg-gray-100 cursor-pointer">
+                            <a href="login.html" class="flex items-center">
+                                <i class="fas fa-sign-out-alt mr-2"></i>
+                                Logout
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="flex">
+        <!-- Sidebar -->
+
+        <aside id="sidebar"
+            class="mobile-sidebar fixed md:relative w-64 bg-white min-h-screen shadow-sm z-20 md:transform-none border border-gray-300S">
+            <nav class="p-4">
+                <ul>
+                    <li class="mb-4">
+                        <a href="quicrefill-dashboard.html" class="flex items-center text-amber-500 font-medium">
+                            <i class="fas fa-th-large mr-3"></i>
+                            <span>Summary</span>
+                        </a>
+                    </li>
+
+                    <li class="mb-4">
+                        <a href="order-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-clipboard-list mr-3"></i>
+                            <span>Order Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="delivery-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-cube mr-3"></i>
+                            <span>Delivery Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="service-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-briefcase mr-3"></i>
+                            <span>Service Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="accessories-management.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-bag-shopping mr-3"></i>
+                            <span>Accessories Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="user-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-user mr-3"></i>
+                            <span>User Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="vendor-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-store mr-3"></i>
+                            <span>Vendor Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="delivery-rep-management.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-truck-droplet mr-2"></i>
+                            <span>Delivery Rep Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="verification-and-compliance.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-check-square mr-3"></i>
+                            <span>Verification & Compliance</span>
+                        </a>
+                    </li>
+                    <li x-data="{ open: false }" class="mb-4">
+                        <a href="#" @click.prevent="open = !open"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-sack-dollar mr-3"></i>
+                            <span>Revenue Management</span>
+                            <i :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas ml-auto text-xs"></i>
+                        </a>
+
+                        <!-- Dropdown Menu -->
+                        <ul x-show="open" x-cloak class="mt-2 ml-6 space-y-2 text-gray-800">
+
+                            <!-- Revenue Breakdown -->
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-chart-pie mr-3 text-gray-500"></i>
+                                <a href="revenue-breakdown.html">Revenue Breakdown</a>
+                            </li>
+
+                            <!-- Payout Management -->
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-hand-holding-usd mr-3 text-gray-500"></i>
+                                <a href="payout-management.html">Payout Management</a>
+                            </li>
+
+                            <!-- Revenue Analytics -->
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-chart-line mr-3 text-gray-500"></i>
+                                <a href="revenue-analytics.html">Revenue Analytics & Insights</a>
+                            </li>
+
+                        </ul>
+                    </li>
+
+                    <li class="mb-4">
+                        <a href="withdrawal-management.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-money-bill-transfer mr-3"></i>
+                            <span>Withdrawal Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="account-deletion.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-user-xmark mr-3"></i>
+                            <span>Account Deletion</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="account-deletion.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fa fa-map-marker mr-3"></i>
+                            <span>Operating Locations</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="feedback.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-comments mr-3"></i>
+                            <span>Feedback</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="fraud-watch.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fa fa-binoculars mr-3"></i>
+                            <span>Fraud Watch</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="reports-and-analytics.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-chart-bar mr-3"></i>
+                            <span>Reports and Analytics</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="crash-analytics.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fa fa-line-chart mr-3"></i>
+                            <span>Crash Analytics</span>
+                        </a>
+                    </li>
+                    <li x-data="{ open: false }" class="mb-4">
+                        <a href="#" @click.prevent="open = !open"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-shield-alt mr-3"></i>
+                            <span>Audit Logs & Security</span>
+                            <i :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas ml-auto text-xs"></i>
+                        </a>
+
+                        <!-- Dropdown Menu -->
+                        <ul x-show="open" x-cloak class="mt-2 ml-6 space-y-2 text-gray-500">
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-file-alt mr-3"></i>
+                                <a href="security-logs.html">Security Logs</a>
+                            </li>
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-user-lock mr-3"></i>
+                                <a href="access-control.html">Access Control</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="mb-4">
+                        <a href="staff-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-user-shield mr-3"></i>
+                            <span>Staff Management</span>
+                        </a>
+                    </li>
+
+                    <li x-data="{ open: false }" class="mb-4">
+                        <a href="#" @click.prevent="open = !open"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-cog mr-3"></i>
+                            <span>System Settings</span>
+                            <i :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas ml-auto text-xs"></i>
+                        </a>
+
+                        <!-- Dropdown Menu -->
+                        <ul x-show="open" x-cloak class="mt-2 ml-6 space-y-2 text-gray-500">
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-envelope-open-text mr-3"></i>
+                                <a href="system-message-settings.html">Message Settings</a>
+                            </li>
+
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-bell mr-3"></i>
+                                <a href="system-push-notification-settings.html">Push Notification Settings</a>
+                            </li>
+
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-ticket-alt mr-3"></i>
+                                <a href="system-coupon-settings.html">Coupon Settings</a>
+                            </li>
+
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Overlay for sidebar on mobile -->
+        <div id="sidebar-overlay" class="fixed inset-0 bg-black opacity-50 z-10 hidden"></div>
+
+        <!-- Content Area -->
+        <main class="flex-1 p-4 m-4 w-full overflow-x-hidden">
+            <div class="flex flex-col space-y-4 md:space-y-0 md:flex-row md:justify-between md:items-center mb-6">
+                <!-- Left Section (Title & Breadcrumb) -->
+                <div class="w-full md:w-auto">
+                    <h1 class="text-xl md:text-xl font-bold text-gray-800">Fraud Watch Dashboard</h1>                    
+                </div>
+
+                <!-- Right Section (Controls) -->
+                <div class="grid grid-cols-2 md:flex md:flex-wrap items-center gap-2 md:gap-4 w-full md:w-auto">
+                    <!-- Search Box -->
+                    <div class="relative w-36">
+                        <input type="text" placeholder="Search"
+                            class="bg-white w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 focus:outline-none pr-10 text-sm">
+                        <i
+                            class="fas fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer"></i>
+                    </div>
+
+
+                    <div class="mb-2 md:mb-0">
+                        <div class="flex gap-0">
+                            <div class="date-picker-wrapper relative w-full max-w-xs">
+                                <div class="flex items-center border rounded-md overflow-hidden bg-white">
+                                    <!-- Calendar Icon -->
+                                    <div class="pl-3 pr-2 text-gray-500">
+                                        <i class="fa fa-calendar-alt"></i>
+                                    </div>
+
+                                    <!-- Date Display (Reduced width) -->
+                                    <input type="text"
+                                        class="datePicker w-24 py-2 text-sm text-gray-700 focus:outline-none cursor-pointer"
+                                        placeholder="Select date" readonly />
+
+                                    <!-- Dropdown Button (Increased width) -->
+                                    <button type="button"
+                                        class="dropdownBtn w-32 px-3 py-2 border-l border-gray-300 text-sm text-gray-700 bg-white focus:outline-none flex items-center gap-1">
+                                        <span class="mode-label">Today</span>
+                                        <i class="fa fa-chevron-down text-xs"></i>
+                                    </button>
+                                </div>
+
+                                <!-- Dropdown Menu -->
+                                <div
+                                    class="dropdownMenu absolute right-0 mt-2 bg-white border rounded shadow-md w-40 hidden z-10">
+                                    <button type="button" data-mode="today"
+                                        class="w-full text-left px-4 py-2 hover:bg-gray-100">Today</button>
+                                    <button type="button" data-mode="Specific Date"
+                                        class="w-full text-left px-4 py-2 hover:bg-gray-100">Specific Date</button>
+                                    <button type="button" data-mode="monthly"
+                                        class="w-full text-left px-4 py-2 hover:bg-gray-100">Monthly</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-2 md:mb-0">
+                        <div class="relative inline-block" x-data="{ 
+                                open: false, 
+                                selected: '', 
+                                orderDropdown: false, 
+                                paymentDropdown: false, 
+                                serviceDropdown: false, 
+                                selectedStatuses: [], 
+                                selectedPayments: [], 
+                                selectedServices: [] 
+                            }">
+                            <!-- Filter Button -->
+                            <button @click="open = !open"
+                                class="flex items-center gap-2 px-4 py-2 bg-white border rounded-lg">
+                                <i class="fa fa-filter"></i> Filter
+                            </button>
+
+                            <!-- Dropdown -->
+                            <div x-show="open" @click.outside="open = false" x-cloak
+                                class="dropdown-menu absolute left-auto right-0 top-full mt-2 w-96 bg-white border rounded-lg shadow-lg p-4 z-30">
+
+
+                                <h3 class="text-gray-700 font-medium mb-3">Select Filter</h3>
+
+                                <!-- Main Options -->
+                                <div class="grid grid-cols-3 gap-2">
+                                    <button
+                                        @click="selected = 'Order Status'; orderDropdown = true; paymentDropdown = false; serviceDropdown = false"
+                                        :class="selected === 'Order Status' ? 'bg-yellow-400 ' : 'border'"
+                                        class="px-3 py-2 rounded-lg text-sm">
+                                        Order Status
+                                    </button>
+                                    <button
+                                        @click="selected = 'Payment Type'; paymentDropdown = true; orderDropdown = false; serviceDropdown = false"
+                                        :class="selected === 'Payment Type' ? 'bg-yellow-400 ' : 'border'"
+                                        class="px-3 py-2 rounded-lg text-sm">
+                                        Payment Type
+                                    </button>
+                                    <button
+                                        @click="selected = 'Service Type'; serviceDropdown = true; orderDropdown = false; paymentDropdown = false"
+                                        :class="selected === 'Service Type' ? 'bg-yellow-400 ' : 'border'"
+                                        class="px-3 py-2 rounded-lg text-sm">
+                                        Service Type
+                                    </button>
+                                </div>
+
+                                <!-- Order Status Dropdown -->
+                                <div x-show="orderDropdown" x-cloak class="mt-3">
+                                    <h3 class="text-gray-700 font-medium mb-2">Select Order Status</h3>
+                                    <div class="grid grid-cols-3 gap-2">
+                                        <template
+                                            x-for="status in ['Completed', 'In Progress', 'Cancelled', 'Disputed', 'In Transit']">
+                                            <button
+                                                @click="selectedStatuses.includes(status) ? selectedStatuses = selectedStatuses.filter(s => s !== status) : selectedStatuses.push(status)"
+                                                :class="selectedStatuses.includes(status) ? 'bg-yellow-400 ' : 'border'"
+                                                class="px-3 py-2 rounded-lg text-sm">
+                                                <span x-text="status"></span>
+                                            </button>
+                                        </template>
+                                    </div>
+                                </div>
+
+                                <!-- Payment Type Dropdown -->
+                                <div x-show="paymentDropdown" x-cloak class="mt-3">
+                                    <h3 class="text-gray-700 font-medium mb-2">Select Payment Type</h3>
+                                    <div class="grid grid-cols-3 gap-2">
+                                        <template x-for="payment in ['On delivery', 'Wallet', 'Flutterwave']">
+                                            <button
+                                                @click="selectedPayments.includes(payment) ? selectedPayments = selectedPayments.filter(p => p !== payment) : selectedPayments.push(payment)"
+                                                :class="selectedPayments.includes(payment) ? 'bg-yellow-400 ' : 'border'"
+                                                class="px-3 py-2 rounded-lg text-sm">
+                                                <span x-text="payment"></span>
+                                            </button>
+                                        </template>
+                                    </div>
+                                </div>
+
+                                <!-- Service Type Dropdown -->
+                                <div x-show="serviceDropdown" x-cloak class="mt-3">
+                                    <h3 class="text-gray-700 font-medium mb-2">Select Service Type</h3>
+                                    <div class="grid grid-cols-3 gap-2">
+                                        <template
+                                            x-for="service in ['Gas Refill', 'Peroleum', 'Diesel', 'Accessories', 'Electricity']">
+                                            <button
+                                                @click="selectedServices.includes(service) ? selectedServices = selectedServices.filter(s => s !== service) : selectedServices.push(service)"
+                                                :class="selectedServices.includes(service) ? 'bg-yellow-400 ' : 'border'"
+                                                class="px-3 py-2 rounded-lg text-sm">
+                                                <span x-text="service"></span>
+                                            </button>
+                                        </template>
+                                    </div>
+                                </div>
+
+                                <!-- Apply Button -->
+                                <div class="mt-4 text-center">
+                                    <button @click="open = false"
+                                        class="px-4 py-2 bg-yellow-400  rounded-lg">Apply</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+            </div>
+            <div class="max-w-full mx-auto mb-6">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  <!-- Left Panel -->
+                  <div class="lg:col-span-2">
+                    <div class="bg-white rounded-lg shadow p-5">
+                      <h2 class="text-xl font-semibold text-gray-800 mb-6">Monthly Suspicious Transactions Trend</h2>
+              
+                      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <!-- User Suspicious Transactions -->
+                        <div class="border rounded-lg p-4">
+                          <div class="text-sm text-gray-500 mb-1">User Suspicious Transactions</div>
+                          <div class="flex items-center justify-between">
+                            <div class="text-3xl font-bold text-gray-800">8950</div>
+                            <div class="text-green-500 font-medium">+ 22%</div>
+                          </div>
+                        </div>
+              
+                        <!-- Vendor Suspicious Transactions -->
+                        <div class="border rounded-lg p-4">
+                          <div class="text-sm text-gray-500 mb-1">Vendor Suspicious Transactions</div>
+                          <div class="flex items-center justify-between">
+                            <div class="text-3xl font-bold text-gray-800">1520</div>
+                            <div class="text-yellow-500 font-medium">- 24%</div>
+                          </div>
+                        </div>
+                      </div>
+              
+                      <div class="text-sm text-gray-500 mb-4">Jan 16 - Jan 30 Number of flagged orders per month</div>
+              
+                      <div class="h-64 relative">
+                        <canvas id="transactionsChart"></canvas>
+                      </div>
+                    </div>
+                  </div>
+              
+                  <!-- Right Panel -->
+                  <div class="lg:col-span-1">
+                    <div class="bg-white rounded-2xl p-8 shadow-md h-full text-center">
+                      <div class="text-[20px] font-semibold mb-2 text-[#1f1f3c] flex justify-center items-center gap-2">
+                        Fraud Risk Score
+                        <span class="text-gray-400 text-[18px]">&#9432;</span>
+                      </div>
+              
+                      <div class="relative w-[200px] h-[200px] mx-auto">
+                        <canvas id="riskChart"></canvas>
+                        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-[28px] font-semibold text-[#1f1f3c]">38%</div>
+                      </div>
+              
+                      <div class="mt-5 text-left">
+                        <p class="flex items-center gap-2 text-sm mb-1"><span class="w-4 h-4 rounded-full bg-red-500 inline-block"></span> High (🔴 80% - 100%)</p>
+                        <p class="flex items-center gap-2 text-sm mb-1"><span class="w-4 h-4 rounded-full bg-yellow-400 inline-block"></span> Medium (🟡 50% - 79%)</p>
+                        <p class="flex items-center gap-2 text-sm"><span class="w-4 h-4 rounded-full bg-green-500 inline-block"></span> Low (🟢 0% - 49%)</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+
+       
+              
+            
+                <!-- Suspicious Order Table -->
+                <div class="bg-white rounded-md border border-gray-300 shadow-md p-4 mb-6">
+                    <div class="container mx-auto">
+                        <div class="flex justify-between items-center mb-4">
+                            <div>
+                                <h2 class="text-lg font-semibold text-gray-800">Suspicious Transactions (Flagged Transactions)</h2>
+                                <p class="text-sm text-gray-600">A detailed table listing all suspicious transactions.</p>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                            
+                                <div class="date-picker-wrapper relative w-full max-w-xs">
+                                    <div class="flex items-center border rounded-md overflow-hidden bg-white">
+                                        <!-- Calendar Icon -->
+                                        <div class="pl-3 pr-2 text-gray-500">
+                                            <i class="fa fa-calendar-alt"></i>
+                                        </div>
+    
+                                        <!-- Date Display (Reduced width) -->
+                                        <input type="text"
+                                            class="datePicker w-24 py-2 text-sm text-gray-700 focus:outline-none cursor-pointer"
+                                            placeholder="Select date" readonly />
+    
+                                        <!-- Dropdown Button (Increased width) -->
+                                        <button type="button"
+                                            class="dropdownBtn w-32 px-3 py-2 border-l border-gray-300 text-sm text-gray-700 bg-white focus:outline-none flex items-center gap-1">
+                                            <span class="mode-label">Today</span>
+                                            <i class="fa fa-chevron-down text-xs"></i>
+                                        </button>
+                                    </div>
+    
+                                    <!-- Dropdown Menu -->
+                                    <div
+                                        class="dropdownMenu absolute right-0 mt-2 bg-white border rounded shadow-md w-40 hidden z-10">
+                                        <button type="button" data-mode="today"
+                                            class="w-full text-left px-4 py-2 hover:bg-gray-100">Today</button>
+                                        <button type="button" data-mode="Specific Date"
+                                            class="w-full text-left px-4 py-2 hover:bg-gray-100">Specific Date</button>
+                                        <button type="button" data-mode="monthly"
+                                            class="w-full text-left px-4 py-2 hover:bg-gray-100">Monthly</button>
+                                    </div>
+                                </div>
+                                
+                                <div class="relative">
+                                    <div class="relative inline-block" x-data="{ open: false, minAmount: 0, maxAmount: 10000000, selectedMin: 0, selectedMax: 10000000, updateMin(event) { this.selectedMin = Math.min(parseInt(event.target.value), this.selectedMax); }, updateMax(event) { this.selectedMax = Math.max(parseInt(event.target.value), this.selectedMin); } }">
+                                        <button @click="open = !open" class="flex items-center gap-2 px-4 py-2 bg-white border rounded-lg">
+                                            <i class="fa fa-filter"></i> Amount
+                                        </button>
+                                
+                                        <div x-show="open" @click.outside="open = false" x-cloak
+                                            class="dropdown-menu absolute left-auto right-0 top-full mt-2 w-64 bg-white border rounded-lg shadow-lg p-4 z-30">
+                                
+                                            <h3 class="text-gray-700 font-medium mb-3">Select Amount Range (₦)</h3>
+                                
+                                            <div class="mb-4">
+                                                <div class="flex items-center justify-between text-sm text-gray-600 mb-2">
+                                                    <span>Select Amount:</span>
+                                                    <span></span> </div>
+                                                <div class="relative">
+                                                    <input type="range" x-model.number="selectedMin" :min="minAmount" :max="maxAmount" @input="updateMin($event)" class="w-full absolute top-0 left-0 h-5 opacity-0 cursor-pointer z-20">
+                                                    <input type="range" x-model.number="selectedMax" :min="minAmount" :max="maxAmount" @input="updateMax($event)" class="w-full absolute top-0 left-0 h-5 opacity-0 cursor-pointer z-10">
+                                                    <div class="w-full h-1 bg-gray-300 rounded-md">
+                                                        <div class="bg-yellow-400 h-1 rounded-md" :style="`left: ${(selectedMin / maxAmount) * 100}%; right: ${100 - (selectedMax / maxAmount) * 100}%; position: absolute;`"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="flex items-center justify-between text-sm text-gray-600 mt-2">
+                                                    <span x-text="'₦' + selectedMin.toLocaleString()"></span>
+                                                    <span x-text="'₦' + selectedMax.toLocaleString()"></span>
+                                                </div>
+                                            </div>
+                                
+                                            <div class="mt-4 text-center">
+                                                <button @click="open = false; console.log('Selected Amount Range:', selectedMin, '-', selectedMax);"
+                                                    class="px-4 py-2 bg-yellow-400 rounded-lg text-white text-sm">Apply</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full border-collapse bg-white shadow-md rounded-lg overflow-hidden">
+                                <thead class="bg-gray-200 text-left text-gray-600 text-sm">
+                                    <tr>
+                                        <th class="p-3">Transaction ID</th>
+                                        <th class="p-3">User/Vendor</th>
+                                        <th class="p-3">Amount (₦)</th>
+                                        <th class="p-3">Date & Time</th>
+                                        <th class="p-3">Flag Reason</th>
+                                        <th class="p-3">Fraud Score</th>
+                                        <th class="p-3">Status</th>
+                                        <th class="p-3">Admin Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-gray-700 text-sm">
+                                    <tr class="border-t hover:bg-gray-100">
+                                        <td class="p-3">TXN-20250314</td>
+                                        <td class="p-3">John Doe</td>
+                                        <td class="p-3">500,000</td>
+                                        <td class="p-3">14/03/2025 10:00 AM</td>
+                                        <td class="p-3">Multiple Failed Payments</td>
+                                        <td class="p-3"><span class="inline-block w-2 h-2 rounded-full bg-red-500 mr-1"></span> 90%</td>
+                                        <td class="p-3"><span class="text-yellow-500">Pending Review</span></td>
+                                        <td class="p-3"><a href="#" class="text-blue-500 hover:underline">View Details</a></td>
+                                    </tr>
+                                    <tr class="border-t hover:bg-gray-100">
+                                        <td class="p-3">TXN-20250313</td>
+                                        <td class="p-3">Alpha Enterprises (V)</td>
+                                        <td class="p-3">3,500,000</td>
+                                        <td class="p-3">13/03/2025 4:15 PM</td>
+                                        <td class="p-3">Large Order After Dormancy</td>
+                                        <td class="p-3"><span class="inline-block w-2 h-2 rounded-full bg-red-500 mr-1"></span> 85%</td>
+                                        <td class="p-3"><span class="text-yellow-500">Under Investigation</span></td>
+                                        <td class="p-3"><a href="#" class="text-blue-500 hover:underline">View Details</a></td>
+                                    </tr>
+                                    <tr class="border-t hover:bg-gray-100">
+                                        <td class="p-3">TXN-20250312</td>
+                                        <td class="p-3">ABC Ltd (Vendor)</td>
+                                        <td class="p-3">2,000,000</td>
+                                        <td class="p-3">12/03/2025 1:30 PM</td>
+                                        <td class="p-3">Unusual Transaction Size</td>
+                                        <td class="p-3"><span class="inline-block w-2 h-2 rounded-full bg-yellow-500 mr-1"></span> 65%</td>
+                                        <td class="p-3"><span class="text-blue-500">Reviewing</span></td>
+                                        <td class="p-3"><a href="#" class="text-blue-500 hover:underline">View Details</a></td>
+                                    </tr>
+                                    <tr class="border-t hover:bg-gray-100">
+                                        <td class="p-3">TXN-20250311</td>
+                                        <td class="p-3">Jane Smith</td>
+                                        <td class="p-3">5,000</td>
+                                        <td class="p-3">11/03/2025 6:30 AM</td>
+                                        <td class="p-3">Rapid Order Frequency</td>
+                                        <td class="p-3"><span class="inline-block w-2 h-2 rounded-full bg-green-500 mr-1"></span> 40%</td>
+                                        <td class="p-3"><span class="text-yellow-500">Investigating</span></td>
+                                        <td class="p-3"><a href="#" class="text-blue-500 hover:underline">View Details</a></td>
+                                    </tr>
+                                    <tr class="border-t hover:bg-gray-100">
+                                        <td class="p-3">TXN-20250310</td>
+                                        <td class="p-3">David Wright (User)</td>
+                                        <td class="p-3">75,000</td>
+                                        <td class="p-3">10/03/2025 9:45 PM</td>
+                                        <td class="p-3">Multiple Refund Requests</td>
+                                        <td class="p-3"><span class="inline-block w-2 h-2 rounded-full bg-yellow-500 mr-1"></span> 72%</td>
+                                        <td class="p-3"><span class="text-red-500">Urgent Review</span></td>
+                                        <td class="p-3"><a href="#" class="text-blue-500 hover:underline">View Details</a></td>
+                                    </tr>
+                                    <tr class="border-t hover:bg-gray-100">
+                                        <td class="p-3">TXN-20250309</td>
+                                        <td class="p-3">XYZ Traders (Vendor)</td>
+                                        <td class="p-3">2,750,000</td>
+                                        <td class="p-3">09/03/2025 3:10 PM</td>
+                                        <td class="p-3">Repeated Transactions to Same Account</td>
+                                        <td class="p-3"><span class="inline-block w-2 h-2 rounded-full bg-red-500 mr-1"></span> 95%</td>
+                                        <td class="p-3"><span class="text-yellow-500">Pending Review</span></td>
+                                        <td class="p-3"><a href="#" class="text-blue-500 hover:underline">View Details</a></td>
+                                    </tr>
+                                    <tr class="border-t hover:bg-gray-100">
+                                        <td class="p-3">TXN-20250308</td>
+                                        <td class="p-3">Sarah K. (User)</td>
+                                        <td class="p-3">300,000</td>
+                                        <td class="p-3">08/03/2025 7:50 AM</td>
+                                        <td class="p-3">Unusual Payment Method Change</td>
+                                        <td class="p-3"><span class="inline-block w-2 h-2 rounded-full bg-red-500 mr-1"></span> 88%</td>
+                                        <td class="p-3"><span class="text-yellow-500">Under Review</span></td>
+                                        <td class="p-3"><a href="#" class="text-blue-500 hover:underline">View Details</a></td>
+                                    </tr>
+                                    <tr class="border-t hover:bg-gray-100">
+                                        <td class="p-3">TXN-20250307</td>
+                                        <td class="p-3">Bright Stores (Vendor)</td>
+                                        <td class="p-3">1,600,000</td>
+                                        <td class="p-3">07/03/2025 11:20 AM</td>
+                                        <td class="p-3">Exceeds Daily Limit</td>
+                                        <td class="p-3"><span class="inline-block w-2 h-2 rounded-full bg-yellow-500 mr-1"></span> 78%</td>
+                                        <td class="p-3"><span class="text-red-500">Urgent Action Needed</span></td>
+                                        <td class="p-3"><a href="#" class="text-blue-500 hover:underline">View Details</a></td>
+                                    </tr>
+                                    <tr class="border-t hover:bg-gray-100">
+                                        <td class="p-3">TXN-20250306</td>
+                                        <td class="p-3">Chris A. (User)</td>
+                                        <td class="p-3">22,000</td>
+                                        <td class="p-3">06/03/2025 8:30 PM</td>
+                                        <td class="p-3">First-Time High-Value Order</td>
+                                        <td class="p-3"><span class="inline-block w-2 h-2 rounded-full bg-green-500 mr-1"></span> 55%</td>
+                                        <td class="p-3"><span class="text-yellow-500">Investigating</span></td>
+                                        <td class="p-3"><a href="#" class="text-blue-500 hover:underline">View Details</a></td>
+                                    </tr>
+                                    <tr class="border-t hover:bg-gray-100">
+                                        <td class="p-3">TXN-20250305</td>
+                                        <td class="p-3">Daniel Corp (Vendor)</td>
+                                        <td class="p-3">4,100,000</td>
+                                        <td class="p-3">05/03/2025 5:00 PM</td>
+                                        <td class="p-3">Large Spike in Orders</td>
+                                        <td class="p-3"><span class="inline-block w-2 h-2 rounded-full bg-red-500 mr-1"></span> 92%</td>
+                                        <td class="p-3"><span class="text-red-500">Action Required</span></td>
+                                        <td class="p-3"><a href="#" class="text-blue-500 hover:underline">View Details</a></td>
+                                    </tr>
+                                    <tr class="border-t hover:bg-gray-100">
+                                        <td class="p-3">TXN-20250304</td>
+                                        <td class="p-3">Emmanuel O. (User)</td>
+                                        <td class="p-3">950,000</td>
+                                        <td class="p-3">04/03/2025 2:15 PM</td>
+                                        <td class="p-3">Unusual Login Location</td>
+                                        <td class="p-3"><span class="inline-block w-2 h-2 rounded-full bg-red-500 mr-1"></span> 87%</td>
+                                        <td class="p-3"><span class="text-yellow-500">Under Review</span></td>
+                                        <td class="p-3"><a href="#" class="text-blue-500 hover:underline">View Details</a></td>
+                                    </tr>
+                                    <tr class="border-t hover:bg-gray-100">
+                                        <td class="p-3">TXN-20250303</td>
+                                        <td class="p-3">K-Tech Solutions (V)</td>
+                                        <td class="p-3">5,800,000</td>
+                                        <td class="p-3">03/03/2025 9:40 AM</td>
+                                        <td class="p-3">Large Order with New Payment Method</td>
+                                        <td class="p-3"><span class="inline-block w-2 h-2 rounded-full bg-red-500 mr-1"></span> 93%</td>
+                                        <td class="p-3"><span class="text-gray-500">Disputed</span></td>
+                                        <td class="p-3"><a href="#" class="text-blue-500 hover:underline">View Details</a></td>
+                                    </tr>
+                                    <tr class="border-t hover:bg-gray-100">
+                                        <td class="p-3">TXN-20250302</td>
+                                        <td class="p-3">Olivia Martins (User)</td>
+                                        <td class="p-3">125,000</td>
+                                        <td class="p-3">02/03/2025 7:30 PM</td>
+                                        <td class="p-3">Suspicious IP Address Change</td>
+                                        <td class="p-3"><span class="inline-block w-2 h-2 rounded-full bg-yellow-500 mr-1"></span> 76%</td>
+                                        <td class="p-3"><span class="text-yellow-500">Pending</span></td>
+                                        <td class="p-3"><a href="#" class="text-blue-500 hover:underline">View Details</a></td>
+                                    </tr>
+                                    <tr class="border-t hover:bg-gray-100">
+                                        <td class="p-3">TXN-20250301</td>
+                                        <td class="p-3">Smart Retailers Ltd (V)</td>
+                                        <td class="p-3">3,200,000</td>
+                                        <td class="p-3">01/03/2025 11:05 AM</td>
+                                        <td class="p-3">Multiple Orders in Quick Succession</td>
+                                        <td class="p-3"><span class="inline-block w-2 h-2 rounded-full bg-red-500 mr-1"></span> 89%</td>
+                                        <td class="p-3"><span class="text-yellow-500">Under Review</span></td>
+                                        <td class="p-3"><a href="#" class="text-blue-500 hover:underline">View Details</a></td>
+                                    </tr>
+                                    <tr class="border-t hover:bg-gray-100">
+                                        <td class="p-3">TXN-20250228</td>
+                                        <td class="p-3">Ahmed S. (User)</td>
+                                        <td class="p-3">42,500</td>
+                                        <td class="p-3">28/02/2025 6:45 PM</td>
+                                        <td class="p-3">High Chargeback Rate</td>
+                                        <td class="p-3"><span class="inline-block w-2 h-2 rounded-full bg-yellow-500 mr-1"></span> 81%</td>
+                                        <td class="p-3"><span class="text-yellow-500">Pending Review</span></td>
+                                        <td class="p-3"><a href="#" class="text-blue-500 hover:underline">View Details</a></td>
+                                    </tr>
+                                    <tr class="border-t hover:bg-gray-100">
+                                        <td class="p-3">TXN-20250227</td>
+                                        <td class="p-3">Quick Mart (Vendor)</td>
+                                        <td class="p-3">2,400,000</td>
+                                        <td class="p-3">27/02/2025 3:20 PM</td>
+                                        <td class="p-3">Irregular Payment Structure</td>
+                                        <td class="p-3"><span class="inline-block w-2 h-2 rounded-full bg-yellow-500 mr-1"></span> 70%</td>
+                                        <td class="p-3"><span class="text-yellow-500">Pending Review</span></td>
+                                        <td class="p-3"><a href="#" class="text-blue-500 hover:underline">View Details</a></td>
+                                    </tr>
+                                    <tr class="border-t hover:bg-gray-100">
+                                        <td class="p-3">TXN-20250226</td>
+                                        <td class="p-3">Jennifer L. (User)</td>
+                                        <td class="p-3">185,000</td>
+                                        <td class="p-3">26/02/2025 10:15 AM</td>
+                                        <td class="p-3">Transaction Split into Small Amounts</td>
+                                        <td class="p-3"><span class="inline-block w-2 h-2 rounded-full bg-yellow-500 mr-1"></span> 74%</td>
+                                        <td class="p-3"><span class="text-yellow-500">Under Review</span></td>
+                                        <td class="p-3"><a href="#" class="text-blue-500 hover:underline">View Details</a></td>
+                                    </tr>
+                                    <tr class="border-t hover:bg-gray-100">
+                                        <td class="p-3">TXN-20250225</td>
+                                        <td class="p-3">Tech Hub Ltd (Vendor)</td>
+                                        <td class="p-3">6,500,000</td>
+                                        <td class="p-3">25/02/2025 1:55 PM</td>
+                                        <td class="p-3">Payment Gateway Mismatch</td>
+                                        <td class="p-3"><span class="inline-block w-2 h-2 rounded-full bg-red-500 mr-1"></span> 96%</td>
+                                        <td class="p-3"><span class="text-red-500">Action Required</span></td>
+                                        <td class="p-3"><a href="#" class="text-blue-500 hover:underline">View Details</a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="flex justify-between items-center mt-4 p-4 border-t">
+                            <div class="flex items-center space-x-4">
+                                <span class="text-gray-600">Total entries: <span class="font-bold">56</span></span>
+                                <button class="px-3 py-1 text-gray-400 flex items-center space-x-1" disabled>
+                                    <i class="fa fa-chevron-left"></i> <span>Previous</span>
+                                </button>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button class="px-3 py-1 bg-yellow-500 text-white font-bold rounded-full">1</button>
+                                <span class="text-gray-700">2</span>
+                                <span class="text-gray-700">3</span>
+                                <span class="text-gray-500">...</span>
+                                <span class="text-gray-700">5</span>
+                            </div>
+                            <button class="px-3 py-1 text-gray-500 flex items-center space-x-1 hover:text-gray-700">
+                                <span>Next</span> <i class="fa fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+        </main>
+    </div>
+    <!-- Alpine.js (Add this script if not already included in your project) -->
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script>
+        const ctx = document.getElementById('transactionsChart').getContext('2d');
+        let tooltipEl = null;
+        
+        const chart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: ['14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30'],
+            datasets: [{
+              label: 'Suspicious Transactions',
+              data: [1200, 800, 1500, 2200, 3000, 2600, 2300, 2000, 1900, 1700, 1500, 1600, 1800, 2200, 2500, 2800, 3100],
+              borderColor: '#f59e0b',
+              backgroundColor: 'rgba(245, 158, 11, 0.1)',
+              borderWidth: 2,
+              tension: 0.4,
+              fill: true,
+              pointRadius: 0,
+              pointHoverRadius: 6,
+              pointBackgroundColor: '#f59e0b',
+              pointHoverBackgroundColor: '#f59e0b'
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+              mode: 'index',
+              intersect: false
+            },
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                enabled: false,
+                external: function (context) {
+                  const {chart, tooltip} = context;
+                  if (!tooltipEl) {
+                    tooltipEl = document.createElement('div');
+                    tooltipEl.className = 'custom-tooltip';
+                    document.body.appendChild(tooltipEl);
+                  }
+        
+                  if (tooltip.opacity === 0) {
+                    tooltipEl.style.opacity = 0;
+                    return;
+                  }
+        
+                  if (tooltip.body) {
+                    const value = chart.data.datasets[0].data[tooltip.dataPoints[0].dataIndex];
+                    const formattedValue = value >= 1000 ? (value / 1000).toFixed(1) + 'k' : value;
+                    tooltipEl.textContent = formattedValue;
+                  }
+        
+                  const position = chart.canvas.getBoundingClientRect();
+                  tooltipEl.style.opacity = 1;
+                  tooltipEl.style.left = position.left + window.pageXOffset + tooltip.caretX + 'px';
+                  tooltipEl.style.top = position.top + window.pageYOffset + tooltip.caretY - 40 + 'px';
+                }
+              }
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                grid: { color: 'rgba(0,0,0,0.05)' },
+                ticks: { display: false },
+                border: { display: false }
+              },
+              x: {
+                grid: { display: false },
+                ticks: { color: '#9ca3af' }
+              }
+            }
+          }
+        });
+        
+        // Highlight a point manually
+        const highlightIndex = 7;
+        chart.data.datasets[0].pointRadius = chart.data.datasets[0].data.map((_, i) => i === highlightIndex ? 4 : 0);
+        chart.update();
+        
+        const riskCtx = document.getElementById('riskChart').getContext('2d');
+            const riskValue = 38;
+
+            new Chart(riskCtx, {
+            type: 'doughnut',
+            data: {
+                datasets: [{
+                data: [riskValue, 100 - riskValue],
+                backgroundColor: ['#FFC833', '#f8f8f8'],
+                borderWidth: 0,
+                cutout: '80%',
+                borderRadius: 50, // <-- Rounded ends
+                weight: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                tooltip: { enabled: false },
+                legend: { display: false }
+                }
+            }
+            });
+
+    </script>
+
+        
+    <script>
+
+
+
+
+        // Mobile sidebar toggle functionality
+        document.addEventListener('DOMContentLoaded', function () {
+            const sidebarToggle = document.querySelector('#sidebar-toggle');
+            const sidebar = document.getElementById('sidebar');
+            const sidebarOverlay = document.getElementById('sidebar-overlay');
+
+            const hideSidebarButton = document.getElementById('hide-sidebar-button');
+
+            sidebarToggle.addEventListener('click', function () {
+                sidebar.classList.toggle('open');
+                sidebar.classList.remove('hidden');
+                sidebarOverlay.classList.toggle('hidden');
+            });
+
+            sidebarOverlay.addEventListener('click', function () {
+                sidebar.classList.remove('open');
+                sidebar.classList.add('hidden');
+                sidebarOverlay.classList.add('hidden');
+            });
+
+            hideSidebarButton.addEventListener('click', function () {
+                sidebar.classList.toggle("hidden");
+            });
+
+
+
+        });
+
+
+    </script>
+      <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Select all date picker wrappers
+            const wrappers = document.querySelectorAll('.date-picker-wrapper');
+
+            wrappers.forEach((wrapper) => {
+                const datePicker = wrapper.querySelector('.datePicker');
+                const dropdownBtn = wrapper.querySelector('.dropdownBtn');
+                const dropdownMenu = wrapper.querySelector('.dropdownMenu');
+                const modeLabel = wrapper.querySelector('.mode-label');
+
+                let mode = "today"; // Default mode is 'today'
+
+                function setDateMode(selectedMode) {
+                    mode = selectedMode;
+                    modeLabel.textContent = selectedMode;
+                    dropdownMenu.classList.add("hidden");
+
+                    if (mode === "today") {
+                        const today = new Date();
+                        const formatted = today.toLocaleDateString("en-GB", {
+                            day: "2-digit",
+                            month: "short",
+                            year: "numeric"
+                        });
+                        datePicker.value = formatted;
+                    } else if (mode === "Specific Date") {
+                        flatpickr(datePicker, {
+                            dateFormat: "d M, Y",
+                            defaultDate: new Date(),
+                            onChange: function (selectedDates, dateStr) {
+                                datePicker.value = dateStr;
+                            }
+                        }).open();
+                    } else if (mode === "monthly") {
+                        flatpickr(datePicker, {
+                            mode: "range",
+                            dateFormat: "d M",
+                            onChange: function (selectedDates) {
+                                if (selectedDates.length === 2) {
+                                    const start = selectedDates[0].toLocaleDateString("en-GB", {
+                                        day: "2-digit",
+                                        month: "short"
+                                    });
+                                    const end = selectedDates[1].toLocaleDateString("en-GB", {
+                                        day: "2-digit",
+                                        month: "short"
+                                    });
+                                    datePicker.value = `${start} - ${end}`;
+                                }
+                            }
+                        }).open();
+                    }
+                }
+
+                // Init default mode on page load for each picker
+                setDateMode("today");
+
+                // Toggle dropdown for each picker
+                dropdownBtn.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    dropdownMenu.classList.toggle("hidden");
+                });
+
+                // Handle dropdown option click for each picker
+                dropdownMenu.querySelectorAll('button[data-mode]').forEach(btn => {
+                    btn.addEventListener("click", () => {
+                        setDateMode(btn.dataset.mode);
+                    });
+                });
+
+                // Close dropdown if clicked outside
+                document.addEventListener("click", (e) => {
+                    if (!wrapper.contains(e.target)) {
+                        dropdownMenu.classList.add("hidden");
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
