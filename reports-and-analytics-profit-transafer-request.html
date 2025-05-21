@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quicrefill Admin</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Chart.js from cdnjs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"
+        integrity="sha512-ElRFoEQdI5Ht6kZvyzXhYG9NqjtkmlkfYk0wr6wHxU9JEHakS7UJZNeml5ALk+8IKlU6jDgMabC3vkumRokgJA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+    <!-- Load Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+        integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.js"></script>
+</head>
+
+<style>
+    canvas {
+        max-height: 250px;
+    }
+
+    .legend-box {
+        width: 12px;
+        height: 12px;
+    }
+
+    [x-cloak] {
+        display: none !important;
+    }
+
+    @media (max-width: 768px) {
+        .mobile-sidebar {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .mobile-sidebar.open {
+            transform: translateX(0);
+        }
+
+        .dropdown-menu {
+            @apply left-1/2 -translate-x-1/2 w-80 max-w-[95%];
+        }
+
+
+    }
+
+    .flatpickr-day.selected,
+    .flatpickr-day.startRange,
+    .flatpickr-day.endRange {
+        background: #FFB600 !important;
+        color: white !important;
+        border-color: #FFB600 !important;
+    }
+
+    /* Change the color of dates between the range */
+    .flatpickr-day.inRange {
+        background: #FFE08A !important;
+        /* Light yellow */
+        color: black !important;
+    }
+</style>
+</head>
+
+<body class="bg-gray-100">
+    <!-- Header -->
+
+    <header class="bg-white shadow-md flex items-center justify-between p-4 sticky top-0 z-30">
+        <div class="flex items-center">
+            <button id="sidebar-toggle" class=" md:hidden mr-4">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="flex items-center mr-4 md:mr-8">
+                <img src="images/logo.png" class="w-[150px] md:w-[250px]">
+            </div>
+            <button id="hide-sidebar-button" class="border border-gray-200 rounded-md px-2 py-1 z-15 hidden md:block">
+                <i class="fas fa-angle-left"></i>
+            </button>
+        </div>
+
+        <div class="hidden md:block relative w-1/3">
+            <input type="text" placeholder="Search"
+                class="w-full px-4 py-2 border border-gray-300 rounded-md bg-gray-100 focus:outline-none pl-10">
+            <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+            <button
+                class="absolute right-0 top-0 h-full px-4 bg-gradient-to-b from-[#FFC533] to-[#FFB600] text-black rounded-r-md border border-gray-300 shadow flex items-center justify-center">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+        </div>
+
+
+        <div class="flex items-center">
+            <div x-data="{ open: false }" class="relative mr-4">
+                <!-- Notification Icon -->
+                <button @click="open = !open" class="relative p-2">
+                    <i class="fas fa-bell text-gray-600 text-lg"></i>
+                    <!-- Notification Badge -->
+                    <span
+                        class="absolute -top-1 -right-1 bg-yellow-400 text-black text-xs font-bold px-1.5 py-0.5 rounded-full">8</span>
+                </button>
+
+                <!-- Dropdown Menu -->
+                <div x-show="open" @click.away="open = false" x-transition x-cloak
+                    class="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-64 bg-white border rounded-md shadow-lg z-50">
+                    <div class="p-3 border-b">
+                        <span class="font-semibold text-gray-700">Notifications</span>
+                    </div>
+
+                    <ul class="max-h-60 overflow-auto">
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer flex items-center">
+                            <i class="fas fa-bell text-gray-500 text-sm mr-2"></i>
+                            <span class="text-sm text-gray-700">You have a new message</span>
+                        </li>
+
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer flex items-center">
+                            <i class="fas fa-check-circle text-green-500 text-sm mr-2"></i>
+                            <span class="text-sm text-gray-700">Task Completed Successfully</span>
+                        </li>
+
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer flex items-center">
+                            <i class="fas fa-exclamation-triangle text-yellow-500 text-sm mr-2"></i>
+                            <span class="text-sm text-gray-700">System Alert: Update Required</span>
+                        </li>
+
+                    </ul>
+
+                    <div class="p-3 border-t text-center">
+                        <a href="notifications-center.html" class="text-sm text-blue-500 hover:underline">View all</a>
+                    </div>
+                </div>
+            </div>
+
+            <div x-data="{ open: false }" class="relative">
+                <!-- Profile Button -->
+                <button @click="open = !open"
+                    class="flex items-center rounded-full px-2 py-1 md:px-4 md:py-2 border border-gray-300 shadow-md focus:outline-none">
+                    <!-- Avatar -->
+                    <div class="relative w-10 h-10 md:w-10 md:h-10 rounded-full bg-gray-300 mr-2">
+                        <!-- Avatar Image -->
+                        <img src="images/Avatar/avatar.png" alt="User Avatar"
+                            class="w-full h-full object-cover rounded-full">
+
+                        <!-- Green Dot (Move Outside) -->
+                        <div class="absolute top-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"
+                            style="transform: translate(30%, -30%);"></div>
+                    </div>
+
+                    <!-- User Info -->
+                    <div class="hidden md:block text-left">
+                        <div class="text-sm font-medium">Timothy Jonson</div>
+                        <div class="text-xs text-gray-500">timoj@Quicrefil.ng</div>
+                    </div>
+                </button>
+
+                <!-- Dropdown Menu -->
+                <div x-show="open" @click.away="open = false" x-transition x-cloak
+                    class="absolute right-0 mt-2 w-48 bg-white border rounded-md shadow-lg z-50">
+                    <ul class="py-2">
+                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                            <a href="profiles-settings.html" class="flex items-center text-gray-700">
+                                <i class="fas fa-user mr-2"></i>
+                                Profile
+                            </a>
+                        </li>
+
+                        <li class="px-4 py-2 text-red-500 hover:bg-gray-100 cursor-pointer">
+                            <a href="login.html" class="flex items-center">
+                                <i class="fas fa-sign-out-alt mr-2"></i>
+                                Logout
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="flex">
+        <!-- Sidebar -->
+
+        <aside id="sidebar"
+            class="mobile-sidebar fixed md:relative w-64 bg-white min-h-screen shadow-sm z-20 md:transform-none border border-gray-300S">
+            <nav class="p-4">
+                <ul>
+                    <li class="mb-4">
+                        <a href="quicrefill-dashboard.html" class="flex items-center text-amber-500 font-medium">
+                            <i class="fas fa-th-large mr-3"></i>
+                            <span>Summary</span>
+                        </a>
+                    </li>
+
+                    <li class="mb-4">
+                        <a href="order-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-clipboard-list mr-3"></i>
+                            <span>Order Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="delivery-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-cube mr-3"></i>
+                            <span>Delivery Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="service-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-briefcase mr-3"></i>
+                            <span>Service Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="accessories-management.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-bag-shopping mr-3"></i>
+                            <span>Accessories Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="user-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-user mr-3"></i>
+                            <span>User Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="vendor-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-store mr-3"></i>
+                            <span>Vendor Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="delivery-rep-management.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-truck-droplet mr-2"></i>
+                            <span>Delivery Rep Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="verification-and-compliance.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-check-square mr-3"></i>
+                            <span>Verification & Compliance</span>
+                        </a>
+                    </li>
+                    <li x-data="{ open: false }" class="mb-4">
+                        <a href="#" @click.prevent="open = !open"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-sack-dollar mr-3"></i>
+                            <span>Revenue Management</span>
+                            <i :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas ml-auto text-xs"></i>
+                        </a>
+
+                        <!-- Dropdown Menu -->
+                        <ul x-show="open" x-cloak class="mt-2 ml-6 space-y-2 text-gray-800">
+
+                            <!-- Revenue Breakdown -->
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-chart-pie mr-3 text-gray-500"></i>
+                                <a href="revenue-breakdown.html">Revenue Breakdown</a>
+                            </li>
+
+                            <!-- Payout Management -->
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-hand-holding-usd mr-3 text-gray-500"></i>
+                                <a href="payout-management.html">Payout Management</a>
+                            </li>
+
+                            <!-- Revenue Analytics -->
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-chart-line mr-3 text-gray-500"></i>
+                                <a href="revenue-analytics.html">Revenue Analytics & Insights</a>
+                            </li>
+
+                        </ul>
+                    </li>
+
+                    <li class="mb-4">
+                        <a href="withdrawal-management.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-money-bill-transfer mr-3"></i>
+                            <span>Withdrawal Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="account-deletion.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-user-xmark mr-3"></i>
+                            <span>Account Deletion</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="account-deletion.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fa fa-map-marker mr-3"></i>
+                            <span>Operating Locations</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="feedback.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-comments mr-3"></i>
+                            <span>Feedback</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="fraud-watch.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fa fa-binoculars mr-3"></i>
+                            <span>Fraud Watch</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="reports-and-analytics.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-chart-bar mr-3"></i>
+                            <span>Reports and Analytics</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="crash-analytics.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fa fa-line-chart mr-3"></i>
+                            <span>Crash Analytics</span>
+                        </a>
+                    </li>
+                    <li x-data="{ open: false }" class="mb-4">
+                        <a href="#" @click.prevent="open = !open"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-shield-alt mr-3"></i>
+                            <span>Audit Logs & Security</span>
+                            <i :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas ml-auto text-xs"></i>
+                        </a>
+
+                        <!-- Dropdown Menu -->
+                        <ul x-show="open" x-cloak class="mt-2 ml-6 space-y-2 text-gray-500">
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-file-alt mr-3"></i>
+                                <a href="security-logs.html">Security Logs</a>
+                            </li>
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-user-lock mr-3"></i>
+                                <a href="access-control.html">Access Control</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="mb-4">
+                        <a href="staff-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-user-shield mr-3"></i>
+                            <span>Staff Management</span>
+                        </a>
+                    </li>
+
+                    <li x-data="{ open: false }" class="mb-4">
+                        <a href="#" @click.prevent="open = !open"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-cog mr-3"></i>
+                            <span>System Settings</span>
+                            <i :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas ml-auto text-xs"></i>
+                        </a>
+
+                        <!-- Dropdown Menu -->
+                        <ul x-show="open" x-cloak class="mt-2 ml-6 space-y-2 text-gray-500">
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-envelope-open-text mr-3"></i>
+                                <a href="system-message-settings.html">Message Settings</a>
+                            </li>
+
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-bell mr-3"></i>
+                                <a href="system-push-notification-settings.html">Push Notification Settings</a>
+                            </li>
+
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-ticket-alt mr-3"></i>
+                                <a href="system-coupon-settings.html">Coupon Settings</a>
+                            </li>
+
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Overlay for sidebar on mobile -->
+        <div id="sidebar-overlay" class="fixed inset-0 bg-black opacity-50 z-10 hidden"></div>
+
+        <!-- Content Area -->
+        <main class="flex-1 p-4 md:p-6">
+            <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-6">
+                <div class="flex items-center">
+                    <a class="mr-4 p-2 bg-white rounded-lg text-gray-600 hover:bg-gray-200 shadow-md" href="#">
+                        <i class="fa fa-arrow-left fa-lg"></i>
+                    </a>
+                    <div>
+                        <h1 class="text-xl font-bold text-gray-800">Profit Transfer Request</h1>
+                        <div class="text-gray-600 text-sm">
+                            <a href="#" class="hover:text-blue-600">Dashboard</a>
+                            <span>></span>
+                            <a href="#" class="hover:text-blue-600">Reports and Analytics</a>
+                            <span>></span>
+                            <span class="font-semibold">Profit Transfer Request</span>
+                        </div>
+                    </div>
+                     <!-- Right Section (Controls) -->
+                <div class="grid grid-cols-2 md:flex md:flex-wrap items-center gap-2 md:gap-4 w-full md:w-auto">
+                    <!-- Search Box -->
+                    <div class="relative w-36">
+                        <input type="text" placeholder="Search"
+                            class="bg-white w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 focus:outline-none pr-10 text-sm">
+                        <i
+                            class="fas fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer"></i>
+                    </div>
+
+
+                    <div class="mb-2 md:mb-0">
+                        <div class="flex gap-0">
+                            <div class="date-picker-wrapper relative w-full max-w-xs">
+                                <div class="flex items-center border rounded-md overflow-hidden bg-white">
+                                    <!-- Calendar Icon -->
+                                    <div class="pl-3 pr-2 text-gray-500">
+                                        <i class="fa fa-calendar-alt"></i>
+                                    </div>
+
+                                    <!-- Date Display (Reduced width) -->
+                                    <input type="text"
+                                        class="datePicker w-24 py-2 text-sm text-gray-700 focus:outline-none cursor-pointer"
+                                        placeholder="Select date" readonly />
+
+                                    <!-- Dropdown Button (Increased width) -->
+                                    <button type="button"
+                                        class="dropdownBtn w-32 px-3 py-2 border-l border-gray-300 text-sm text-gray-700 bg-white focus:outline-none flex items-center gap-1">
+                                        <span class="mode-label">Today</span>
+                                        <i class="fa fa-chevron-down text-xs"></i>
+                                    </button>
+                                </div>
+
+                                <!-- Dropdown Menu -->
+                                <div
+                                    class="dropdownMenu absolute right-0 mt-2 bg-white border rounded shadow-md w-40 hidden z-10">
+                                    <button type="button" data-mode="today"
+                                        class="w-full text-left px-4 py-2 hover:bg-gray-100">Today</button>
+                                    <button type="button" data-mode="Specific Date"
+                                        class="w-full text-left px-4 py-2 hover:bg-gray-100">Specific Date</button>
+                                    <button type="button" data-mode="monthly"
+                                        class="w-full text-left px-4 py-2 hover:bg-gray-100">Monthly</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-2 md:mb-0 text-sm">
+                        <div class="relative inline-block" x-data="{ 
+                                open: false, 
+                                selected: '',                                                             
+                                selectedServices: [] 
+                            }">
+                            <!-- Filter Button -->
+                            <button @click="open = !open"
+                                class="flex items-center gap-2 px-4 py-2 bg-white border rounded-lg">
+                                <i class="fa fa-filter"></i> Service Type
+                            </button>
+
+                            <!-- Dropdown -->
+                            <div x-show="open" @click.outside="open = false" x-cloak
+                                class="dropdown-menu absolute left-auto right-0 top-full mt-2 w-96 bg-white border rounded-lg shadow-lg p-4 z-30">                                
+
+                                <!-- Service Type Dropdown -->
+                                
+                                    <h3 class="text-gray-700 font-medium mb-2">Select Service Type</h3>
+                                    <div class="grid grid-cols-3 gap-2">
+                                        <template
+                                            x-for="service in ['Gas Refill', 'Peroleum', 'Diesel', 'Accessories', 'Electricity']">
+                                            <button
+                                                @click="selectedServices.includes(service) ? selectedServices = selectedServices.filter(s => s !== service) : selectedServices.push(service)"
+                                                :class="selectedServices.includes(service) ? 'bg-yellow-400 ' : 'border'"
+                                                class="px-3 py-2 rounded-lg text-sm">
+                                                <span x-text="service"></span>
+                                            </button>
+                                        </template>
+                                    </div>
+                                
+
+                                <!-- Apply Button -->
+                                <div class="mt-4 text-center">
+                                    <button @click="open = false"
+                                        class="px-4 py-2 bg-yellow-400  rounded-lg">Apply</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+                </div>
+            </div>
+            
+            <div class="min-h-screen bg-gray-100 flex justify-start p-4">
+                <div class="bg-white p-8 rounded-lg shadow-md max-w-[65%]">
+                    <p class="text-sm text-gray-700 mb-6">
+                        Allow the admin to request a transfer of company profit from the payment company to a designated bank account.
+                    </p>
+            
+                    <div class="mb-4">
+                        <label for="availableBalance" class="block text-sm font-medium text-gray-700">Available Balance:</label>
+                        <input type="text" id="availableBalance" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" value="₦3,400,000" readonly>
+                    </div>
+            
+                    <div class="mb-4">
+                        <label for="amountToTransfer" class="block text-sm font-medium text-gray-700">Amount to Transfer:</label>
+                        <input type="text" id="amountToTransfer" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Enter transfer amount">
+                    </div>
+            
+                    <div class="mb-4">
+                        <label for="bankName" class="block text-sm font-medium text-gray-700">Bank Name</label>
+                        <select id="bankName" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            <option>First Bank</option>
+                            </select>
+                    </div>
+            
+                    <div class="mb-4">
+                        <label for="bankAccountNumber1" class="block text-sm font-medium text-gray-700">Bank Account Number:</label>
+                        <input type="text" id="bankAccountNumber1" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="e.g 1234567890">
+                    </div>
+            
+                    <div class="mb-6">
+                        <label for="bankAccountNumber2" class="block text-sm font-medium text-gray-700">Bank Account Number:</label>
+                        <input type="text" id="bankAccountNumber2" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="e.g 1234567890">
+                    </div>
+            
+                    <button type="submit" class="w-full bg-yellow-500 text-white py-2 px-4 rounded-md hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-opacity-50">
+                        Request Transfer
+                    </button>
+                </div>
+            </div>
+
+            
+
+            <div class="min-h-screen bg-gray-100 p-4">
+                <div class="bg-white rounded-lg shadow-md p-4">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
+                        <div>
+                            <h2 class="text-xl  font-semibold text-gray-800">Transfer History & Status</h2>
+                            <p class="text-gray-600 text-xs mt-1">Display the history of profit transfers, including pending and completed requests.</p>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="date-picker-wrapper relative w-full max-w-xs">
+                                <div class="flex items-center border rounded-md overflow-hidden bg-white">
+                                    <div class="pl-3 pr-2 text-gray-500">
+                                        <i class="fa fa-calendar-alt"></i>
+                                    </div>
+    
+                                    <input type="text"
+                                        class="datePicker w-24 py-2 text-sm text-gray-700 focus:outline-none cursor-pointer"
+                                        placeholder="30 Jan, 2025" readonly />
+    
+                                    <button type="button"
+                                        class="dropdownBtn w-32 px-3 py-2 border-l border-gray-300 text-sm text-gray-700 bg-white focus:outline-none flex items-center gap-1">
+                                        <span class="mode-label">Today</span>
+                                        <i class="fa fa-chevron-down text-xs"></i>
+                                    </button>
+                                </div>
+    
+                                <div
+                                    class="dropdownMenu absolute right-0 mt-2 bg-white border rounded shadow-md w-40 hidden z-10">
+                                    <button type="button" data-mode="today"
+                                        class="w-full text-left px-4 py-2 hover:bg-gray-100">Today</button>
+                                    <button type="button" data-mode="Specific Date"
+                                        class="w-full text-left px-4 py-2 hover:bg-gray-100">Specific Date</button>
+                                    <button type="button" data-mode="monthly"
+                                        class="w-full text-left px-4 py-2 hover:bg-gray-100">Monthly</button>
+                                </div>
+                            </div>
+                            <div class="relative">
+                                <div class="relative inline-block" x-data="{ open: false, selectedStatuses: [] }">
+                                    <button @click="open = !open" class="flex items-center gap-2 px-4 py-2  border border-gray-300 rounded-md text-gray-700 text-sm ">
+                                        <i class="fa fa-filter"></i>
+                                        <span>Status</span>
+                                        
+                                    </button>
+            
+                                    <div x-show="open" @click.outside="open = false" x-cloak
+                                        class="dropdown-menu absolute left-auto right-0 top-full mt-2 w-64 bg-white border rounded-lg shadow-lg p-4 z-30">
+            
+                                        <h3 class="text-gray-700 font-medium mb-3">Select Status</h3>
+            
+                                        <div class="grid grid-cols-2 gap-2">
+                                            <template x-for="status in ['Completed', 'Pending', 'Failed']">
+                                                <button
+                                                    @click="selectedStatuses.includes(status) ? selectedStatuses = selectedStatuses.filter(s => s !== status) : selectedStatuses.push(status)"
+                                                    :class="selectedStatuses.includes(status) ? 'bg-yellow-400' : 'border border-gray-300'"
+                                                    class="px-3 py-2 rounded-lg text-sm text-gray-700 hover:bg-gray-100">
+                                                    <span x-text="status"></span>
+                                                </button>
+                                            </template>
+                                        </div>
+            
+                                        <div class="mt-4 text-center">
+                                            <button @click="open = false; console.log('Selected Statuses:', selectedStatuses);"
+                                                class="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-opacity-50">Apply</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-100"> <tr>
+                                <th scope="col" class="px-4 py-3 text-left text-sm font-normal text-gray-700 tracking-normal whitespace-nowrap rounded-tl-lg">Date</th>
+                                <th scope="col" class="px-4 py-3 text-left text-sm font-normal text-gray-700 tracking-normal whitespace-nowrap">Amount (₦)</th>
+                                <th scope="col" class="px-4 py-3 text-left text-sm font-normal text-gray-700 tracking-normal whitespace-nowrap">Bank</th>
+                                <th scope="col" class="px-4 py-3 text-left text-sm font-normal text-gray-700 tracking-normal whitespace-nowrap">Account No.</th>
+                                <th scope="col" class="px-4 py-3 text-left text-sm font-normal text-gray-700 tracking-normal whitespace-nowrap">Status</th>
+                                <th scope="col" class="px-4 py-3 text-left text-sm font-normal text-gray-700 tracking-normal whitespace-nowrap rounded-tr-lg">Action</th>
+                            </tr>
+                        </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">15/02/2025</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">1,000,000</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">GTBank</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">1234567890</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm">
+                                        <span class="inline-flex text-xs leading-5 font-semibold text-green-600">Completed</span>
+                                    </td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-blue-600 hover:underline cursor-pointer">View Details</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">10/03/2025</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">500,000</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Zenith Bank</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">9876543210</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm">
+                                        <span class="inline-flex text-xs leading-5 font-semibold text-yellow-600">Pending</span>
+                                    </td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-red-600 hover:underline cursor-pointer">Cancel Request</td>
+                                </tr>
+                                 <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">05/03/2025</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">750,000</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">UBA</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">1122334455</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm">
+                                        <span class="inline-flex text-xs leading-5 font-semibold text-green-600">Completed</span>
+                                    </td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-blue-600 hover:underline cursor-pointer">View Details</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">02/03/2025</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">1,200,000</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Access Bank</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">5566778899</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm">
+                                        <span class="inline-flex text-xs leading-5 font-semibold text-red-600">Failed</span>
+                                    </td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-blue-600 hover:underline cursor-pointer">Retry Transfer</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">28/02/2025</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">900,000</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">First Bank</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">6677889900</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm">
+                                        <span class="inline-flex text-xs leading-5 font-semibold text-yellow-600">Pending</span>
+                                    </td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-red-600 hover:underline cursor-pointer">Cancel Request</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">25/02/2025</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">650,000</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">EcoBank</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">2233445566</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm">
+                                        <span class="inline-flex text-xs leading-5 font-semibold text-green-600">Completed</span>
+                                    </td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-blue-600 hover:underline cursor-pointer">View Details</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">20/02/2025</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">820,000</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Fidelity</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">7788990011</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm">
+                                        <span class="inline-flex text-xs leading-5 font-semibold text-green-600">Completed</span>
+                                    </td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-blue-600 hover:underline cursor-pointer">View Details</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">18/02/2025</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">300,000</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Polaris Bank</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">9988776655</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm">
+                                        <span class="inline-flex text-xs leading-5 font-semibold text-red-600">Failed</span>
+                                    </td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-blue-600 hover:underline cursor-pointer">Retry Transfer</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">16/02/2025</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">1,500,000</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Stanbic IBTC</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">3344556677</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm">
+                                        <span class="inline-flex text-xs leading-5 font-semibold text-green-600">Completed</span>
+                                    </td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-blue-600 hover:underline cursor-pointer">View Details</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">14/02/2025</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">1,100,000</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Keystone</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">5566889900</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm">
+                                        <span class="inline-flex text-xs leading-5 font-semibold text-green-600">Completed</span>
+                                    </td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-blue-600 hover:underline cursor-pointer">View Details</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">12/02/2025</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">950,000</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Union Bank</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">8877665544</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm">
+                                        <span class="inline-flex text-xs leading-5 font-semibold text-yellow-600">Pending</span>
+                                    </td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-red-600 hover:underline cursor-pointer">Cancel Request</td>
+                                </tr>
+                                 <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">10/02/2025</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">400,000</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">Wema Bank</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">6655443322</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm">
+                                        <span class="inline-flex text-xs leading-5 font-semibold text-green-600">Completed</span>
+                                    </td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-blue-600 hover:underline cursor-pointer">View Details</td>
+                                </tr>
+                                 <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">08/02/2025</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">2,500,000</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">GTBank</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">1234567890</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm">
+                                        <span class="inline-flex text-xs leading-5 font-semibold text-red-600">Failed</span>
+                                    </td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-blue-600 hover:underline cursor-pointer">Retry Transfer</td>
+                                </tr>
+                                </tbody>
+                        </table>
+                    </div>
+                    <div class="flex justify-between items-center mt-4 p-4 border-t">
+                        <div class="flex items-center space-x-4">
+                            <span class="text-gray-600">Total entries: <span class="font-bold">20</span></span>
+                            <button class="px-3 py-1 text-gray-400 flex items-center space-x-1" disabled>
+                                <i class="fa fa-arrow-left"></i> <span>Previous</span>
+                            </button>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button class="px-3 py-1 bg-yellow-500 text-white font-bold rounded-full">1</button>
+                            <span class="text-gray-700">2</span>
+                            
+                        </div>
+                        <button class="px-3 py-1 text-gray-500 flex items-center space-x-1 hover:text-gray-700">
+                            <span>Next</span> <i class="fa fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            
+                
+            </div>            
+
+        </main>
+    </div>
+    <!-- Alpine.js (Add this script if not already included in your project) -->
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script>
+        document.querySelectorAll('.toggle-input').forEach((checkbox) => {
+          checkbox.addEventListener('change', function () {
+            const row = this.closest('tr');
+            const label = row.querySelector('.status-label');
+            const toggleBg = row.querySelector('.toggle-bg');
+            const dot = toggleBg.querySelector('.dot');
+    
+            if (this.checked) {
+              
+    
+              toggleBg.classList.remove('bg-gray-300');
+              toggleBg.classList.add('bg-yellow-400');
+    
+              dot.classList.remove('translate-x-0');
+              dot.classList.add('translate-x-5');
+            } else {
+              
+              toggleBg.classList.remove('bg-yellow-400');
+              toggleBg.classList.add('bg-gray-300');
+    
+              dot.classList.remove('translate-x-5');
+              dot.classList.add('translate-x-0');
+            }
+          });
+        });
+      </script>
+    <script>
+        // User Distribution Chart
+        const userCtx = document.getElementById('userChart').getContext('2d');
+        new Chart(userCtx, {
+            type: 'pie',
+            data: {
+                labels: ['Customer', 'Rider', 'Vendor'],
+                datasets: [{
+                    data: [8087, 1348, 1348],
+                    backgroundColor: ['#FBBF24', '#3B82F6', '#10B981'],
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: { display: false },
+                    datalabels: {
+                        color: '#000',
+                        font: { weight: 'bold', size: 14 },
+                        formatter: (value) => value
+                    },
+                    tooltip: { enabled: false }
+                },
+                elements: {
+                    arc: { borderWidth: 0 }
+                }
+            },
+            plugins: [ChartDataLabels]
+        });
+
+        // Order Volume Chart
+        const orderCtx = document.getElementById('orderChart').getContext('2d');
+        new Chart(orderCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'],
+                datasets: [{
+                    label: 'Orders',
+                    data: [320, 540, 530, 440, 620, 560, 700, 280, 500, 540, 510, 650],
+                    backgroundColor: '#06b6d4',
+                    borderRadius: 4,
+                    barThickness: 10,
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 1000,
+                        ticks: {
+                            stepSize: 250,
+                            callback: value => value === 1000 ? '1k' : value
+                        },
+                        grid: { drawBorder: false }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { enabled: false }
+                }
+            }
+        });
+    </script>
+    <script>
+
+        // Mobile sidebar toggle functionality
+        document.addEventListener('DOMContentLoaded', function () {
+            const sidebarToggle = document.querySelector('#sidebar-toggle');
+            const sidebar = document.getElementById('sidebar');
+            const sidebarOverlay = document.getElementById('sidebar-overlay');
+
+            const hideSidebarButton = document.getElementById('hide-sidebar-button');
+
+            sidebarToggle.addEventListener('click', function () {
+                sidebar.classList.toggle('open');
+                sidebar.classList.remove('hidden');
+                sidebarOverlay.classList.toggle('hidden');
+            });
+
+            sidebarOverlay.addEventListener('click', function () {
+                sidebar.classList.remove('open');
+                sidebar.classList.add('hidden');
+                sidebarOverlay.classList.add('hidden');
+            });
+
+            hideSidebarButton.addEventListener('click', function () {
+                sidebar.classList.toggle("hidden");
+            });
+
+
+
+        });
+
+
+    </script>
+      <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Select all date picker wrappers
+            const wrappers = document.querySelectorAll('.date-picker-wrapper');
+
+            wrappers.forEach((wrapper) => {
+                const datePicker = wrapper.querySelector('.datePicker');
+                const dropdownBtn = wrapper.querySelector('.dropdownBtn');
+                const dropdownMenu = wrapper.querySelector('.dropdownMenu');
+                const modeLabel = wrapper.querySelector('.mode-label');
+
+                let mode = "today"; // Default mode is 'today'
+
+                function setDateMode(selectedMode) {
+                    mode = selectedMode;
+                    modeLabel.textContent = selectedMode;
+                    dropdownMenu.classList.add("hidden");
+
+                    if (mode === "today") {
+                        const today = new Date();
+                        const formatted = today.toLocaleDateString("en-GB", {
+                            day: "2-digit",
+                            month: "short",
+                            year: "numeric"
+                        });
+                        datePicker.value = formatted;
+                    } else if (mode === "Specific Date") {
+                        flatpickr(datePicker, {
+                            dateFormat: "d M, Y",
+                            defaultDate: new Date(),
+                            onChange: function (selectedDates, dateStr) {
+                                datePicker.value = dateStr;
+                            }
+                        }).open();
+                    } else if (mode === "monthly") {
+                        flatpickr(datePicker, {
+                            mode: "range",
+                            dateFormat: "d M",
+                            onChange: function (selectedDates) {
+                                if (selectedDates.length === 2) {
+                                    const start = selectedDates[0].toLocaleDateString("en-GB", {
+                                        day: "2-digit",
+                                        month: "short"
+                                    });
+                                    const end = selectedDates[1].toLocaleDateString("en-GB", {
+                                        day: "2-digit",
+                                        month: "short"
+                                    });
+                                    datePicker.value = `${start} - ${end}`;
+                                }
+                            }
+                        }).open();
+                    }
+                }
+
+                // Init default mode on page load for each picker
+                setDateMode("today");
+
+                // Toggle dropdown for each picker
+                dropdownBtn.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    dropdownMenu.classList.toggle("hidden");
+                });
+
+                // Handle dropdown option click for each picker
+                dropdownMenu.querySelectorAll('button[data-mode]').forEach(btn => {
+                    btn.addEventListener("click", () => {
+                        setDateMode(btn.dataset.mode);
+                    });
+                });
+
+                // Close dropdown if clicked outside
+                document.addEventListener("click", (e) => {
+                    if (!wrapper.contains(e.target)) {
+                        dropdownMenu.classList.add("hidden");
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
