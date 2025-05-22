@@ -11,14 +11,25 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"
         integrity="sha512-ElRFoEQdI5Ht6kZvyzXhYG9NqjtkmlkfYk0wr6wHxU9JEHakS7UJZNeml5ALk+8IKlU6jDgMabC3vkumRokgJA=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
     <!-- Load Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+        integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.js"></script>
 </head>
 
 <style>
+    canvas {
+        max-height: 250px;
+    }
+
+    .legend-box {
+        width: 12px;
+        height: 12px;
+    }
+
     [x-cloak] {
         display: none !important;
     }
@@ -169,7 +180,6 @@
             </div>
         </div>
     </header>
-
 
     <!-- Main Content -->
     <div class="flex">
@@ -376,71 +386,192 @@
         <div id="sidebar-overlay" class="fixed inset-0 bg-black opacity-50 z-10 hidden"></div>
 
         <!-- Content Area -->
-        <main class="flex-1 p-6 w-full overflow-x-hidden">
-            <div class="max-w-md w-full">
-                <div class="max-w-6xl mx-auto mb-4">
-                    <button class="text-xl text-gray-700 bg-white pl-2 pr-2 border p-1 rounded-md"><i
-                            class="fa fa-arrow-left"></i></button>
-                </div>
-
-                <div class="bg-white rounded-md shadow-md p-6">
-                    <h2 class="text-xl font-semibold text-gray-700 mb-4">Delivery details</h2>
-
-                    <div class="mb-3">
-                        <span class="font-bold text-gray-600">Order ID:</span>
-                        <span class="text-gray-500">#ORD1001</span>
-                    </div>
-
-                    <div class="mb-3">
-                        <span class="font-bold text-gray-600">Customer name:</span>
-                        <span class="text-gray-500">John Doe</span>
-                    </div>
-
-                    <div class="mb-3">
-                        <span class="font-bold text-gray-600">Delivery rep name:</span>
-                        <span class="text-gray-500">Salami Ahmed</span>
-                    </div>
-
-                    <div class="mb-3">
-                        <span class="font-bold text-gray-600">Delivery address:</span>
-                        <span class="text-gray-500">Third mainland avenue, Ikeja, Lagos.</span>
-                    </div>
-
-                    <div class="mb-3">
-                        <span class="font-bold text-gray-600">Delivery rep contact:</span>
-                        <span class="text-gray-500">091234567890</span>
-                    </div>
-
-                    <div class="mb-3">
-                        <span class="font-bold text-gray-600">Status:</span>
-                        <span class="font-semibold text-yellow-500">Out for delivery</span>
-                    </div>
-
-                    <div class="mb-4">
-                        <span class="font-bold text-gray-600">ETA:</span>
-                        <span class="text-gray-500">25/01/27 10:15 AM</span>
-                    </div>
-
-                    <div class="flex flex-col sm:flex-row gap-2">
-                        <button
-                            class="bg-yellow-500 hover:bg-yellow-600  font-semibold py-2 px-4 rounded-md w-full sm:w-auto">
-                            Contact delivery rep
-                        </button>
-                        <button
-                            class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md w-full sm:w-auto">
-                            Update status
-                        </button>
+        <main class="flex-1 p-4 md:p-6">
+            <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-6">
+                <div class="flex items-center">
+                    <a class="mr-4 p-2 bg-white rounded-lg text-gray-600 hover:bg-gray-200 shadow-md" href="#">
+                        <i class="fa fa-arrow-left fa-lg"></i>
+                    </a>           
+                     <div>
+                        <h2 class="text-xl font-bold text-gray-800">Crash Analytics Details </h1>
+                        <p class="text-gray-700 text-sm mt-1">Review the details of this crash activity below.</p>
                     </div>
                 </div>
             </div>
+            <!-- Table  -->
+              <div class="max-w-xl w-full bg-white rounded-lg shadow-md overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <h1 class="text-xl font-semibold text-gray-800">Crash ID: C1001</h1>
+        </div>
+
+        <div class="p-6">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">Error Details</h3>
+
+            <div class="bg-gray-50 rounded-lg overflow-hidden border border-gray-200">
+                <div class="grid grid-cols-[1fr_2fr] text-sm text-gray-600 border-b border-gray-200 bg-gray-100">
+                    <div class="px-4 py-3 font-medium text-gray-700">Label</div>
+                    <div class="px-4 py-3 font-medium text-gray-700">Value</div>
+                </div>
+                <div class="grid grid-cols-[1fr_2fr] text-sm text-gray-800 border-b border-gray-200">
+                    <div class="px-4 py-3 text-gray-600">Type</div>
+                    <div class="px-4 py-3">PaymentTimeoutException</div>
+                </div>
+                <div class="grid grid-cols-[1fr_2fr] text-sm text-gray-800 border-b border-gray-200">
+                    <div class="px-4 py-3 text-gray-600">First Occurred</div>
+                    <div class="px-4 py-3">Today 09:42 AM</div>
+                </div>
+                <div class="grid grid-cols-[1fr_2fr] text-sm text-gray-800 border-b border-gray-200">
+                    <div class="px-4 py-3 text-gray-600">Last Occurred</div>
+                    <div class="px-4 py-3">2 min ago</div>
+                </div>
+                <div class="grid grid-cols-[1fr_2fr] text-sm text-gray-800">
+                    <div class="px-4 py-3 text-gray-600">Affected</div>
+                    <div class="px-4 py-3">142 users (12 active sessions)</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="px-6 py-4">
+            <h3 class="text-lg font-semibold text-gray-800 mb-2">Stack Trace</h3>
+            <p class="text-sm text-gray-600">[expandable code block with syntax highlighting]</p>
+        </div>
+
+        <div class="px-6 py-4">
+            <h3 class="text-lg font-semibold text-gray-800 mb-2">User Impact</h3>
+            <ul class="list-disc pl-5 text-sm text-gray-700 space-y-1">
+                <li>Checkout fails at final step</li>
+                <li>Error message: "Payment processing timed out"</li>
+            </ul>
+        </div>
+
+        <div class="px-6 py-4">
+            <h3 class="text-lg font-semibold text-gray-800 mb-2">Timeline</h3>
+            <ul class="text-sm text-gray-700 space-y-1">
+                <li>09:42 - Error first detected (auto-reported)</li>
+                <li>09:45 - Marked as priority by Admin Alex</li>
+                <li>09:50 - Note added: "Occurs with PayPal payments"</li>
+            </ul>
+        </div>
+
+        <div class="px-4 py-4 border-t border-gray-200 flex flex-wrap gap-3 justify-center text-sm">
+            <button class="flex-1 min-w-[160px] px-2 py-2 bg-yellow-500 text-black font-medium rounded-md hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-opacity-50 transition-colors duration-200">
+                Mark as priority
+            </button>
+            <button class="flex-1 min-w-[160px] px-2 py-2 bg-green-500 text-white font-medium rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 transition-colors duration-200">
+                Mark as resolved
+            </button>
+            <button class="flex-1 min-w-[160px] px-2 py-2 bg-orange-500 text-black font-medium rounded-md hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50 transition-colors duration-200">
+                Under investigation
+            </button>
+        </div>
+
+      <div class="px-6 pb-6 flex justify-start">
+            <button class="w-full max-w-xs
+                           bg-gradient-to-b from-gray-100 to-gray-300 
+                           text-gray-700 py-2 px-4 rounded-md text-sm flex items-center justify-center gap-2 border border-gray-300">
+                <i class="fa-regular fa-clipboard text-gray-500"></i>
+                Add Comments/Notes
+            </button>
+        </div>
+    </div>
+
         </main>
     </div>
     <!-- Alpine.js (Add this script if not already included in your project) -->
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <script>
+        document.querySelectorAll('.toggle-input').forEach((checkbox) => {
+          checkbox.addEventListener('change', function () {
+            const row = this.closest('tr');
+            const label = row.querySelector('.status-label');
+            const toggleBg = row.querySelector('.toggle-bg');
+            const dot = toggleBg.querySelector('.dot');
+    
+            if (this.checked) {
+              
+    
+              toggleBg.classList.remove('bg-gray-300');
+              toggleBg.classList.add('bg-yellow-400');
+    
+              dot.classList.remove('translate-x-0');
+              dot.classList.add('translate-x-5');
+            } else {
+              
+              toggleBg.classList.remove('bg-yellow-400');
+              toggleBg.classList.add('bg-gray-300');
+    
+              dot.classList.remove('translate-x-5');
+              dot.classList.add('translate-x-0');
+            }
+          });
+        });
+      </script>
+    <script>
+        // User Distribution Chart
+        const userCtx = document.getElementById('userChart').getContext('2d');
+        new Chart(userCtx, {
+            type: 'pie',
+            data: {
+                labels: ['Customer', 'Rider', 'Vendor'],
+                datasets: [{
+                    data: [8087, 1348, 1348],
+                    backgroundColor: ['#FBBF24', '#3B82F6', '#10B981'],
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: { display: false },
+                    datalabels: {
+                        color: '#000',
+                        font: { weight: 'bold', size: 14 },
+                        formatter: (value) => value
+                    },
+                    tooltip: { enabled: false }
+                },
+                elements: {
+                    arc: { borderWidth: 0 }
+                }
+            },
+            plugins: [ChartDataLabels]
+        });
 
-
-
+        // Order Volume Chart
+        const orderCtx = document.getElementById('orderChart').getContext('2d');
+        new Chart(orderCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'],
+                datasets: [{
+                    label: 'Orders',
+                    data: [320, 540, 530, 440, 620, 560, 700, 280, 500, 540, 510, 650],
+                    backgroundColor: '#06b6d4',
+                    borderRadius: 4,
+                    barThickness: 10,
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 1000,
+                        ticks: {
+                            stepSize: 250,
+                            callback: value => value === 1000 ? '1k' : value
+                        },
+                        grid: { drawBorder: false }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { enabled: false }
+                }
+            }
+        });
+    </script>
+    <script>
 
         // Mobile sidebar toggle functionality
         document.addEventListener('DOMContentLoaded', function () {
@@ -466,171 +597,90 @@
                 sidebar.classList.toggle("hidden");
             });
 
-            // Initialize Pie Chart
-            const pieCtx = document.getElementById('pieChart').getContext('2d');
-            const pieChart = new Chart(pieCtx, {
-                type: 'pie',
-                data: {
-                    labels: ['Petroleum', 'Cooking gas', 'Diesel', 'Electricity'],
-                    datasets: [{
-                        data: [40, 20, 25, 15],
-                        backgroundColor: [
-                            '#4FD1C5', // teal
-                            '#F6E05E', // yellow
-                            '#F56565', // red
-                            '#4299E1'  // blue
-                        ],
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    }
-                }
-            });
 
-            // Initialize Bar Chart
-            const barCtx = document.getElementById('barChart').getContext('2d');
-            const barChart = new Chart(barCtx, {
-                type: 'bar',
-                data: {
-                    labels: ['20', '22', '24', '26', '28', '30', '02', '04', '06', '08', '10', '12', '14', '16'],
-                    datasets: [{
-                        label: 'Daily Revenue',
-                        data: [250000, 350000, 200000, 280000, 220000, 180000, 500000, 320000, 450000, 280000, 220000, 380000, 200000, 350000],
-                        backgroundColor: function (context) {
-                            const index = context.dataIndex;
-                            return index === 6 ? '#4299E1' : '#4FD1C5'; // Blue for day 7, teal for others
-                        },
-                        borderWidth: 0,
-                        borderRadius: 4,
-                        maxBarThickness: 10
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                callback: function (value) {
-                                    if (value === 0) return '₦0';
-                                    if (value === 100000) return '₦100k';
-                                    if (value === 200000) return '₦200k';
-                                    if (value === 300000) return '₦300k';
-                                    if (value === 400000) return '₦400k';
-                                    if (value === 500000) return '₦500k';
+
+        });
+
+
+    </script>
+      <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Select all date picker wrappers
+            const wrappers = document.querySelectorAll('.date-picker-wrapper');
+
+            wrappers.forEach((wrapper) => {
+                const datePicker = wrapper.querySelector('.datePicker');
+                const dropdownBtn = wrapper.querySelector('.dropdownBtn');
+                const dropdownMenu = wrapper.querySelector('.dropdownMenu');
+                const modeLabel = wrapper.querySelector('.mode-label');
+
+                let mode = "today"; // Default mode is 'today'
+
+                function setDateMode(selectedMode) {
+                    mode = selectedMode;
+                    modeLabel.textContent = selectedMode;
+                    dropdownMenu.classList.add("hidden");
+
+                    if (mode === "today") {
+                        const today = new Date();
+                        const formatted = today.toLocaleDateString("en-GB", {
+                            day: "2-digit",
+                            month: "short",
+                            year: "numeric"
+                        });
+                        datePicker.value = formatted;
+                    } else if (mode === "Specific Date") {
+                        flatpickr(datePicker, {
+                            dateFormat: "d M, Y",
+                            defaultDate: new Date(),
+                            onChange: function (selectedDates, dateStr) {
+                                datePicker.value = dateStr;
+                            }
+                        }).open();
+                    } else if (mode === "monthly") {
+                        flatpickr(datePicker, {
+                            mode: "range",
+                            dateFormat: "d M",
+                            onChange: function (selectedDates) {
+                                if (selectedDates.length === 2) {
+                                    const start = selectedDates[0].toLocaleDateString("en-GB", {
+                                        day: "2-digit",
+                                        month: "short"
+                                    });
+                                    const end = selectedDates[1].toLocaleDateString("en-GB", {
+                                        day: "2-digit",
+                                        month: "short"
+                                    });
+                                    datePicker.value = `${start} - ${end}`;
                                 }
                             }
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
+                        }).open();
                     }
                 }
-            });
 
+                // Init default mode on page load for each picker
+                setDateMode("today");
 
+                // Toggle dropdown for each picker
+                dropdownBtn.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    dropdownMenu.classList.toggle("hidden");
+                });
 
-        });
-
-
-    </script>
-    <script>
-        let datePicker = document.getElementById("datePicker");
-        let dropdownBtn = document.getElementById("dropdownBtn");
-        let dropdownMenu = document.getElementById("dropdownMenu");
-
-        let mode = "monthly"; // Default mode
-
-        function setDateMode(selectedMode) {
-            mode = selectedMode;
-            dropdownBtn.innerHTML = selectedMode.charAt(0).toUpperCase() + selectedMode.slice(1) + ' <i class="fa-solid fa-chevron-down ml-1"></i>';
-            dropdownMenu.classList.add("hidden");
-
-            if (mode === "today") {
-                let today = new Date();
-                let formattedDate = today.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
-                datePicker.value = formattedDate;
-            }
-            else if (mode === "Specific Date") {
-                flatpickr(datePicker, {
-                    dateFormat: "d M, Y",
-                    onChange: function (selectedDates, dateStr) {
-                        datePicker.value = dateStr;
-                    }
-                }).open();
-            }
-            else if (mode === "monthly") {
-                flatpickr(datePicker, {
-                    mode: "range",
-                    dateFormat: "d M",
-                    onChange: function (selectedDates, dateStr) {
-                        if (selectedDates.length === 2) {
-                            let start = selectedDates[0].toLocaleDateString("en-GB", { day: "2-digit", month: "short" });
-                            let end = selectedDates[1].toLocaleDateString("en-GB", { day: "2-digit", month: "short" });
-                            datePicker.value = `${start} - ${end}`;
-                        }
-                    }
-                }).open();
-            }
-
-        }
-
-        // Toggle dropdown
-        dropdownBtn.addEventListener("click", () => {
-            dropdownMenu.classList.toggle("hidden");
-        });
-
-        // Close dropdown on outside click
-        document.addEventListener("click", (event) => {
-            if (!dropdownBtn.contains(event.target) && !dropdownMenu.contains(event.target)) {
-                dropdownMenu.classList.add("hidden");
-            }
-        });
-
-        // Set default
-        setDateMode("today");
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', (event) => {
-            // --- Selector Update ---
-            // We need to select the INNER div that directly contains the buttons.
-            // It now has 'inline-flex', 'flex-wrap', 'gap-2', 'bg-white' etc.
-            // This selector targets that specific combination.
-            const tabContainer = document.querySelector('.inline-flex.flex-wrap.gap-2.bg-white');
-
-            if (tabContainer) {
-                // Find buttons ONLY within this specific container
-                const tabs = tabContainer.querySelectorAll('.tab-button');
-
-                tabs.forEach(tab => {
-                    tab.addEventListener('click', () => {
-                        // Remove active styles from all tabs within this specific container
-                        tabs.forEach(t => {
-                            t.classList.remove('bg-yellow-400', 'text-black');
-                            t.classList.add('text-gray-600', 'hover:bg-gray-100', 'hover:text-gray-800');
-                        });
-
-                        // Add active styles to the clicked tab
-                        tab.classList.add('bg-yellow-400', 'text-black');
-                        tab.classList.remove('text-gray-600', 'hover:bg-gray-100', 'hover:text-gray-800');
-
-                        // Your logic for handling tab content
-                        console.log(`Selected tab: ${tab.textContent.trim()}`);
-                        // Example: displayPanel(tab.textContent.trim());
+                // Handle dropdown option click for each picker
+                dropdownMenu.querySelectorAll('button[data-mode]').forEach(btn => {
+                    btn.addEventListener("click", () => {
+                        setDateMode(btn.dataset.mode);
                     });
                 });
-            } else {
-                // If you see this message, the selector is still not matching the HTML element.
-                console.warn("Tab container not found for JavaScript initialization. Check the CSS selector used in the script.");
-            }
+
+                // Close dropdown if clicked outside
+                document.addEventListener("click", (e) => {
+                    if (!wrapper.contains(e.target)) {
+                        dropdownMenu.classList.add("hidden");
+                    }
+                });
+            });
         });
     </script>
 </body>

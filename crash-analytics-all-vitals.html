@@ -391,223 +391,176 @@
                 <div class="flex items-center">
                     <a class="mr-4 p-2 bg-white rounded-lg text-gray-600 hover:bg-gray-200 shadow-md" href="#">
                         <i class="fa fa-arrow-left fa-lg"></i>
-                    </a>
-                    <div>
-                        <h2 class="text-xl font-semibold text-gray-900">Transfer Details</h2>
-                        <p class="text-xs text-gray-600">
-                            <a href="#" class="hover:text-blue-600">Dashboard</a>
-                            <span>></span>
-                            <a href="#" class="hover:text-blue-600">Reports and Analytics</a>
-                            <span>></span>
-                            <a href="#" class="hover:text-blue-600">Profit Transfer Request</a>
-                            <span>></span>
-                            <span class="font-semibold">Transfer Details</span>
-                        </p>
-                    </div>
-                     <!-- Right Section (Controls) -->
-                     <div class="flex flex-col sm:flex-row gap-3 ml-10">
-                        <button class="flex items-center justify-center gap-2 bg-gradient-to-b from-gray-100 to-gray-200  text-gray-700 py-2 px-4 rounded-lg text-sm font-medium border border-gray-300 shadow-sm">
-                            <i class="fa-solid fa-file-export"></i> Send Transfer Report to Finance Team
-                        </button>
-                        <button class="flex items-center justify-center gap-2 bg-gradient-to-b from-gray-100 to-gray-200  text-gray-700 py-2 px-4 rounded-lg text-sm font-medium border border-gray-300 shadow-sm">
-                            <i class="fa-solid fa-download"></i>
-                            Download Receipt
-                        </button>
-                    </div>
+                    </a>           
                 </div>
             </div>
-            
-            <div class="relative flex items-center justify-between w-[50%]">
-                <!-- Horizontal line -->
-                <div class="absolute top-[20px] left-[42px] right-[42px] h-1 bg-yellow-400 z-0"></div>
-            
-                <!-- Step 1 -->
-                <div class="flex flex-col items-center z-10">
-                  <div class="w-10 h-10 bg-yellow-400 text-white rounded-full flex items-center justify-center font-bold">1</div>
-                  <p class="mt-2 text-center text-sm font-semibold leading-tight">
-                    Transfer Request<br>Initiated
-                  </p>
+            <!-- Table  -->
+              <div class="max-w-full bg-white rounded-lg shadow-sm overflow-hidden p-4">
+                <div class="px-6 py-4 border-b border-gray-200">
+                    <h2 class="text-xl font-semibold text-gray-800">All vitals</h2>
                 </div>
-            
-                <!-- Step 2 -->
-                <div class="flex flex-col items-center z-10">
-                  <div class="w-10 h-10 bg-yellow-400 text-white rounded-full flex items-center justify-center font-bold mb-4">2</div>
-                  <p class="mb-2 text-center text-sm font-semibold leading-tight">
-                    Processing
-                  </p>
-                </div>
-            
-                <!-- Step 3 -->
-                <div class="flex flex-col items-center z-10">
-                  <div class="w-10 h-10 bg-yellow-400 text-white rounded-full flex items-center justify-center font-bold">3</div>
-                  <p class="mt-2 text-center text-sm font-semibold leading-tight">
-                    Transfer<br>Completed
-                  </p>
-                </div>
-              </div>
-              <div class="max-w-xl bg-white rounded-lg shadow-lg overflow-hidden mt-6">
-                <div class="p-6">
-                    <div class="flex justify-between items-center mb-6">
-                        <h3 class="text-xl font-medium text-gray-900">TXN20250215</h3>
-                        <button class="text-gray-400 hover:text-gray-600 focus:outline-none">
-                            <i class="fa-regular fa-copy text-lg"></i>
-                        </button>
-                    </div>
-            
-                    <div class="divide-y divide-gray-100">
-                        <div class="grid grid-cols-2 py-3 bg-gray-100">
-                            <div class="text-sm font-semibold text-gray-500 pl-4">Field</div>
-                            <div class="text-sm font-semibold text-gray-500">Details</div>
-                        </div>
-                        <div class="grid grid-cols-2 py-3 pl-4">
-                            <div class="text-sm text-gray-600">Transaction ID</div>
-                            <div class="text-sm text-gray-900">TXN20250215</div>
-                        </div>
-                        <div class="grid grid-cols-2 py-3 pl-4">
-                            <div class="text-sm text-gray-600">Transfer Date</div>
-                            <div class="text-sm text-gray-900">15/02/2025</div>
-                        </div>
-                        <div class="grid grid-cols-2 py-3 pl-4">
-                            <div class="text-sm text-gray-600">Processing Date</div>
-                            <div class="text-sm text-gray-900">16/02/2025 (if delayed, show reason)</div>
-                        </div>
-                        <div class="grid grid-cols-2 py-3 pl-4">
-                            <div class="text-sm text-gray-600">Amount Transferred</div>
-                            <div class="text-sm text-gray-900">₦1,000,000</div>
-                        </div>
-                        <div class="grid grid-cols-2 py-3 pl-4">
-                            <div class="text-sm text-gray-600">Currency</div>
-                            <div class="text-sm text-gray-900">NGN (₦)</div>
-                        </div>
-                        <div class="grid grid-cols-2 py-3 pl-4">
-                            <div class="text-sm text-gray-600">Payment Gateway</div>
-                            <div class="text-sm text-gray-900">Flutterwave</div>
-                        </div>
-                        <div class="grid grid-cols-2 py-3 pl-4">
-                            <div class="text-sm text-gray-600">Payment Mode</div>
-                            <div class="text-sm text-gray-900">Bank Transfer</div>
-                        </div>
-                        <div class="grid grid-cols-2 py-3 pl-4">
-                            <div class="text-sm text-gray-600">Recipient Bank</div>
-                            <div class="text-sm text-gray-900">GTBank</div>
-                        </div>
-                        <div class="grid grid-cols-2 py-3 pl-4">
-                            <div class="text-sm text-gray-600">Account Name</div>
-                            <div class="text-sm text-gray-900">Quicrefill Company Ltd</div>
-                        </div>
-                        <div class="grid grid-cols-2 py-3 pl-4">
-                            <div class="text-sm text-gray-600">Account Number</div>
-                            <div class="text-sm text-gray-900">1234567890</div>
-                        </div>
-                        <div class="grid grid-cols-2 py-3 pl-4">
-                            <div class="text-sm text-gray-600">Transaction Status</div>
-                            <div class="text-sm text-gray-900 flex items-center gap-2">
-                                <i class="fa-solid fa-square-check text-green-500"></i> <span class="text-green-600 font-medium">Completed</span>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-2 py-3 pl-4">
-                            <div class="text-sm text-gray-600">Processing Duration</div>
-                            <div class="text-sm text-gray-900">24 hours (Auto-calculated)</div>
-                        </div>
-                        <div class="grid grid-cols-2 py-3 pl-4">
-                            <div class="text-sm text-gray-600">Admin in Charge</div>
-                            <div class="text-sm text-gray-900">John Doe (Who requested it?)</div>
-                        </div>
-                        <div class="grid grid-cols-2 py-3 pl-4">
-                            <div class="text-sm text-gray-600">Approval Date</div>
-                            <div class="text-sm text-gray-900">15/02/2025</div>
-                        </div>
-                        <div class="grid grid-cols-2 py-3 pl-4">
-                            <div class="text-sm text-gray-600">Reason for Transfer</div>
-                            <div class="text-sm text-gray-900">Profit Disbursement</div>
-                        </div>
-                    </div>
-            
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
-                        <!-- Top buttons -->
-                        <button class="bg-gray-500 text-white py-2.5 px-4 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 text-sm font-medium shadow-sm">
-                          Retry Transfer
-                        </button>
-                        <button class="bg-gray-500 text-white py-2.5 px-4 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 text-sm font-medium shadow-sm">
-                          Cancel Pending
-                        </button>
-                      
-                        <!-- Bottom buttons with light gradient -->
-                        <button class="bg-gradient-to-b from-white to-gray-200 text-black py-2.5 px-4 rounded-md hover:from-gray-100 hover:to-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 text-sm font-medium shadow-sm border border-gray-300">
-                          Export Transaction Log
-                        </button>
-                        <button class="bg-gradient-to-b from-white to-gray-200 text-black py-2.5 px-4 rounded-md hover:from-gray-100 hover:to-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 text-sm font-medium shadow-sm border border-gray-300">
-                          Send Confirmation Email
-                        </button>
-                      </div>
-                      
-                </div>
-            </div>
-              <div class="bg-white rounded-lg shadow-sm p-4 md:w-7/12 mt-6">
-                <div class="mb-4">
-                    <label for="adminNotes" class="block text-sm font-medium text-gray-700">Admin Notes:</label>
-                    <div class="mt-1">
-                        <textarea id="adminNotes" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="  Transfer Processed successfully without delay"></textarea>
-                    </div>
-                </div>
-                
-            </div>
-            <div class="max-w-full mx-auto bg-white rounded-lg shadow-xl overflow-hidden my-8 p-6">
-                <h2 class="text-xl font-semibold text-gray-900 mb-6">Logs & Audit Trail Section</h2>
-            
-                <div class="border border-gray-100 rounded-lg overflow-hidden">
-                    <table class="min-w-full divide-y divide-gray-200">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-100">
                         <thead class="bg-gray-100">
                             <tr>
-                                <th scope="col" class="px-4 py-4 text-left text-sm font-semibold text-gray-600">
-                                    Date & Time
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500  ">
+                                    Crash/ANR
                                 </th>
-                                <th scope="col" class="px-4 py-4 text-left text-sm font-semibold text-gray-600">
-                                    Action Taken
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500  ">
+                                    Type
                                 </th>
-                                <th scope="col" class="px-4 py-4 text-left text-sm font-semibold text-gray-600 flex items-center">
-                                    Admin/User
-                                    <svg class="w-3 h-3 ml-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                    </svg>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500  ">
+                                    New in production
                                 </th>
-                                <th scope="col" class="px-4 py-4 text-left text-sm font-semibold text-gray-600">
-                                    Actions
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500  ">
+                                    Occurrences
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500  ">
+                                    Impacted users
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500  ">
+                                    Last occurred
                                 </th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
                             <tr>
-                                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-800">15/02/2025 10:00 AM</td>
-                                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-800">Transfer Requested</td>
-                                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-800">Admin (John Doe)</td>
-                                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-800">Requested ₦1M transfer</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-600">Input dispatching timed-out (random.generated.98TGH-link.lorem...)</div>
+                                    <div class="text-xs text-gray-500">random.generated.98TGH-link.lorem.</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">0.24%</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">1,276</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">844</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">34 minutes ago</td>
                             </tr>
-            
                             <tr>
-                                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-800">15/02/2025 12:00 PM</td>
-                                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-800">Transfer Approved</td>
-                                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-800">Admin (Finance Team)</td>
-                                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-800">Approved request</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-600">Input dispatching timed-out (random.generated.98TGH-link.lorem...)</div>
+                                    <div class="text-xs text-gray-500">random.generated.98TGH-link.lorem.</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">0.24%</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">1,276</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">844</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">34 minutes ago</td>
                             </tr>
-            
                             <tr>
-                                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-800">15/02/2025 3:00 PM</td>
-                                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-800">Transfer Processed</td>
-                                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-800">Payment Gateway</td>
-                                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-800">Successful transfer</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-600">Input dispatching timed-out (random.generated.98TGH-link.lorem...)</div>
+                                    <div class="text-xs text-gray-500">random.generated.98TGH-link.lorem.</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">0.24%</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">1,276</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">844</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">34 minutes ago</td>
                             </tr>
-            
                             <tr>
-                                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-800">15/02/2025 3:30 PM</td>
-                                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-800">Confirmation Sent</td>
-                                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-800">System</td>
-                                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-800">Auto-email sent to Admin</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-600">Input dispatching timed-out (random.generated.98TGH-link.lorem...)</div>
+                                    <div class="text-xs text-gray-500">random.generated.98TGH-link.lorem.</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">0.24%</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">1,276</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">844</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">34 minutes ago</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-600">Input dispatching timed-out (random.generated.98TGH-link.lorem...)</div>
+                                    <div class="text-xs text-gray-500">random.generated.98TGH-link.lorem.</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">0.24%</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">1,276</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">844</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">34 minutes ago</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-600">Input dispatching timed-out (random.generated.98TGH-link.lorem...)</div>
+                                    <div class="text-xs text-gray-500">random.generated.98TGH-link.lorem.</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">0.24%</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">1,276</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">844</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">34 minutes ago</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-600">Input dispatching timed-out (random.generated.98TGH-link.lorem...)</div>
+                                    <div class="text-xs text-gray-500">random.generated.98TGH-link.lorem.</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">0.24%</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">1,276</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">844</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">34 minutes ago</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-600">Input dispatching timed-out (random.generated.98TGH-link.lorem...)</div>
+                                    <div class="text-xs text-gray-500">random.generated.98TGH-link.lorem.</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">0.24%</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">1,276</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">844</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">34 minutes ago</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-600">Input dispatching timed-out (random.generated.98TGH-link.lorem...)</div>
+                                    <div class="text-xs text-gray-500">random.generated.98TGH-link.lorem.</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">0.24%</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">1,276</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">844</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">34 minutes ago</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-600">Input dispatching timed-out (random.generated.98TGH-link.lorem...)</div>
+                                    <div class="text-xs text-gray-500">random.generated.98TGH-link.lorem.</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">0.24%</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">1,276</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">844</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">34 minutes ago</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-600">Input dispatching timed-out (random.generated.98TGH-link.lorem...)</div>
+                                    <div class="text-xs text-gray-500">random.generated.98TGH-link.lorem.</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">0.24%</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">1,276</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">844</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">34 minutes ago</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-600">Input dispatching timed-out (random.generated.98TGH-link.lorem...)</div>
+                                    <div class="text-xs text-gray-500">random.generated.98TGH-link.lorem.</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">0.24%</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">1,276</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">844</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">34 minutes ago</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
+
         </main>
     </div>
     <!-- Alpine.js (Add this script if not already included in your project) -->
