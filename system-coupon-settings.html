@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quicrefill Admin</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Chart.js from cdnjs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"
+        integrity="sha512-ElRFoEQdI5Ht6kZvyzXhYG9NqjtkmlkfYk0wr6wHxU9JEHakS7UJZNeml5ALk+8IKlU6jDgMabC3vkumRokgJA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- Load Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.js"></script>
+    <!-- Litepicker CSS & JS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/litepicker/dist/css/litepicker.css" />
+    <script src="https://cdn.jsdelivr.net/npm/litepicker/dist/litepicker.js"></script>
+
+</head>
+<script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    // Define custom colors if necessary, though direct hex values are often fine
+                    'yellow-500-custom': '#FACC15', // Example: if you need a very specific yellow
+                    'gray-400-custom': '#9CA3AF', // Example: if you need a very specific gray
+                }
+            }
+        }
+    }
+</script>
+
+<style>
+    /* Custom Toggle Switch Styling - Adjusted for even smaller size */
+
+    /* Hide default checkbox */
+    .toggle-switch input[type="checkbox"] {
+        display: none;
+    }
+
+    /* The track */
+    .toggle-switch .toggle-track {
+        display: inline-block;
+        width: 30px;
+        /* Further reduced from 36px */
+        height: 16px;
+        /* Further reduced from 20px */
+        background-color: #CBD5E0;
+        /* Tailwind gray-300 for inactive */
+        border-radius: 9999px;
+        /* Full rounded corners */
+        position: relative;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    /* The thumb/handle */
+    .toggle-switch .toggle-thumb {
+        position: absolute;
+        top: 2px;
+        /* Adjusted to center vertically */
+        left: 2px;
+        /* Adjusted for initial position */
+        width: 12px;
+        /* Further reduced from 16px */
+        height: 12px;
+        /* Further reduced from 16px */
+        background-color: white;
+        border-radius: 9999px;
+        transition: transform 0.3s;
+        box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
+        /* Subtle shadow on thumb */
+    }
+
+    /* Checked state - track color and thumb position */
+    .toggle-switch input[type="checkbox"]:checked+.toggle-track {
+        background-color: #FACC15;
+        /* Tailwind yellow-500 */
+    }
+
+    .toggle-switch input[type="checkbox"]:checked+.toggle-track .toggle-thumb {
+        transform: translateX(14px);
+        /* Adjusted transform based on new width */
+        /* Calculation: new_track_width - new_thumb_width - 2 * new_left_padding_of_thumb_on_track
+               30 - 12 - (2 * 2) = 30 - 12 - 4 = 14px */
+    }
+
+    /* Focus outline for accessibility (optional, adjust as needed) */
+    .toggle-switch input[type="checkbox"]:focus+.toggle-track {
+        outline: 2px solid #3B82F6;
+        /* Tailwind blue-500 for focus ring */
+        outline-offset: 2px;
+    }
+</style>
+<style>
+    .custom-tooltip {
+        position: absolute;
+        background: #facc15;
+        color: #000;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-weight: bold;
+        font-size: 14px;
+        pointer-events: none;
+        transition: all 0.1s ease;
+        opacity: 0;
+        white-space: nowrap;
+        z-index: 999;
+    }
+
+
+    [x-cloak] {
+        display: none !important;
+    }
+
+    @media (max-width: 768px) {
+        .mobile-sidebar {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .mobile-sidebar.open {
+            transform: translateX(0);
+        }
+
+        .dropdown-menu {
+            @apply left-1/2 -translate-x-1/2 w-80 max-w-[95%];
+        }
+
+
+    }
+
+    .flatpickr-day.selected,
+    .flatpickr-day.startRange,
+    .flatpickr-day.endRange {
+        background: #FFB600 !important;
+        color: white !important;
+        border-color: #FFB600 !important;
+    }
+
+    /* Change the color of dates between the range */
+    .flatpickr-day.inRange {
+        background: #FFE08A !important;
+        /* Light yellow */
+        color: black !important;
+    }
+</style>
+</head>
+
+<body class="bg-gray-100">
+    <!-- Header -->
+
+    <header class="bg-white shadow-md flex items-center justify-between p-4 sticky top-0 z-30">
+        <div class="flex items-center">
+            <button id="sidebar-toggle" class=" md:hidden mr-4">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="flex items-center mr-4 md:mr-8">
+                <img src="images/logo.png" class="w-[150px] md:w-[250px]">
+            </div>
+            <button id="hide-sidebar-button" class="border border-gray-200 rounded-md px-2 py-1 z-15 hidden md:block">
+                <i class="fas fa-angle-left"></i>
+            </button>
+        </div>
+
+        <div class="hidden md:block relative w-1/3">
+            <input type="text" placeholder="Search"
+                class="w-full px-4 py-2 border border-gray-300 rounded-md bg-gray-100 focus:outline-none pl-10">
+            <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+            <button
+                class="absolute right-0 top-0 h-full px-4 bg-gradient-to-b from-[#FFC533] to-[#FFB600] text-black rounded-r-md border border-gray-300 shadow flex items-center justify-center">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+        </div>
+
+
+        <div class="flex items-center">
+            <div x-data="{ open: false }" class="relative mr-4">
+                <!-- Notification Icon -->
+                <button @click="open = !open" class="relative p-2">
+                    <i class="fas fa-bell text-gray-600 text-lg"></i>
+                    <!-- Notification Badge -->
+                    <span
+                        class="absolute -top-1 -right-1 bg-yellow-400 text-black text-xs font-bold px-1.5 py-0.5 rounded-full">8</span>
+                </button>
+
+                <!-- Dropdown Menu -->
+                <div x-show="open" @click.away="open = false" x-transition x-cloak
+                    class="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-64 bg-white border rounded-md shadow-lg z-50">
+                    <div class="p-3 border-b">
+                        <span class="font-semibold text-gray-700">Notifications</span>
+                    </div>
+
+                    <ul class="max-h-60 overflow-auto">
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer flex items-center">
+                            <i class="fas fa-bell text-gray-500 text-sm mr-2"></i>
+                            <span class="text-sm text-gray-700">You have a new message</span>
+                        </li>
+
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer flex items-center">
+                            <i class="fas fa-check-circle text-green-500 text-sm mr-2"></i>
+                            <span class="text-sm text-gray-700">Task Completed Successfully</span>
+                        </li>
+
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer flex items-center">
+                            <i class="fas fa-exclamation-triangle text-yellow-500 text-sm mr-2"></i>
+                            <span class="text-sm text-gray-700">System Alert: Update Required</span>
+                        </li>
+
+                    </ul>
+
+                    <div class="p-3 border-t text-center">
+                        <a href="notifications-center.html" class="text-sm text-blue-500 hover:underline">View all</a>
+                    </div>
+                </div>
+            </div>
+
+            <div x-data="{ open: false }" class="relative">
+                <!-- Profile Button -->
+                <button @click="open = !open"
+                    class="flex items-center rounded-full px-2 py-1 md:px-4 md:py-2 border border-gray-300 shadow-md focus:outline-none">
+                    <!-- Avatar -->
+                    <div class="relative w-10 h-10 md:w-10 md:h-10 rounded-full bg-gray-300 mr-2">
+                        <!-- Avatar Image -->
+                        <img src="images/Avatar/avatar.png" alt="User Avatar"
+                            class="w-full h-full object-cover rounded-full">
+
+                        <!-- Green Dot (Move Outside) -->
+                        <div class="absolute top-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"
+                            style="transform: translate(30%, -30%);"></div>
+                    </div>
+
+                    <!-- User Info -->
+                    <div class="hidden md:block text-left">
+                        <div class="text-sm font-medium">Timothy Jonson</div>
+                        <div class="text-xs text-gray-500">timoj@Quicrefil.ng</div>
+                    </div>
+                </button>
+
+                <!-- Dropdown Menu -->
+                <div x-show="open" @click.away="open = false" x-transition x-cloak
+                    class="absolute right-0 mt-2 w-48 bg-white border rounded-md shadow-lg z-50">
+                    <ul class="py-2">
+                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                            <a href="profiles-settings.html" class="flex items-center text-gray-700">
+                                <i class="fas fa-user mr-2"></i>
+                                Profile
+                            </a>
+                        </li>
+
+                        <li class="px-4 py-2 text-red-500 hover:bg-gray-100 cursor-pointer">
+                            <a href="login.html" class="flex items-center">
+                                <i class="fas fa-sign-out-alt mr-2"></i>
+                                Logout
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="flex">
+        <!-- Sidebar -->
+
+        <aside id="sidebar"
+            class="mobile-sidebar fixed md:relative w-64 bg-white min-h-screen shadow-sm z-20 md:transform-none border border-gray-300S">
+            <nav class="p-4">
+                <ul>
+                    <li class="mb-4">
+                        <a href="quicrefill-dashboard.html" class="flex items-center text-amber-500 font-medium">
+                            <i class="fas fa-th-large mr-3"></i>
+                            <span>Summary</span>
+                        </a>
+                    </li>
+
+                    <li class="mb-4">
+                        <a href="order-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-clipboard-list mr-3"></i>
+                            <span>Order Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="delivery-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-cube mr-3"></i>
+                            <span>Delivery Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="service-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-briefcase mr-3"></i>
+                            <span>Service Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="accessories-management.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-bag-shopping mr-3"></i>
+                            <span>Accessories Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="user-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-user mr-3"></i>
+                            <span>User Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="vendor-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-store mr-3"></i>
+                            <span>Vendor Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="delivery-rep-management.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-truck-droplet mr-2"></i>
+                            <span>Delivery Rep Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="verification-and-compliance.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-check-square mr-3"></i>
+                            <span>Verification & Compliance</span>
+                        </a>
+                    </li>
+                    <li x-data="{ open: false }" class="mb-4">
+                        <a href="#" @click.prevent="open = !open"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-sack-dollar mr-3"></i>
+                            <span>Revenue Management</span>
+                            <i :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas ml-auto text-xs"></i>
+                        </a>
+
+                        <!-- Dropdown Menu -->
+                        <ul x-show="open" x-cloak class="mt-2 ml-6 space-y-2 text-gray-800">
+
+                            <!-- Revenue Breakdown -->
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-chart-pie mr-3 text-gray-500"></i>
+                                <a href="revenue-breakdown.html">Revenue Breakdown</a>
+                            </li>
+
+                            <!-- Payout Management -->
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-hand-holding-usd mr-3 text-gray-500"></i>
+                                <a href="payout-management.html">Payout Management</a>
+                            </li>
+
+                            <!-- Revenue Analytics -->
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-chart-line mr-3 text-gray-500"></i>
+                                <a href="revenue-analytics.html">Revenue Analytics & Insights</a>
+                            </li>
+
+                        </ul>
+                    </li>
+
+                    <li class="mb-4">
+                        <a href="withdrawal-management.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-money-bill-transfer mr-3"></i>
+                            <span>Withdrawal Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="account-deletion.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-user-xmark mr-3"></i>
+                            <span>Account Deletion</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="account-deletion.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fa fa-map-marker mr-3"></i>
+                            <span>Operating Locations</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="feedback.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-comments mr-3"></i>
+                            <span>Feedback</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="fraud-watch.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fa fa-binoculars mr-3"></i>
+                            <span>Fraud Watch</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="reports-and-analytics.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-chart-bar mr-3"></i>
+                            <span>Reports and Analytics</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="crash-analytics.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fa fa-line-chart mr-3"></i>
+                            <span>Crash Analytics</span>
+                        </a>
+                    </li>
+                    <li x-data="{ open: false }" class="mb-4">
+                        <a href="#" @click.prevent="open = !open"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-shield-alt mr-3"></i>
+                            <span>Audit Logs & Security</span>
+                            <i :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas ml-auto text-xs"></i>
+                        </a>
+
+                        <!-- Dropdown Menu -->
+                        <ul x-show="open" x-cloak class="mt-2 ml-6 space-y-2 text-gray-500">
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-file-alt mr-3"></i>
+                                <a href="audit-admin-logs.html">Admin Logs activities</a>
+                            </li>
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-user-lock mr-3"></i>
+                                <a href="audit-transaction-logs.html">Transaction Logs</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="mb-4">
+                        <a href="staff-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-user-shield mr-3"></i>
+                            <span>Staff Management</span>
+                        </a>
+                    </li>
+
+                    <li x-data="{ open: false }" class="mb-4">
+                        <a href="#" @click.prevent="open = !open"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-cog mr-3"></i>
+                            <span>System Settings</span>
+                            <i :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas ml-auto text-xs"></i>
+                        </a>
+
+                        <!-- Dropdown Menu -->
+                        <ul x-show="open" x-cloak class="mt-2 ml-6 space-y-2 text-gray-500">
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-envelope-open-text mr-3"></i>
+                                <a href="system-message-settings.html">Message Settings</a>
+                            </li>
+
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-bell mr-3"></i>
+                                <a href="system-push-notification-settings.html">Push Notification Settings</a>
+                            </li>
+
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-ticket-alt mr-3"></i>
+                                <a href="system-coupon-settings.html">Coupon Settings</a>
+                            </li>
+
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Overlay for sidebar on mobile -->
+        <div id="sidebar-overlay" class="fixed inset-0 bg-black opacity-50 z-10 hidden"></div>
+
+        <!-- Content Area -->
+        <main class="flex-1 p-4 m-4 w-full overflow-x-hidden">
+            <!-- Header of section -->
+            <div class="flex flex-col space-y-4 md:space-y-0 md:flex-row md:justify-between md:items-center mb-6">
+                <!-- Left Section (Title & Breadcrumb) -->
+                <div class="w-full md:w-auto">
+                    <h2 class="text-xl font-bold text-gray-800">Coupon Management </h1>
+
+                </div>
+
+                <!-- Right Section (Controls) -->
+                <div class="grid grid-cols-2 md:flex md:flex-wrap items-center gap-2 md:gap-4 w-full md:w-auto">
+                    <!-- Search Box -->
+                    <div class="relative w-36">
+                        <input type="text" placeholder="Search"
+                            class="bg-white w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 focus:outline-none pr-10 text-sm">
+                        <i
+                            class="fas fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer"></i>
+                    </div>
+
+
+                    <div class="mb-2 md:mb-0">
+                        <div class="flex gap-0">
+                            <div class="date-picker-wrapper relative w-full max-w-xs">
+                                <div class="flex items-center border rounded-md overflow-hidden bg-white">
+                                    <!-- Calendar Icon -->
+                                    <div class="pl-3 pr-2 text-gray-500">
+                                        <i class="fa fa-calendar-alt"></i>
+                                    </div>
+
+                                    <!-- Date Display (Reduced width) -->
+                                    <input type="text"
+                                        class="datePicker w-24 py-2 text-sm text-gray-700 focus:outline-none cursor-pointer"
+                                        placeholder="Select date" readonly />
+
+                                    <!-- Dropdown Button (Increased width) -->
+                                    <button type="button"
+                                        class="dropdownBtn w-32 px-3 py-2 border-l border-gray-300 text-sm text-gray-700 bg-white focus:outline-none flex items-center gap-1">
+                                        <span class="mode-label">Today</span>
+                                        <i class="fa fa-chevron-down text-xs"></i>
+                                    </button>
+                                </div>
+
+                                <!-- Dropdown Menu -->
+                                <div
+                                    class="dropdownMenu absolute right-0 mt-2 bg-white border rounded shadow-md w-40 hidden z-10">
+                                    <button type="button" data-mode="today"
+                                        class="w-full text-left px-4 py-2 hover:bg-gray-100">Today</button>
+                                    <button type="button" data-mode="Specific Date"
+                                        class="w-full text-left px-4 py-2 hover:bg-gray-100">Specific Date</button>
+                                    <button type="button" data-mode="monthly"
+                                        class="w-full text-left px-4 py-2 hover:bg-gray-100">Monthly</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-2 md:mb-0">
+                        <div class="relative inline-block" x-data="{ 
+                                open: false, 
+                                selected: '', 
+                                orderDropdown: false, 
+                                paymentDropdown: false, 
+                                serviceDropdown: false, 
+                                selectedStatuses: [], 
+                                selectedPayments: [], 
+                                selectedServices: [] 
+                            }">
+                            <!-- Filter Button -->
+                            <button @click="open = !open"
+                                class="flex items-center gap-2 px-4 py-2 bg-white border rounded-lg">
+                                <i class="fa fa-filter"></i> Filter
+                            </button>
+
+                            <!-- Dropdown -->
+                            <div x-show="open" @click.outside="open = false" x-cloak
+                                class="dropdown-menu absolute left-auto right-0 top-full mt-2 w-96 bg-white border rounded-lg shadow-lg p-4 z-30">
+
+
+                                <h3 class="text-gray-700 font-medium mb-3">Select Filter</h3>
+
+                                <!-- Main Options -->
+                                <div class="grid grid-cols-3 gap-2">
+                                    <button
+                                        @click="selected = 'Order Status'; orderDropdown = true; paymentDropdown = false; serviceDropdown = false"
+                                        :class="selected === 'Order Status' ? 'bg-yellow-400 ' : 'border'"
+                                        class="px-3 py-2 rounded-lg text-sm">
+                                        Order Status
+                                    </button>
+                                    <button
+                                        @click="selected = 'Payment Type'; paymentDropdown = true; orderDropdown = false; serviceDropdown = false"
+                                        :class="selected === 'Payment Type' ? 'bg-yellow-400 ' : 'border'"
+                                        class="px-3 py-2 rounded-lg text-sm">
+                                        Payment Type
+                                    </button>
+                                    <button
+                                        @click="selected = 'Service Type'; serviceDropdown = true; orderDropdown = false; paymentDropdown = false"
+                                        :class="selected === 'Service Type' ? 'bg-yellow-400 ' : 'border'"
+                                        class="px-3 py-2 rounded-lg text-sm">
+                                        Service Type
+                                    </button>
+                                </div>
+
+                                <!-- Order Status Dropdown -->
+                                <div x-show="orderDropdown" x-cloak class="mt-3">
+                                    <h3 class="text-gray-700 font-medium mb-2">Select Order Status</h3>
+                                    <div class="grid grid-cols-3 gap-2">
+                                        <template
+                                            x-for="status in ['Completed', 'In Progress', 'Cancelled', 'Disputed', 'In Transit']">
+                                            <button
+                                                @click="selectedStatuses.includes(status) ? selectedStatuses = selectedStatuses.filter(s => s !== status) : selectedStatuses.push(status)"
+                                                :class="selectedStatuses.includes(status) ? 'bg-yellow-400 ' : 'border'"
+                                                class="px-3 py-2 rounded-lg text-sm">
+                                                <span x-text="status"></span>
+                                            </button>
+                                        </template>
+                                    </div>
+                                </div>
+
+                                <!-- Payment Type Dropdown -->
+                                <div x-show="paymentDropdown" x-cloak class="mt-3">
+                                    <h3 class="text-gray-700 font-medium mb-2">Select Payment Type</h3>
+                                    <div class="grid grid-cols-3 gap-2">
+                                        <template x-for="payment in ['On delivery', 'Wallet', 'Flutterwave']">
+                                            <button
+                                                @click="selectedPayments.includes(payment) ? selectedPayments = selectedPayments.filter(p => p !== payment) : selectedPayments.push(payment)"
+                                                :class="selectedPayments.includes(payment) ? 'bg-yellow-400 ' : 'border'"
+                                                class="px-3 py-2 rounded-lg text-sm">
+                                                <span x-text="payment"></span>
+                                            </button>
+                                        </template>
+                                    </div>
+                                </div>
+
+                                <!-- Service Type Dropdown -->
+                                <div x-show="serviceDropdown" x-cloak class="mt-3">
+                                    <h3 class="text-gray-700 font-medium mb-2">Select Service Type</h3>
+                                    <div class="grid grid-cols-3 gap-2">
+                                        <template
+                                            x-for="service in ['Gas Refill', 'Peroleum', 'Diesel', 'Accessories', 'Electricity']">
+                                            <button
+                                                @click="selectedServices.includes(service) ? selectedServices = selectedServices.filter(s => s !== service) : selectedServices.push(service)"
+                                                :class="selectedServices.includes(service) ? 'bg-yellow-400 ' : 'border'"
+                                                class="px-3 py-2 rounded-lg text-sm">
+                                                <span x-text="service"></span>
+                                            </button>
+                                        </template>
+                                    </div>
+                                </div>
+
+                                <!-- Apply Button -->
+                                <div class="mt-4 text-center">
+                                    <button @click="open = false"
+                                        class="px-4 py-2 bg-yellow-400  rounded-lg">Apply</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+            </div>
+
+            <!-- cards -->
+            <div class="bg-gray-100 mb-6  flex flex-col md:flex-row gap-6  items-start max-w-full mx-auto">
+
+                <div class="flex flex-col space-y-4 w-full md:w-auto">
+                    <div class="bg-white rounded-lg shadow-md p-5 w-full max-w-xs">
+                        <div class="flex justify-between items-center mb-2">
+                            <h4 class="text-gray-700 text-base font-medium">Total Active Coupons</h3>
+                                <i class="fas fa-info-circle text-gray-400"></i>
+                        </div>
+
+                        <p class="text-4xl font-bold text-gray-800">10</p>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-md p-5 w-full max-w-xs">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="text-gray-700 text-base font-medium">Total Redeem Coupons</h3>
+                            <i class="fas fa-info-circle text-gray-400"></i>
+                        </div>
+                        <p class="text-4xl font-bold text-gray-800">500</p>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-md p-5 w-full max-w-xs">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="text-gray-700 text-base font-medium">Most Used Coupon</h3>
+                            <i class="fas fa-info-circle text-gray-400"></i>
+                        </div>
+                        <p class="text-2xl font-bold text-gray-800">#SUMMER2025</p>
+                        <p class="text-lg  text-gray-500">200 uses</p>
+                    </div>
+                </div>
+
+
+                <div class="bg-white rounded-lg shadow-md p-8 w-full max-w-4xl mx-4">
+                    <h1 class="text-xl font-semibold text-gray-800 mb-6">Create Coupon</h1>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6 mb-8">
+                        <div class="flex flex-col space-y-1">
+                            <label for="couponCode" class="text-gray-700 text-sm font-medium">Coupon code</label>
+                            <input type="text" id="couponCode" value="SPRING25"
+                                class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
+                        </div>
+
+                        <div class="flex flex-col space-y-1">
+                            <label for="discountValue" class="text-gray-700 text-sm font-medium">Discount value</label>
+                            <input type="text" id="discountValue" value="50% off"
+                                class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
+                        </div>
+
+                        <div class="flex flex-col space-y-1">
+                            <label for="maxLimitUser" class="text-gray-700 text-sm font-medium">Max limit per
+                                user</label>
+                            <input type="number" id="maxLimitUser" value="1"
+                                class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
+                        </div>
+
+                        <div class="flex flex-col space-y-1">
+                            <label for="discountType" class="text-gray-700 text-sm font-medium">Discount type</label>
+                            <div class="relative">
+                                <select id="discountType"
+                                    class="bg-white w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 appearance-none pr-10">
+                                    <option>Percentage</option>
+                                    <option>Fixed Amount</option>
+                                </select>
+                                <div
+                                    class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-700">
+                                    <i class="fas fa-chevron-down text-sm"></i>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="flex flex-col space-y-1">
+                            <label for="validity" class="text-gray-700 text-sm font-medium">Validity</label>
+                            <div class="relative">
+                                <input type="text" id="validity" placeholder="Select date range"
+                                    class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 pr-10 cursor-pointer">
+                                <div
+                                    class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-700">
+                                    <i class="far fa-calendar-alt text-sm"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col space-y-1">
+                            <label for="totalMaxLimit" class="text-gray-700 text-sm font-medium">Total max limit</label>
+                            <input type="number" id="totalMaxLimit" value="100"
+                                class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col space-y-1 mb-8 w-full md:w-1/3">
+                        <label for="targetAudience" class="text-gray-700 text-sm font-medium">Target audience</label>
+                        <input type="text" id="targetAudience" value="New users"
+                            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
+                    </div>
+
+                    <div class="flex justify-start">
+                        <button
+                            class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-3 px-10 rounded-lg shadow-md transition duration-300">
+                            Create
+                        </button>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <!-- table -->
+
+            <div class="container mx-auto mt-6">
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-100 ">
+                                <tr>
+                                    <th scope="col"
+                                        class="px-4 py-3 text-left text-xs font-semibold text-gray-600  tracking-wider">
+                                        Coupon Code
+                                    </th>
+                                    <th scope="col"
+                                        class="px-4 py-3 text-left text-xs font-semibold text-gray-600  tracking-wider">
+                                        Discount Type
+                                    </th>
+                                    <th scope="col"
+                                        class="px-4 py-3 text-left text-xs font-semibold text-gray-600  tracking-wider">
+                                        Discount Value
+                                    </th>
+                                    <th scope="col"
+                                        class="px-4 py-3 text-left text-xs font-semibold text-gray-600  tracking-wider">
+                                        Status <i class="fas fa-sort-down ml-1 text-gray-400"></i>
+                                    </th>
+                                    <th scope="col"
+                                        class="px-4 py-3 text-left text-xs font-semibold text-gray-600  tracking-wider">
+                                        Usage
+                                    </th>
+                                    <th scope="col"
+                                        class="px-4 py-3 text-left text-xs font-semibold text-gray-600  tracking-wider">
+                                        Actions
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap text-xs text-gray-800">#SUMMER2025</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-xs text-gray-800">Percentage</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-xs text-gray-800">70% off</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-xs">
+                                        <span
+                                            class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full  text-green-600">
+                                            Active
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-xs text-gray-800">83</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-xs font-medium">
+                                        <div class="flex items-center space-x-3">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" checked>
+                                                <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                                            </label>
+                                            <button class="text-yellow-500 hover:text-yellow-600 text-sm">
+                                                <i class="far fa-edit"></i>
+                                            </button>
+                                            <button class="text-gray-500 hover:text-gray-600 text-sm">
+                                                <i class="far fa-trash-alt"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap text-xs text-gray-800">SPRING20</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-xs text-gray-800">Percentage</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-xs text-gray-800">50% off</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-xs">
+                                        <span
+                                            class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full  text-green-600">
+                                            Active
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-xs text-gray-800">27</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-xs font-medium">
+                                        <div class="flex items-center space-x-3">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" checked>
+                                                <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                                            </label>
+                                            <button class="text-yellow-500 hover:text-yellow-600 text-sm">
+                                                <i class="far fa-edit"></i>
+                                            </button>
+                                            <button class="text-gray-500 hover:text-gray-600 text-sm">
+                                                <i class="far fa-trash-alt"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap text-xs text-gray-800">VAL2025</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-xs text-gray-800">Fixed amount</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-xs text-gray-800">₦10,000</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-xs">
+                                        <span
+                                            class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full  text-red-600">
+                                            Inactive
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-xs text-gray-800">100</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-xs font-medium">
+                                        <div class="flex items-center space-x-3">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox"> <span class="toggle-track"><span
+                                                        class="toggle-thumb"></span></span>
+                                            </label>
+                                            <button class="text-yellow-500 hover:text-yellow-600 text-sm">
+                                                <i class="far fa-edit"></i>
+                                            </button>
+                                            <button class="text-gray-500 hover:text-gray-600 text-sm">
+                                                <i class="far fa-trash-alt"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap text-xs text-gray-800">RICKY23</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-xs text-gray-800">Percentage</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-xs text-gray-800">20% off</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-xs">
+                                        <span
+                                            class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full  text-red-600">
+                                            Inactive
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-xs text-gray-800">100</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-xs font-medium">
+                                        <div class="flex items-center space-x-3">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox"> <span class="toggle-track"><span
+                                                        class="toggle-thumb"></span></span>
+                                            </label>
+                                            <button class="text-yellow-500 hover:text-yellow-600 text-sm">
+                                                <i class="far fa-edit"></i>
+                                            </button>
+                                            <button class="text-gray-500 hover:text-gray-600 text-sm">
+                                                <i class="far fa-trash-alt"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap text-xs text-gray-800">LISA327</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-xs text-gray-800">Fixed amount</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-xs text-gray-800">₦200,000</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-xs">
+                                        <span
+                                            class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full  text-green-600">
+                                            Active
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-xs text-gray-800">96</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-xs font-medium">
+                                        <div class="flex items-center space-x-3 text-sm">
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" checked>
+                                                <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                                            </label>
+                                            <button class="text-yellow-500 hover:text-yellow-600 text-sm">
+                                                <i class="far fa-edit"></i>
+                                            </button>
+                                            <button class="text-gray-500 hover:text-gray-600 text-sm">
+                                                <i class="far fa-trash-alt"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </main>
+    </div>
+    <!-- Alpine.js (Add this script if not already included in your project) -->
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // Helper function to get day suffix (st, nd, rd, th)
+            function getDaySuffix(day) {
+                if (day > 3 && day < 21) return 'th'; // covers 4th to 20th
+                switch (day % 10) {
+                    case 1: return 'st';
+                    case 2: return 'nd';
+                    case 3: return 'rd';
+                    default: return 'th';
+                }
+            }
+
+            // Custom formatting function that returns the desired string
+            function customRangeFormatter(selectedDates, dateStr, instance) {
+                if (selectedDates.length === 2) {
+                    const startDay = selectedDates[0].getDate();
+                    const startMonth = selectedDates[0].toLocaleString('en-US', { month: 'short' });
+                    const endDay = selectedDates[1].getDate();
+                    const endMonth = selectedDates[1].toLocaleString('en-US', { month: 'short' });
+
+                    // Check if months and years are the same for concise display
+                    const isSameMonthAndYear = selectedDates[0].getMonth() === selectedDates[1].getMonth() &&
+                        selectedDates[0].getFullYear() === selectedDates[1].getFullYear();
+
+                    let formattedStart = `${startDay}${getDaySuffix(startDay)} ${startMonth}`;
+                    let formattedEnd = `${endDay}${getDaySuffix(endDay)} ${endMonth}`;
+
+                    // If years are different, include year for both parts
+                    if (selectedDates[0].getFullYear() !== selectedDates[1].getFullYear()) {
+                        formattedStart += ` ${selectedDates[0].getFullYear()}`;
+                        formattedEnd += ` ${selectedDates[1].getFullYear()}`;
+                    } else if (!isSameMonthAndYear) {
+                        // If only months are different but year is same, still include month in both parts
+                        // No additional year needed as it's the same
+                    }
+
+                    return `${formattedStart} - ${formattedEnd}`;
+
+                } else if (selectedDates.length === 1) {
+                    const day = selectedDates[0].getDate();
+                    const month = selectedDates[0].toLocaleString('en-US', { month: 'short' });
+                    const year = selectedDates[0].getFullYear();
+                    return `${day}${getDaySuffix(day)} ${month} ${year}`;
+                }
+                return ""; // Default for no selection
+            }
+
+
+            const fp = flatpickr("#validity", {
+                mode: "range",
+                // Set dateFormat to a standard parseable format. This is what Flatpickr internally uses.
+                dateFormat: "Y-m-d",
+                altInput: true, // Crucial: Enables the use of a formatted display input
+                // IMPORTANT: Do NOT set altFormat here. We will control the altInput.value directly
+                // through the onReady and onChange hooks.
+
+                defaultDate: ["2025-02-19", "2025-02-24"], // Use standard parseable format for defaultDate
+
+                // onReady is perfect for setting the initial display when the calendar loads
+                onReady: function (selectedDates, dateStr, instance) {
+                    if (selectedDates.length > 0) {
+                        // Apply custom formatter immediately after defaultDate is set
+                        instance.altInput.value = customRangeFormatter(selectedDates, dateStr, instance);
+                    }
+                },
+
+                // onChange updates the display whenever dates are changed by the user
+                onChange: function (selectedDates, dateStr, instance) {
+                    instance.altInput.value = customRangeFormatter(selectedDates, dateStr, instance);
+                }
+            });
+        });
+    </script>
+
+    <script>
+        // Mobile sidebar toggle functionality
+        document.addEventListener('DOMContentLoaded', function () {
+            const sidebarToggle = document.querySelector('#sidebar-toggle');
+            const sidebar = document.getElementById('sidebar');
+            const sidebarOverlay = document.getElementById('sidebar-overlay');
+
+            const hideSidebarButton = document.getElementById('hide-sidebar-button');
+
+            sidebarToggle.addEventListener('click', function () {
+                sidebar.classList.toggle('open');
+                sidebar.classList.remove('hidden');
+                sidebarOverlay.classList.toggle('hidden');
+            });
+
+            sidebarOverlay.addEventListener('click', function () {
+                sidebar.classList.remove('open');
+                sidebar.classList.add('hidden');
+                sidebarOverlay.classList.add('hidden');
+            });
+
+            hideSidebarButton.addEventListener('click', function () {
+                sidebar.classList.toggle("hidden");
+            });
+
+
+
+        });
+
+
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Select all date picker wrappers
+            const wrappers = document.querySelectorAll('.date-picker-wrapper');
+
+            wrappers.forEach((wrapper) => {
+                const datePicker = wrapper.querySelector('.datePicker');
+                const dropdownBtn = wrapper.querySelector('.dropdownBtn');
+                const dropdownMenu = wrapper.querySelector('.dropdownMenu');
+                const modeLabel = wrapper.querySelector('.mode-label');
+
+                let mode = "today"; // Default mode is 'today'
+
+                function setDateMode(selectedMode) {
+                    mode = selectedMode;
+                    modeLabel.textContent = selectedMode;
+                    dropdownMenu.classList.add("hidden");
+
+                    if (mode === "today") {
+                        const today = new Date();
+                        const formatted = today.toLocaleDateString("en-GB", {
+                            day: "2-digit",
+                            month: "short",
+                            year: "numeric"
+                        });
+                        datePicker.value = formatted;
+                    } else if (mode === "Specific Date") {
+                        flatpickr(datePicker, {
+                            dateFormat: "d M, Y",
+                            defaultDate: new Date(),
+                            onChange: function (selectedDates, dateStr) {
+                                datePicker.value = dateStr;
+                            }
+                        }).open();
+                    } else if (mode === "monthly") {
+                        flatpickr(datePicker, {
+                            mode: "range",
+                            dateFormat: "d M",
+                            onChange: function (selectedDates) {
+                                if (selectedDates.length === 2) {
+                                    const start = selectedDates[0].toLocaleDateString("en-GB", {
+                                        day: "2-digit",
+                                        month: "short"
+                                    });
+                                    const end = selectedDates[1].toLocaleDateString("en-GB", {
+                                        day: "2-digit",
+                                        month: "short"
+                                    });
+                                    datePicker.value = `${start} - ${end}`;
+                                }
+                            }
+                        }).open();
+                    }
+                }
+
+                // Init default mode on page load for each picker
+                setDateMode("today");
+
+                // Toggle dropdown for each picker
+                dropdownBtn.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    dropdownMenu.classList.toggle("hidden");
+                });
+
+                // Handle dropdown option click for each picker
+                dropdownMenu.querySelectorAll('button[data-mode]').forEach(btn => {
+                    btn.addEventListener("click", () => {
+                        setDateMode(btn.dataset.mode);
+                    });
+                });
+
+                // Close dropdown if clicked outside
+                document.addEventListener("click", (e) => {
+                    if (!wrapper.contains(e.target)) {
+                        dropdownMenu.classList.add("hidden");
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
