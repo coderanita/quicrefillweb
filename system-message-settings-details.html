@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quicrefill Admin</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Chart.js from cdnjs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"
+        integrity="sha512-ElRFoEQdI5Ht6kZvyzXhYG9NqjtkmlkfYk0wr6wHxU9JEHakS7UJZNeml5ALk+8IKlU6jDgMabC3vkumRokgJA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- Load Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.js"></script>
+    <!-- Litepicker CSS & JS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/litepicker/dist/css/litepicker.css" />
+    <script src="https://cdn.jsdelivr.net/npm/litepicker/dist/litepicker.js"></script>
+
+</head>
+<style>
+    .custom-tooltip {
+        position: absolute;
+        background: #facc15;
+        color: #000;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-weight: bold;
+        font-size: 14px;
+        pointer-events: none;
+        transition: all 0.1s ease;
+        opacity: 0;
+        white-space: nowrap;
+        z-index: 999;
+    }
+
+
+    [x-cloak] {
+        display: none !important;
+    }
+
+    @media (max-width: 768px) {
+        .mobile-sidebar {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .mobile-sidebar.open {
+            transform: translateX(0);
+        }
+
+        .dropdown-menu {
+            @apply left-1/2 -translate-x-1/2 w-80 max-w-[95%];
+        }
+
+
+    }
+
+    .flatpickr-day.selected,
+    .flatpickr-day.startRange,
+    .flatpickr-day.endRange {
+        background: #FFB600 !important;
+        color: white !important;
+        border-color: #FFB600 !important;
+    }
+
+    /* Change the color of dates between the range */
+    .flatpickr-day.inRange {
+        background: #FFE08A !important;
+        /* Light yellow */
+        color: black !important;
+    }
+</style>
+</head>
+
+<body class="bg-gray-100">
+    <!-- Header -->
+
+    <header class="bg-white shadow-md flex items-center justify-between p-4 sticky top-0 z-30">
+        <div class="flex items-center">
+            <button id="sidebar-toggle" class=" md:hidden mr-4">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="flex items-center mr-4 md:mr-8">
+                <img src="images/logo.png" class="w-[150px] md:w-[250px]">
+            </div>
+            <button id="hide-sidebar-button" class="border border-gray-200 rounded-md px-2 py-1 z-15 hidden md:block">
+                <i class="fas fa-angle-left"></i>
+            </button>
+        </div>
+
+        <div class="hidden md:block relative w-1/3">
+            <input type="text" placeholder="Search"
+                class="w-full px-4 py-2 border border-gray-300 rounded-md bg-gray-100 focus:outline-none pl-10">
+            <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+            <button
+                class="absolute right-0 top-0 h-full px-4 bg-gradient-to-b from-[#FFC533] to-[#FFB600] text-black rounded-r-md border border-gray-300 shadow flex items-center justify-center">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+        </div>
+
+
+        <div class="flex items-center">
+            <div x-data="{ open: false }" class="relative mr-4">
+                <!-- Notification Icon -->
+                <button @click="open = !open" class="relative p-2">
+                    <i class="fas fa-bell text-gray-600 text-lg"></i>
+                    <!-- Notification Badge -->
+                    <span
+                        class="absolute -top-1 -right-1 bg-yellow-400 text-black text-xs font-bold px-1.5 py-0.5 rounded-full">8</span>
+                </button>
+
+                <!-- Dropdown Menu -->
+                <div x-show="open" @click.away="open = false" x-transition x-cloak
+                    class="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-64 bg-white border rounded-md shadow-lg z-50">
+                    <div class="p-3 border-b">
+                        <span class="font-semibold text-gray-700">Notifications</span>
+                    </div>
+
+                    <ul class="max-h-60 overflow-auto">
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer flex items-center">
+                            <i class="fas fa-bell text-gray-500 text-sm mr-2"></i>
+                            <span class="text-sm text-gray-700">You have a new message</span>
+                        </li>
+
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer flex items-center">
+                            <i class="fas fa-check-circle text-green-500 text-sm mr-2"></i>
+                            <span class="text-sm text-gray-700">Task Completed Successfully</span>
+                        </li>
+
+                        <li class="p-2 hover:bg-gray-100 cursor-pointer flex items-center">
+                            <i class="fas fa-exclamation-triangle text-yellow-500 text-sm mr-2"></i>
+                            <span class="text-sm text-gray-700">System Alert: Update Required</span>
+                        </li>
+
+                    </ul>
+
+                    <div class="p-3 border-t text-center">
+                        <a href="notifications-center.html" class="text-sm text-blue-500 hover:underline">View all</a>
+                    </div>
+                </div>
+            </div>
+
+            <div x-data="{ open: false }" class="relative">
+                <!-- Profile Button -->
+                <button @click="open = !open"
+                    class="flex items-center rounded-full px-2 py-1 md:px-4 md:py-2 border border-gray-300 shadow-md focus:outline-none">
+                    <!-- Avatar -->
+                    <div class="relative w-10 h-10 md:w-10 md:h-10 rounded-full bg-gray-300 mr-2">
+                        <!-- Avatar Image -->
+                        <img src="images/Avatar/avatar.png" alt="User Avatar"
+                            class="w-full h-full object-cover rounded-full">
+
+                        <!-- Green Dot (Move Outside) -->
+                        <div class="absolute top-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"
+                            style="transform: translate(30%, -30%);"></div>
+                    </div>
+
+                    <!-- User Info -->
+                    <div class="hidden md:block text-left">
+                        <div class="text-sm font-medium">Timothy Jonson</div>
+                        <div class="text-xs text-gray-500">timoj@Quicrefil.ng</div>
+                    </div>
+                </button>
+
+                <!-- Dropdown Menu -->
+                <div x-show="open" @click.away="open = false" x-transition x-cloak
+                    class="absolute right-0 mt-2 w-48 bg-white border rounded-md shadow-lg z-50">
+                    <ul class="py-2">
+                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                            <a href="profiles-settings.html" class="flex items-center text-gray-700">
+                                <i class="fas fa-user mr-2"></i>
+                                Profile
+                            </a>
+                        </li>
+
+                        <li class="px-4 py-2 text-red-500 hover:bg-gray-100 cursor-pointer">
+                            <a href="login.html" class="flex items-center">
+                                <i class="fas fa-sign-out-alt mr-2"></i>
+                                Logout
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="flex">
+        <!-- Sidebar -->
+
+        <aside id="sidebar"
+            class="mobile-sidebar fixed md:relative w-64 bg-white min-h-screen shadow-sm z-20 md:transform-none border border-gray-300S">
+            <nav class="p-4">
+                <ul>
+                    <li class="mb-4">
+                        <a href="quicrefill-dashboard.html" class="flex items-center text-amber-500 font-medium">
+                            <i class="fas fa-th-large mr-3"></i>
+                            <span>Summary</span>
+                        </a>
+                    </li>
+
+                    <li class="mb-4">
+                        <a href="order-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-clipboard-list mr-3"></i>
+                            <span>Order Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="delivery-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-cube mr-3"></i>
+                            <span>Delivery Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="service-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-briefcase mr-3"></i>
+                            <span>Service Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="accessories-management.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-bag-shopping mr-3"></i>
+                            <span>Accessories Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="user-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-user mr-3"></i>
+                            <span>User Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="vendor-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-store mr-3"></i>
+                            <span>Vendor Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="delivery-rep-management.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-truck-droplet mr-2"></i>
+                            <span>Delivery Rep Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="verification-and-compliance.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-check-square mr-3"></i>
+                            <span>Verification & Compliance</span>
+                        </a>
+                    </li>
+                    <li x-data="{ open: false }" class="mb-4">
+                        <a href="#" @click.prevent="open = !open"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-sack-dollar mr-3"></i>
+                            <span>Revenue Management</span>
+                            <i :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas ml-auto text-xs"></i>
+                        </a>
+
+                        <!-- Dropdown Menu -->
+                        <ul x-show="open" x-cloak class="mt-2 ml-6 space-y-2 text-gray-800">
+
+                            <!-- Revenue Breakdown -->
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-chart-pie mr-3 text-gray-500"></i>
+                                <a href="revenue-breakdown.html">Revenue Breakdown</a>
+                            </li>
+
+                            <!-- Payout Management -->
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-hand-holding-usd mr-3 text-gray-500"></i>
+                                <a href="payout-management.html">Payout Management</a>
+                            </li>
+
+                            <!-- Revenue Analytics -->
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-chart-line mr-3 text-gray-500"></i>
+                                <a href="revenue-analytics.html">Revenue Analytics & Insights</a>
+                            </li>
+
+                        </ul>
+                    </li>
+
+                    <li class="mb-4">
+                        <a href="withdrawal-management.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-money-bill-transfer mr-3"></i>
+                            <span>Withdrawal Management</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="account-deletion.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-user-xmark mr-3"></i>
+                            <span>Account Deletion</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="account-deletion.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fa fa-map-marker mr-3"></i>
+                            <span>Operating Locations</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="feedback.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-comments mr-3"></i>
+                            <span>Feedback</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="fraud-watch.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fa fa-binoculars mr-3"></i>
+                            <span>Fraud Watch</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="reports-and-analytics.html"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-chart-bar mr-3"></i>
+                            <span>Reports and Analytics</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="crash-analytics.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fa fa-line-chart mr-3"></i>
+                            <span>Crash Analytics</span>
+                        </a>
+                    </li>
+                    <li x-data="{ open: false }" class="mb-4">
+                        <a href="#" @click.prevent="open = !open"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-shield-alt mr-3"></i>
+                            <span>Audit Logs & Security</span>
+                            <i :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas ml-auto text-xs"></i>
+                        </a>
+
+                        <!-- Dropdown Menu -->
+                        <ul x-show="open" x-cloak class="mt-2 ml-6 space-y-2 text-gray-500">
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-file-alt mr-3"></i>
+                                <a href="audit-admin-logs.html">Admin Logs activities</a>
+                            </li>
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-user-lock mr-3"></i>
+                                <a href="audit-transaction-logs.html">Transaction Logs</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="mb-4">
+                        <a href="staff-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-user-shield mr-3"></i>
+                            <span>Staff Management</span>
+                        </a>
+                    </li>
+
+                    <li x-data="{ open: false }" class="mb-4">
+                        <a href="#" @click.prevent="open = !open"
+                            class="flex items-center text-gray-600 hover:text-amber-500">
+                            <i class="fas fa-cog mr-3"></i>
+                            <span>System Settings</span>
+                            <i :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas ml-auto text-xs"></i>
+                        </a>
+
+                        <!-- Dropdown Menu -->
+                        <ul x-show="open" x-cloak class="mt-2 ml-6 space-y-2 text-gray-500">
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-envelope-open-text mr-3"></i>
+                                <a href="system-message-settings.html">Message Settings</a>
+                            </li>
+
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-bell mr-3"></i>
+                                <a href="system-push-notification-settings.html">Push Notification Settings</a>
+                            </li>
+
+                            <li class="flex items-center hover:text-amber-500">
+                                <i class="fas fa-ticket-alt mr-3"></i>
+                                <a href="system-coupon-settings.html">Coupon Settings</a>
+                            </li>
+
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Overlay for sidebar on mobile -->
+        <div id="sidebar-overlay" class="fixed inset-0 bg-black opacity-50 z-10 hidden"></div>
+
+        <!-- Content Area -->
+        <main class="flex-1 p-4 m-4 w-full overflow-x-hidden">
+            <!-- Main Header Title -->
+            <div class="flex flex-col space-y-4 md:space-y-0 md:flex-row md:justify-between md:items-center mb-6">
+                <!-- Left Section (Title & Breadcrumb) -->
+                   <div class="flex items-center">
+                    <a class="mr-4 p-2 bg-white rounded-lg text-gray-600 hover:bg-gray-200 shadow-md" href="#">
+                        <i class="fa fa-arrow-left fa-lg"></i>
+                    </a>           
+                    
+                </div>
+
+                <!-- Right Section (Controls) -->
+                <div class="grid grid-cols-2 md:flex md:flex-wrap items-center gap-2 md:gap-4 w-full md:w-auto">
+                    <!-- Search Box -->
+                    <div class="relative w-36">
+                        <input type="text" placeholder="Search"
+                            class="bg-white w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 focus:outline-none pr-10 text-sm">
+                        <i
+                            class="fas fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer"></i>
+                    </div>
+
+
+                    <div class="mb-2 md:mb-0">
+                        <div class="flex gap-0">
+                            <div class="date-picker-wrapper relative w-full max-w-xs">
+                                <div class="flex items-center border rounded-md overflow-hidden bg-white">
+                                    <!-- Calendar Icon -->
+                                    <div class="pl-3 pr-2 text-gray-500">
+                                        <i class="fa fa-calendar-alt"></i>
+                                    </div>
+
+                                    <!-- Date Display (Reduced width) -->
+                                    <input type="text"
+                                        class="datePicker w-24 py-2 text-sm text-gray-700 focus:outline-none cursor-pointer"
+                                        placeholder="Select date" readonly />
+
+                                    <!-- Dropdown Button (Increased width) -->
+                                    <button type="button"
+                                        class="dropdownBtn w-32 px-3 py-2 border-l border-gray-300 text-sm text-gray-700 bg-white focus:outline-none flex items-center gap-1">
+                                        <span class="mode-label">Today</span>
+                                        <i class="fa fa-chevron-down text-xs"></i>
+                                    </button>
+                                </div>
+
+                                <!-- Dropdown Menu -->
+                                <div
+                                    class="dropdownMenu absolute right-0 mt-2 bg-white border rounded shadow-md w-40 hidden z-10">
+                                    <button type="button" data-mode="today"
+                                        class="w-full text-left px-4 py-2 hover:bg-gray-100">Today</button>
+                                    <button type="button" data-mode="Specific Date"
+                                        class="w-full text-left px-4 py-2 hover:bg-gray-100">Specific Date</button>
+                                    <button type="button" data-mode="monthly"
+                                        class="w-full text-left px-4 py-2 hover:bg-gray-100">Monthly</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-2 md:mb-0">
+                        <div class="relative inline-block" x-data="{ 
+                                open: false, 
+                                selected: '', 
+                                orderDropdown: false, 
+                                paymentDropdown: false, 
+                                serviceDropdown: false, 
+                                selectedStatuses: [], 
+                                selectedPayments: [], 
+                                selectedServices: [] 
+                            }">
+                            <!-- Filter Button -->
+                            <button @click="open = !open"
+                                class="flex items-center gap-2 px-4 py-2 bg-white border rounded-lg">
+                                <i class="fa fa-filter"></i> Filter
+                            </button>
+
+                            <!-- Dropdown -->
+                            <div x-show="open" @click.outside="open = false" x-cloak
+                                class="dropdown-menu absolute left-auto right-0 top-full mt-2 w-96 bg-white border rounded-lg shadow-lg p-4 z-30">
+
+
+                                <h3 class="text-gray-700 font-medium mb-3">Select Filter</h3>
+
+                                <!-- Main Options -->
+                                <div class="grid grid-cols-3 gap-2">
+                                    <button
+                                        @click="selected = 'Order Status'; orderDropdown = true; paymentDropdown = false; serviceDropdown = false"
+                                        :class="selected === 'Order Status' ? 'bg-yellow-400 ' : 'border'"
+                                        class="px-3 py-2 rounded-lg text-sm">
+                                        Order Status
+                                    </button>
+                                    <button
+                                        @click="selected = 'Payment Type'; paymentDropdown = true; orderDropdown = false; serviceDropdown = false"
+                                        :class="selected === 'Payment Type' ? 'bg-yellow-400 ' : 'border'"
+                                        class="px-3 py-2 rounded-lg text-sm">
+                                        Payment Type
+                                    </button>
+                                    <button
+                                        @click="selected = 'Service Type'; serviceDropdown = true; orderDropdown = false; paymentDropdown = false"
+                                        :class="selected === 'Service Type' ? 'bg-yellow-400 ' : 'border'"
+                                        class="px-3 py-2 rounded-lg text-sm">
+                                        Service Type
+                                    </button>
+                                </div>
+
+                                <!-- Order Status Dropdown -->
+                                <div x-show="orderDropdown" x-cloak class="mt-3">
+                                    <h3 class="text-gray-700 font-medium mb-2">Select Order Status</h3>
+                                    <div class="grid grid-cols-3 gap-2">
+                                        <template
+                                            x-for="status in ['Completed', 'In Progress', 'Cancelled', 'Disputed', 'In Transit']">
+                                            <button
+                                                @click="selectedStatuses.includes(status) ? selectedStatuses = selectedStatuses.filter(s => s !== status) : selectedStatuses.push(status)"
+                                                :class="selectedStatuses.includes(status) ? 'bg-yellow-400 ' : 'border'"
+                                                class="px-3 py-2 rounded-lg text-sm">
+                                                <span x-text="status"></span>
+                                            </button>
+                                        </template>
+                                    </div>
+                                </div>
+
+                                <!-- Payment Type Dropdown -->
+                                <div x-show="paymentDropdown" x-cloak class="mt-3">
+                                    <h3 class="text-gray-700 font-medium mb-2">Select Payment Type</h3>
+                                    <div class="grid grid-cols-3 gap-2">
+                                        <template x-for="payment in ['On delivery', 'Wallet', 'Flutterwave']">
+                                            <button
+                                                @click="selectedPayments.includes(payment) ? selectedPayments = selectedPayments.filter(p => p !== payment) : selectedPayments.push(payment)"
+                                                :class="selectedPayments.includes(payment) ? 'bg-yellow-400 ' : 'border'"
+                                                class="px-3 py-2 rounded-lg text-sm">
+                                                <span x-text="payment"></span>
+                                            </button>
+                                        </template>
+                                    </div>
+                                </div>
+
+                                <!-- Service Type Dropdown -->
+                                <div x-show="serviceDropdown" x-cloak class="mt-3">
+                                    <h3 class="text-gray-700 font-medium mb-2">Select Service Type</h3>
+                                    <div class="grid grid-cols-3 gap-2">
+                                        <template
+                                            x-for="service in ['Gas Refill', 'Peroleum', 'Diesel', 'Accessories', 'Electricity']">
+                                            <button
+                                                @click="selectedServices.includes(service) ? selectedServices = selectedServices.filter(s => s !== service) : selectedServices.push(service)"
+                                                :class="selectedServices.includes(service) ? 'bg-yellow-400 ' : 'border'"
+                                                class="px-3 py-2 rounded-lg text-sm">
+                                                <span x-text="service"></span>
+                                            </button>
+                                        </template>
+                                    </div>
+                                </div>
+
+                                <!-- Apply Button -->
+                                <div class="mt-4 text-center">
+                                    <button @click="open = false"
+                                        class="px-4 py-2 bg-yellow-400  rounded-lg">Apply</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+            </div>
+           
+            <div class="bg-white rounded-lg shadow-lg p-6 md:p-8 max-w-xl w-full relative"> <h2 class="text-xl md:text-2xl font-semibold text-gray-800 mb-6">Email message details</h2>
+
+                <div class="space-y-4 text-gray-700">
+                    <div>
+                        <span class="font-semibold text-gray-600">Message ID:</span>
+                        <span class="ml-2">MSG1001</span>
+                    </div>
+                    <div>
+                        <span class="font-semibold text-gray-600">Template name:</span>
+                        <span class="ml-2">“Order Confirmation”</span>
+                    </div>
+                    <div>
+                        <span class="font-semibold text-gray-600">Content:</span>
+                        <span class="ml-2">Hi [Customer Name], your order #123456 is confirmed! Delivery expected by [Delivery Date]. Track your order: [Link]. Need help? Call +2349123456789. - Quicrifill</span>
+                    </div>
+                    <div>
+                        <span class="font-semibold text-gray-600">Status:</span>
+                        <span class="ml-2 text-green-500 font-medium">Active</span>
+                    </div>
+                    <div>
+                        <span class="font-semibold text-gray-600">Provider:</span>
+                        <span class="ml-2">SMTP</span>
+                    </div>
+                    <div>
+                        <span class="font-semibold text-gray-600">Date created:</span>
+                        <span class="ml-2">25/01/27 10:15 AM</span>
+                    </div>
+                </div>
+
+                <div class="mt-8 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                    <button id="editTemplateBtn" class="flex-1 bg-yellow-500 hover:bg-yellow-600 text-black font-semibold py-3 px-6 rounded-lg shadow-md transition duration-200 ease-in-out">
+                        Edit template
+                    </button>
+                    <button class="flex-1 bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition duration-200 ease-in-out">
+                        Delete template
+                    </button>
+                </div>
+            </div>
+
+            <div id="templatePopup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-90">
+                <div class="bg-white rounded-lg shadow-xl p-6 md:p-8 max-w-xl w-full mx-4"> <h2 class="text-xl md:text-2xl font-semibold text-gray-800 mb-6">Template</h2>
+
+                    <div class="mb-4">
+                        <label for="templateName" class="block text-gray-700 text-sm font-semibold mb-2">Template name</label>
+                        <input type="text" id="templateName" name="templateName"
+                            class="block w-full px-4 py-2 border border-yellow-500 rounded-lg
+                                    focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                            value="Order Confirmation">
+                    </div>
+
+                    <div class="mb-6">
+                        <label for="content" class="block text-gray-700 text-sm font-semibold mb-2">Content</label>
+                        <textarea id="content" name="content" rows="6"
+                                class="block w-full px-4 py-2 border border-gray-300 rounded-lg
+                                        focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent
+                                        resize-y"
+                                placeholder="Enter template content...">Hi [Customer Name], your order #123456 is confirmed! Delivery expected by [Delivery Date]. Track your order: [Link]. Need help? Call +2349123456789. - Quicrifill</textarea>
+                    </div>
+
+                    <button id="saveChangesBtn" class="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition duration-200 ease-in-out">
+                        Save changes
+                    </button>
+                </div>
+            </div>
+
+            <!-- 2nd Card -->
+              <div class="w-full max-w-md mt-6">
+                <h2 class="text-xl font-semibold text-gray-800 mb-6">Available host providers</h2>
+
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                    <table class="min-w-full leading-normal">
+                        <thead>
+                            <tr class="bg-gray-100 border-b border-gray-200 text-gray-800 text-sm font-semibold tracking-wider">
+                                <th class="px-5 py-3 text-left">Provider</th>
+                                <th class="px-5 py-3 text-left">
+                                    <div class="flex items-center">
+                                        Status
+                                        <i class="fas fa-sort-down ml-1 text-gray-400"></i>
+                                    </div>
+                                </th>
+                                <th class="px-5 py-3 text-left">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody >
+                            <tr class="border-b border-gray-200">
+                                <td class="px-5 py-4 whitespace-nowrap text-sm text-gray-700">SMTP</td>
+                                <td class="px-5 py-4 whitespace-nowrap text-sm text-green-500">Enabled</td>
+                                <td class="px-5 py-4 whitespace-nowrap">
+                                    <button class="bg-yellow-500 hover:bg-yellow-600 text-blackfont-semibold py-2 px-6 rounded shadow-md transition duration-200 ease-in-out">
+                                        Switch
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr class="border-b border-gray-200">
+                                <td class="px-5 py-4 whitespace-nowrap text-sm text-gray-700">SMTP</td>
+                                <td class="px-5 py-4 whitespace-nowrap text-sm text-green-500">Enabled</td>
+                                <td class="px-5 py-4 whitespace-nowrap">
+                                    <button class="bg-yellow-500 hover:bg-yellow-600 text-blackfont-semibold py-2 px-6 rounded shadow-md transition duration-200 ease-in-out">
+                                        Switch
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="px-5 py-4 whitespace-nowrap text-sm text-gray-700">SMTP</td>
+                                <td class="px-5 py-4 whitespace-nowrap text-sm text-green-500">Enabled</td>
+                                <td class="px-5 py-4 whitespace-nowrap">
+                                    <button class="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold py-2 px-6 rounded shadow-md transition duration-200 ease-in-out">
+                                        Switch
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+
+        </main>
+    </div>
+    <!-- Alpine.js (Add this script if not already included in your project) -->
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+       <script>
+        const editTemplateBtn = document.getElementById('editTemplateBtn');
+        const templatePopup = document.getElementById('templatePopup');
+        const popupContent = templatePopup.querySelector('div'); // Get the inner content div of the popup
+
+        // NEW: Get a reference to the Save Changes button
+        const saveChangesBtn = document.getElementById('saveChangesBtn');
+
+
+        // Function to open the popup
+        editTemplateBtn.addEventListener('click', () => {
+            templatePopup.classList.remove('hidden');
+        });
+
+        // Function to close the popup when clicking on the overlay (outside the content)
+        templatePopup.addEventListener('click', (event) => {
+            if (event.target === templatePopup) { // Check if the click was directly on the overlay element
+                templatePopup.classList.add('hidden');
+            }
+        });
+
+        // Prevent clicks inside the popup content from closing the popup
+        popupContent.addEventListener('click', (event) => {
+            event.stopPropagation(); // Stop the click event from bubbling up to the overlay
+        });
+
+        // NEW: Close the popup when Save Changes button is clicked
+        saveChangesBtn.addEventListener('click', () => {
+            templatePopup.classList.add('hidden'); // Hide the popup
+            // You might want to add logic here to actually save the changes (e.g., send data to a server)
+            console.log('Changes saved (popup closing)'); // For demonstration
+        });
+
+        // Optional: Close popup with 'Escape' key
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && !templatePopup.classList.contains('hidden')) {
+                templatePopup.classList.add('hidden');
+            }
+        });
+    </script>
+
+    <script>
+        // Mobile sidebar toggle functionality
+        document.addEventListener('DOMContentLoaded', function () {
+            const sidebarToggle = document.querySelector('#sidebar-toggle');
+            const sidebar = document.getElementById('sidebar');
+            const sidebarOverlay = document.getElementById('sidebar-overlay');
+
+            const hideSidebarButton = document.getElementById('hide-sidebar-button');
+
+            sidebarToggle.addEventListener('click', function () {
+                sidebar.classList.toggle('open');
+                sidebar.classList.remove('hidden');
+                sidebarOverlay.classList.toggle('hidden');
+            });
+
+            sidebarOverlay.addEventListener('click', function () {
+                sidebar.classList.remove('open');
+                sidebar.classList.add('hidden');
+                sidebarOverlay.classList.add('hidden');
+            });
+
+            hideSidebarButton.addEventListener('click', function () {
+                sidebar.classList.toggle("hidden");
+            });
+
+
+
+        });
+
+
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Select all date picker wrappers
+            const wrappers = document.querySelectorAll('.date-picker-wrapper');
+
+            wrappers.forEach((wrapper) => {
+                const datePicker = wrapper.querySelector('.datePicker');
+                const dropdownBtn = wrapper.querySelector('.dropdownBtn');
+                const dropdownMenu = wrapper.querySelector('.dropdownMenu');
+                const modeLabel = wrapper.querySelector('.mode-label');
+
+                let mode = "today"; // Default mode is 'today'
+
+                function setDateMode(selectedMode) {
+                    mode = selectedMode;
+                    modeLabel.textContent = selectedMode;
+                    dropdownMenu.classList.add("hidden");
+
+                    if (mode === "today") {
+                        const today = new Date();
+                        const formatted = today.toLocaleDateString("en-GB", {
+                            day: "2-digit",
+                            month: "short",
+                            year: "numeric"
+                        });
+                        datePicker.value = formatted;
+                    } else if (mode === "Specific Date") {
+                        flatpickr(datePicker, {
+                            dateFormat: "d M, Y",
+                            defaultDate: new Date(),
+                            onChange: function (selectedDates, dateStr) {
+                                datePicker.value = dateStr;
+                            }
+                        }).open();
+                    } else if (mode === "monthly") {
+                        flatpickr(datePicker, {
+                            mode: "range",
+                            dateFormat: "d M",
+                            onChange: function (selectedDates) {
+                                if (selectedDates.length === 2) {
+                                    const start = selectedDates[0].toLocaleDateString("en-GB", {
+                                        day: "2-digit",
+                                        month: "short"
+                                    });
+                                    const end = selectedDates[1].toLocaleDateString("en-GB", {
+                                        day: "2-digit",
+                                        month: "short"
+                                    });
+                                    datePicker.value = `${start} - ${end}`;
+                                }
+                            }
+                        }).open();
+                    }
+                }
+
+                // Init default mode on page load for each picker
+                setDateMode("today");
+
+                // Toggle dropdown for each picker
+                dropdownBtn.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    dropdownMenu.classList.toggle("hidden");
+                });
+
+                // Handle dropdown option click for each picker
+                dropdownMenu.querySelectorAll('button[data-mode]').forEach(btn => {
+                    btn.addEventListener("click", () => {
+                        setDateMode(btn.dataset.mode);
+                    });
+                });
+
+                // Close dropdown if clicked outside
+                document.addEventListener("click", (e) => {
+                    if (!wrapper.contains(e.target)) {
+                        dropdownMenu.classList.add("hidden");
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
