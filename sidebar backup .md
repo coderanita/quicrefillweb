@@ -1,170 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quicrefill Admin</title>
-    <!-- Load Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="icon" href="/images/image.ico" type="image/x-icon">
-    <!-- Load Chart.js from cdnjs -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"
-        integrity="sha512-ElRFoEQdI5Ht6kZvyzXhYG9NqjtkmlkfYk0wr6wHxU9JEHakS7UJZNeml5ALk+8IKlU6jDgMabC3vkumRokgJA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <!-- Load Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.js"></script>
-
-<style>
-    [x-cloak] {
-        display: none !important;
-    }
-
-   
-
-    .flatpickr-day.selected,
-    .flatpickr-day.startRange,
-    .flatpickr-day.endRange {
-        background: #FFB600 !important;
-        color: white !important;
-        border-color: #FFB600 !important;
-    }
-
-    /* Change the color of dates between the range */
-    .flatpickr-day.inRange {
-        background: #FFE08A !important;
-        /* Light yellow */
-        color: black !important;
-    }
-</style>
-</head>
-
-<body class="bg-gray-100" x-data="sidebar()">
-    <!-- Header -->
-
-    <header class="bg-white shadow-md flex items-center justify-between p-4 sticky top-0 z-30">
-        <div class="flex items-center">
-            <button @click="sidebarCollapsed = !sidebarCollapsed" class=" md:hidden mr-4">
-                <i class="fas fa-bars"></i>
-            </button>
-            <div class="flex items-center mr-4 md:mr-8">
-                <img src="images/logo.png" class="w-[150px] md:w-[250px]">
-            </div>
-           <button @click="sidebarCollapsed = !sidebarCollapsed"
-              class="flex hidden md:flex  justify-center items-center p-2 text-gray-600 hover:text-amber-500 transition border border-gray-200 rounded-md px-2 py-1 m-2 z-50">
-        <i :class="sidebarCollapsed ? 'fas fa-angle-right' : 'fas fa-angle-left'"></i>
-      </button>
-        </div>
-
-        <div class="hidden md:block relative w-1/3">
-            <input type="text" placeholder="Search"
-                class="w-full px-4 py-2 border border-gray-300 rounded-md bg-gray-100 focus:outline-none pl-10">
-            <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-            <button
-                class="absolute right-0 top-0 h-full px-4 bg-gradient-to-b from-[#FFC533] to-[#FFB600] text-black rounded-r-md border border-gray-300 shadow flex items-center justify-center">
-                <i class="fas fa-arrow-left"></i>
-            </button>
-        </div>
-
-
-        <div class="flex items-center">
-            <div x-data="{ open: false }" class="relative mr-4">
-                <!-- Notification Icon -->
-                <button @click="open = !open" class="relative p-2">
-                    <i class="fas fa-bell text-gray-600 text-lg"></i>
-                    <!-- Notification Badge -->
-                    <span
-                        class="absolute -top-1 -right-1 bg-yellow-400 text-black text-xs font-bold px-1.5 py-0.5 rounded-full">8</span>
-                </button>
-
-                <!-- Dropdown Menu -->
-                <div x-show="open" @click.away="open = false" x-transition x-cloak
-                    class="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-64 bg-white border rounded-md shadow-lg z-50">
-                    <div class="p-3 border-b">
-                        <span class="font-semibold text-gray-700">Notifications</span>
-                    </div>
-
-                    <ul class="max-h-60 overflow-auto">
-                        <li class="p-2 hover:bg-gray-100 cursor-pointer flex items-center">
-                            <i class="fas fa-bell text-gray-500 text-sm mr-2"></i>
-                            <span class="text-sm text-gray-700">You have a new message</span>
-                        </li>
-
-                        <li class="p-2 hover:bg-gray-100 cursor-pointer flex items-center">
-                            <i class="fas fa-check-circle text-green-500 text-sm mr-2"></i>
-                            <span class="text-sm text-gray-700">Task Completed Successfully</span>
-                        </li>
-
-                        <li class="p-2 hover:bg-gray-100 cursor-pointer flex items-center">
-                            <i class="fas fa-exclamation-triangle text-yellow-500 text-sm mr-2"></i>
-                            <span class="text-sm text-gray-700">System Alert: Update Required</span>
-                        </li>
-
-                    </ul>
-
-                    <div class="p-3 border-t text-center">
-                        <a href="notifications-center.html" class="text-sm text-blue-500 hover:underline">View all</a>
-                    </div>
-                </div>
-            </div>
-
-            <div x-data="{ open: false }" class="relative">
-                <!-- Profile Button -->
-                <button @click="open = !open"
-                    class="flex items-center rounded-full px-2 py-1 md:px-4 md:py-2 border border-gray-300 shadow-md focus:outline-none">
-                    <!-- Avatar -->
-                    <div class="relative w-10 h-10 md:w-10 md:h-10 rounded-full bg-gray-300 mr-2">
-                        <!-- Avatar Image -->
-                        <img src="images/Avatar/avatar.png" alt="User Avatar"
-                            class="w-full h-full object-cover rounded-full">
-
-                        <!-- Green Dot (Move Outside) -->
-                        <div class="absolute top-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"
-                            style="transform: translate(30%, -30%);"></div>
-                    </div>
-
-                    <!-- User Info -->
-                    <div class="hidden md:block text-left">
-                        <div class="text-sm font-medium">Timothy Jonson</div>
-                        <div class="text-xs text-gray-500">timoj@Quicrefil.ng</div>
-                    </div>
-                </button>
-
-                <!-- Dropdown Menu -->
-                <div x-show="open" @click.away="open = false" x-transition x-cloak
-                    class="absolute right-0 mt-2 w-48 bg-white border rounded-md shadow-lg z-50">
-                    <ul class="py-2">
-                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                            <a href="profiles-settings.html" class="flex items-center text-gray-700">
-                                <i class="fas fa-user mr-2"></i>
-                                Profile
-                            </a>
-                        </li>
-
-                        <li class="px-4 py-2 text-red-500 hover:bg-gray-100 cursor-pointer">
-                            <a href="login.html" class="flex items-center">
-                                <i class="fas fa-sign-out-alt mr-2"></i>
-                                Logout
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </header>
-
-
-    <!-- Main Content -->
-    <div class="flex">
-        <!-- Sidebar -->
-
-        <aside
+  <aside
                     :class="sidebarCollapsed ? 'w-16' : 'w-64'"
                     class="relative bg-white min-h-screen shadow-sm z-20 border-r border-gray-300 transition-all duration-300 ease-in-out" >
-            <nav class="p-4">
+         <nav class="p-4">
                     <ul>
                         <li class="mb-4">
                             <a href="quicrefill-dashboard.html" class="flex items-center text-gray-600 hover:text-amber-500">
@@ -180,7 +17,7 @@
                             </a>
                         </li>
                         <li class="mb-4">
-                            <a href="delivery-management.html" class="flex items-center text-amber-500 font-medium">
+                            <a href="delivery-management.html" class="flex items-center text-gray-600 hover:text-amber-500">
                                 <i class="fas fa-cube mr-3"></i>
                                  <span x-show="!sidebarCollapsed">Delivery Management</span>
                             </a>
@@ -378,73 +215,53 @@
                     </ul>
                 </nav>
         </aside>
-
-        
-
-        <!-- Content Area -->
-        <main class="flex-1 p-6 w-full overflow-x-hidden">
-            <div class="max-w-md w-full">
-                <div class="max-w-6xl mx-auto mb-4">
-                    <button class="text-xl text-gray-700 bg-white pl-2 pr-2 border p-1 rounded-md"><i
-                            class="fa fa-arrow-left"></i></button>
-                </div>
-
-                <div class="bg-white rounded-md shadow-md p-6">
-                    <h2 class="text-xl font-semibold text-gray-700 mb-4">Delivery details</h2>
-
-                    <div class="mb-3">
-                        <span class="font-bold text-gray-600">Order ID:</span>
-                        <span class="text-gray-500">#ORD1001</span>
-                    </div>
-
-                    <div class="mb-3">
-                        <span class="font-bold text-gray-600">Customer name:</span>
-                        <span class="text-gray-500">John Doe</span>
-                    </div>
-
-                    <div class="mb-3">
-                        <span class="font-bold text-gray-600">Delivery rep name:</span>
-                        <span class="text-gray-500">Salami Ahmed</span>
-                    </div>
-
-                    <div class="mb-3">
-                        <span class="font-bold text-gray-600">Delivery address:</span>
-                        <span class="text-gray-500">Third mainland avenue, Ikeja, Lagos.</span>
-                    </div>
-
-                    <div class="mb-3">
-                        <span class="font-bold text-gray-600">Delivery rep contact:</span>
-                        <span class="text-gray-500">091234567890</span>
-                    </div>
-
-                    <div class="mb-3">
-                        <span class="font-bold text-gray-600">Status:</span>
-                        <span class="font-semibold text-yellow-500">Out for delivery</span>
-                    </div>
-
-                    <div class="mb-4">
-                        <span class="font-bold text-gray-600">ETA:</span>
-                        <span class="text-gray-500">25/01/27 10:15 AM</span>
-                    </div>
-
-                    <div class="flex flex-col sm:flex-row gap-2">
-                        <button
-                            class="bg-yellow-500 hover:bg-yellow-600  font-semibold py-2 px-4 rounded-md w-full sm:w-auto">
-                            Contact delivery rep
-                        </button>
-                        <button
-                            class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md w-full sm:w-auto">
-                            Update status
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
-    <!-- Alpine.js (Add this script if not already included in your project) -->
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-    <script src="assets/js/sidebar.js"></script>
- 
-</body>
-
-</html>
+            // Mobile sidebar toggle functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebarToggle = document.querySelector('#sidebar-toggle');
+            const sidebar = document.getElementById('sidebar');
+            const sidebarOverlay = document.getElementById('sidebar-overlay');
+            
+            const hideSidebarButton = document.getElementById('hide-sidebar-button');
+            
+            sidebarToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('open');
+                sidebar.classList.remove('hidden');
+                sidebarOverlay.classList.toggle('hidden');
+            });
+            
+            sidebarOverlay.addEventListener('click', function() {
+                sidebar.classList.remove('open');
+                sidebar.classList.add('hidden');
+                sidebarOverlay.classList.add('hidden');
+            });
+            
+            hideSidebarButton.addEventListener('click', function() {
+                sidebar.classList.toggle("hidden");
+            });
+    
+             // Initialize Pie Chart
+             const pieCtx = document.getElementById('pieChart').getContext('2d');
+            const pieChart = new Chart(pieCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['Petroleum', 'Cooking gas', 'Diesel', 'Electricity'],
+                    datasets: [{
+                        data: [40, 20, 25, 15],
+                        backgroundColor: [
+                            '#4FD1C5', // teal
+                            '#F6E05E', // yellow
+                            '#F56565', // red
+                            '#4299E1'  // blue
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
