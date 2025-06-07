@@ -189,7 +189,7 @@
                             <!-- Dropdown Menu -->
                             <ul x-show="open" x-cloak :class="!sidebarCollapsed ? 'ml-6' : ' border p-1 rounded-lg border-amber-300'" class="mt-2 space-y-2 text-gray-500">
                                 <li class="flex items-center hover:text-amber-500">
-                                    <a href="system-message-settings.html"></a>
+                                    <a href="system-message-settings.html">
                                         <i class="fas fa-envelope-open-text mr-3"></i>
                                         <span x-show="!sidebarCollapsed">Message Settings</span>
                                     </a>
