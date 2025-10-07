@@ -1,0 +1,15 @@
+/* Add these three lines at the very top of your CSS file */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom Flatpickr selected date color */
+.flatpickr-day.selected,
+.flatpickr-day.startRange,
+.flatpickr-day.endRange,
+.flatpickr-day.selected:focus,
+.flatpickr-day.startRange:focus,
+.flatpickr-day.endRange:focus {
+    background: #FFE08A !important;
+    border-color: #FFE08A !important;
+}
